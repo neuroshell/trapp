@@ -314,43 +314,103 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
       - name: Download coverage artifacts
         uses: actions/download-artifact@v4
         with:
           name: test-results-app
           path: ./coverage-artifacts
 
+      - name: Install coverage tools
+        run: npm install -g lcov-parse
+
       - name: Generate coverage summary
+        id: coverage
         run: |
           echo "## 📊 Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
-          if [ -f "./coverage-artifacts/coverage/lcov.info" ]; then
-            echo "### Coverage Report" >> $GITHUB_STEP_SUMMARY
+
+          LCOV_FILE="./coverage-artifacts/coverage/lcov.info"
+          FINAL_JSON="./coverage-artifacts/coverage/coverage-final.json"
+
+          if [ -f "$LCOV_FILE" ]; then
+            echo "### Overall Coverage" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo '```' >> $GITHUB_STEP_SUMMARY
-            # Extract summary from lcov if available
-            if command -v lcov &> /dev/null; then
-              lcov --list ./coverage-artifacts/coverage/lcov.info >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
-            else
-              echo "Coverage file: lcov.info ($(wc -c < ./coverage-artifacts/coverage/lcov.info) bytes)" >> $GITHUB_STEP_SUMMARY
+            
+            # Parse LCOV for summary statistics
+            TOTAL_LINES=$(grep -c "^DA:" "$LCOV_FILE" 2>/dev/null || echo "0")
+            HIT_LINES=$(grep "^DA:" "$LCOV_FILE" | awk -F, '$2 > 0' | wc -l 2>/dev/null || echo "0")
+            
+            TOTAL_FUNCS=$(grep -c "^FNDA:" "$LCOV_FILE" 2>/dev/null || echo "0")
+            HIT_FUNCS=$(grep "^FNDA:" "$LCOV_FILE" | awk -F, '$2 > 0' | wc -l 2>/dev/null || echo "0")
+            
+            TOTAL_BRANCHES=$(grep -c "^BRDA:" "$LCOV_FILE" 2>/dev/null || echo "0")
+            HIT_BRANCHES=$(grep "^BRDA:" "$LCOV_FILE" | awk -F, '$2 > 0' | wc -l 2>/dev/null || echo "0")
+
+            if [ "$TOTAL_LINES" -gt 0 ]; then
+              LINE_PCT=$(awk "BEGIN {printf \"%.1f\", ($HIT_LINES/$TOTAL_LINES)*100}")
+              echo "| Metric | Covered | Total | Percentage |" >> $GITHUB_STEP_SUMMARY
+              echo "|--------|---------|-------|------------|" >> $GITHUB_STEP_SUMMARY
+              echo "| 📝 Lines | $HIT_LINES | $TOTAL_LINES | ${LINE_PCT}% |" >> $GITHUB_STEP_SUMMARY
             fi
-            echo '```' >> $GITHUB_STEP_SUMMARY
+            
+            if [ "$TOTAL_FUNCS" -gt 0 ]; then
+              FUNC_PCT=$(awk "BEGIN {printf \"%.1f\", ($HIT_FUNCS/$TOTAL_FUNCS)*100}")
+              echo "| 🔄 Functions | $HIT_FUNCS | $TOTAL_FUNCS | ${FUNC_PCT}% |" >> $GITHUB_STEP_SUMMARY
+            fi
+            
+            if [ "$TOTAL_BRANCHES" -gt 0 ]; then
+              BRANCH_PCT=$(awk "BEGIN {printf \"%.1f\", ($HIT_BRANCHES/$TOTAL_BRANCHES)*100}")
+              echo "| 🔀 Branches | $HIT_BRANCHES | $TOTAL_BRANCHES | ${BRANCH_PCT}% |" >> $GITHUB_STEP_SUMMARY
+            fi
+            
             echo "" >> $GITHUB_STEP_SUMMARY
           fi
-          
-          if [ -f "./coverage-artifacts/coverage/coverage-final.json" ]; then
-            echo "### Coverage Details" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f "$FINAL_JSON" ]; then
+            echo "### Coverage by File" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
-            echo "- Coverage file: coverage-final.json" >> $GITHUB_STEP_SUMMARY
-            echo "- Size: $(wc -c < ./coverage-artifacts/coverage/coverage-final.json) bytes" >> $GITHUB_STEP_SUMMARY
+            
+            # Copy parse script to temp location
+            cp ./scripts/parse-coverage.js /tmp/parse-coverage.js
+            node /tmp/parse-coverage.js "$FINAL_JSON" >> $GITHUB_STEP_SUMMARY
+            
             echo "" >> $GITHUB_STEP_SUMMARY
           fi
-          
-          echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
+
+          echo "### 📁 Coverage Files" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Download coverage reports from the workflow artifacts" >> $GITHUB_STEP_SUMMARY
-          echo "- Look for: \`test-results-app\`" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size | Purpose |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|---------|" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "$LCOV_FILE" ]; then
+            LCOV_SIZE=$(wc -c < "$LCOV_FILE")
+            echo "| lcov.info | ${LCOV_SIZE} bytes | LCOV format (Codecov) |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -f "$FINAL_JSON" ]; then
+            JSON_SIZE=$(wc -c < "$FINAL_JSON")
+            echo "| coverage-final.json | ${JSON_SIZE} bytes | JSON report |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          COBERTURA_FILE="./coverage-artifacts/coverage/cobertura-coverage.xml"
+          if [ -f "$COBERTURA_FILE" ]; then
+            COB_SIZE=$(wc -c < "$COBERTURA_FILE")
+            echo "| cobertura-coverage.xml | ${COB_SIZE} bytes | Cobertura XML |" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 💡 Download Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "To download the full coverage reports:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Go to the workflow run page" >> $GITHUB_STEP_SUMMARY
+          echo "2. Scroll to **Artifacts** section" >> $GITHUB_STEP_SUMMARY
+          echo "3. Click on \`test-results-app\`" >> $GITHUB_STEP_SUMMARY
+          echo "4. Extract and open \`coverage/lcov-report/index.html\` in a browser" >> $GITHUB_STEP_SUMMARY
 
   # ===========================================
   # STATUS CHECK JOB
