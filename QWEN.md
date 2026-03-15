@@ -51,17 +51,17 @@ npm install
 
 ### Development Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm start` | Start Expo dev server |
-| `npm run android` | Run on Android device/emulator |
-| `npm run ios` | Run on iOS simulator |
-| `npm run web` | Run in web browser |
-| `npm run build:web` | Build for web deployment |
-| `npm run lint` | Run ESLint |
-| `npm run test:app` | Run app tests (Jest) |
-| `npm run test:backend` | Run backend tests |
-| `npm test` | Run all tests |
+| Command                | Description                    |
+| ---------------------- | ------------------------------ |
+| `npm start`            | Start Expo dev server          |
+| `npm run android`      | Run on Android device/emulator |
+| `npm run ios`          | Run on iOS simulator           |
+| `npm run web`          | Run in web browser             |
+| `npm run build:web`    | Build for web deployment       |
+| `npm run lint`         | Run ESLint                     |
+| `npm run test:app`     | Run app tests (Jest)           |
+| `npm run test:backend` | Run backend tests              |
+| `npm test`             | Run all tests                  |
 
 ### Backend Server
 
@@ -75,18 +75,19 @@ npm start
 
 The project includes an automated SDLC pipeline for processing GitHub Issues:
 
-| Command | Description |
-|---------|-------------|
-| `npm run agents:process` | Process all backlog items |
-| `npm run agents:watch` | Continuous watch mode |
-| `npm run agents:issue -- --issue=123` | Process specific issue |
-| `npm run agents:setup` | Initialize agent scripts |
+| Command                               | Description               |
+| ------------------------------------- | ------------------------- |
+| `npm run agents:process`              | Process all backlog items |
+| `npm run agents:watch`                | Continuous watch mode     |
+| `npm run agents:issue -- --issue=123` | Process specific issue    |
+| `npm run agents:setup`                | Initialize agent scripts  |
 
 See `AGENTS.md` for full documentation on the AI agent pipeline.
 
 ## Key Features
 
 ### Authentication
+
 - Simple username/password login (SHA-256 hashed via `expo-crypto`)
 - Persistent auth state via AsyncStorage
 - AuthContext provides `signIn`, `signOut`, `user`, `loading`
@@ -99,8 +100,8 @@ type ActivityType = "running" | "squats" | "pushups" | "pullups" | "other";
 interface ActivityEntry {
   id: string;
   type: ActivityType;
-  date: string;        // ISO date string
-  quantity: number;    // reps, minutes, etc.
+  date: string; // ISO date string
+  quantity: number; // reps, minutes, etc.
   notes?: string;
   createdAt: string;
   updatedAt: string;
@@ -120,11 +121,13 @@ interface ActivityEntry {
 ## Development Conventions
 
 ### Code Style
+
 - ESLint with `eslint-config-universe` (Expo/React Native focused)
 - TypeScript strict mode enabled
 - React JSX transform (`react-jsx`)
 
 ### Testing
+
 - Jest with `jest-expo` preset
 - React Native Testing Library for component tests
 - Mocks configured for Expo modules in `__mocks__/`
@@ -132,6 +135,7 @@ interface ActivityEntry {
 - JUnit XML output for CI integration
 
 ### Project Structure Patterns
+
 - Screen components are named exports: `export function HomeScreen(...)`
 - App entry uses default export: `export default function App()`
 - Types/interfaces defined in `src/models.ts`
@@ -140,16 +144,16 @@ interface ActivityEntry {
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `app.json` | Expo configuration (name, platforms, assets) |
-| `package.json` | Dependencies and scripts |
-| `tsconfig.json` | TypeScript configuration (extends expo/ts.config.base) |
-| `babel.config.js` | Babel configuration |
-| `jest.config.js` | Jest test configuration |
-| `.eslintrc.json` | ESLint rules |
-| `.env.example` | Environment variable template for AI agents |
-| `eas.json` | EAS Build configuration |
+| File              | Purpose                                                |
+| ----------------- | ------------------------------------------------------ |
+| `app.json`        | Expo configuration (name, platforms, assets)           |
+| `package.json`    | Dependencies and scripts                               |
+| `tsconfig.json`   | TypeScript configuration (extends expo/ts.config.base) |
+| `babel.config.js` | Babel configuration                                    |
+| `jest.config.js`  | Jest test configuration                                |
+| `.eslintrc.json`  | ESLint rules                                           |
+| `.env.example`    | Environment variable template for AI agents            |
+| `eas.json`        | EAS Build configuration                                |
 
 ## Environment Variables
 

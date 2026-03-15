@@ -8,45 +8,45 @@ on:
   # Trigger on version tags
   push:
     tags:
-      - 'v*'
-  
+      - "v*"
+
   # Manual trigger with options
   workflow_dispatch:
     inputs:
       build_type:
-        description: 'Build Type'
+        description: "Build Type"
         required: true
         type: choice
         options:
           - production
           - preview
-        default: 'preview'
+        default: "preview"
       platform:
-        description: 'Platform'
+        description: "Platform"
         required: true
         type: choice
         options:
           - both
           - ios
           - android
-        default: 'both'
+        default: "both"
       profile:
-        description: 'EAS Build Profile'
+        description: "EAS Build Profile"
         required: true
         type: choice
         options:
           - production
           - development
-        default: 'production'
+        default: "production"
       submit_to_store:
-        description: 'Submit to App Store'
+        description: "Submit to App Store"
         required: false
         type: boolean
         default: false
 
 env:
-  NODE_VERSION: '18'
-  EAS_VERSION: 'latest'
+  NODE_VERSION: "18"
+  EAS_VERSION: "latest"
 
 jobs:
   # ===========================================
@@ -120,7 +120,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -194,7 +194,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -339,15 +339,15 @@ jobs:
           name: Release ${{ github.ref_name }}
           body: |
             ## Trapp Tracker ${{ github.ref_name }}
-            
+
             ### What's New
             - iOS and Android builds generated via EAS Build
             - Build artifacts available in GitHub Actions
-            
+
             ### Installation
             - iOS: Available via TestFlight
             - Android: Available via Google Play Internal Testing
-            
+
             ---
             *Automated release from CI/CD pipeline*
           draft: false
@@ -367,5 +367,5 @@ jobs:
             const version = '${{ needs.validate.outputs.version }}';
             const status = '${{ steps.status.outputs.status }}';
             const emoji = '${{ steps.status.outputs.emoji }}';
-            
+
             console.log(`Build ${status} for version ${version} ${emoji}`);

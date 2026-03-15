@@ -1,5 +1,12 @@
 import React from "react";
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
 import { colors, typography } from "../theme";
 
 export function SplashScreen() {
@@ -8,7 +15,11 @@ export function SplashScreen() {
       <View style={styles.content}>
         <Text style={styles.title}>FitTrack Pro</Text>
         <Text style={styles.subtitle}>Loading your data...</Text>
-        <ActivityIndicator size="large" color={colors.primary} style={styles.spinner} />
+        <ActivityIndicator
+          size="large"
+          color={colors.primary}
+          style={styles.spinner}
+        />
       </View>
     </SafeAreaView>
   );

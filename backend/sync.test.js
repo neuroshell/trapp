@@ -25,7 +25,9 @@ function hashPassword(password) {
   const iterations = 100_000;
   const keyLength = 32;
   const digest = "sha256";
-  return pbkdf2Sync(password, salt, iterations, keyLength, digest).toString("hex");
+  return pbkdf2Sync(password, salt, iterations, keyLength, digest).toString(
+    "hex",
+  );
 }
 
 async function postSync(base, data) {
@@ -356,7 +358,10 @@ describe("Authentication", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "username, passwordHash, deviceId and payload are required");
+    assert.strictEqual(
+      json.error,
+      "username, passwordHash, deviceId and payload are required",
+    );
   });
 
   test("POST /sync rejects missing passwordHash", async () => {
@@ -367,7 +372,10 @@ describe("Authentication", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "username, passwordHash, deviceId and payload are required");
+    assert.strictEqual(
+      json.error,
+      "username, passwordHash, deviceId and payload are required",
+    );
   });
 
   test("POST /sync rejects missing deviceId", async () => {
@@ -390,7 +398,10 @@ describe("Authentication", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "username, passwordHash, deviceId and payload are required");
+    assert.strictEqual(
+      json.error,
+      "username, passwordHash, deviceId and payload are required",
+    );
   });
 
   test("POST /sync rejects null payload", async () => {
@@ -402,7 +413,10 @@ describe("Authentication", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "username, passwordHash, deviceId and payload are required");
+    assert.strictEqual(
+      json.error,
+      "username, passwordHash, deviceId and payload are required",
+    );
   });
 
   test("POST /sync rejects array payload (expects object)", async () => {
@@ -458,7 +472,10 @@ describe("Authentication", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "username, passwordHash and deviceId query parameters are required");
+    assert.strictEqual(
+      json.error,
+      "username, passwordHash and deviceId query parameters are required",
+    );
   });
 
   test("GET /sync rejects missing passwordHash query param", async () => {
@@ -468,7 +485,10 @@ describe("Authentication", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "username, passwordHash and deviceId query parameters are required");
+    assert.strictEqual(
+      json.error,
+      "username, passwordHash and deviceId query parameters are required",
+    );
   });
 
   test("GET /sync rejects missing deviceId query param", async () => {
@@ -586,7 +606,7 @@ describe("Device Registration", () => {
 
   test("Device is isolated between users", async () => {
     const user2Hash = hashPassword("user2pass");
-    
+
     // Register device for user2
     await postSync(base, {
       username: "user2",
@@ -644,7 +664,7 @@ describe("Edge Cases: Username Validation", () => {
       payload: { data: "test" },
     });
     assert.strictEqual(res.status, 200);
-    
+
     // Try with lowercase version - should work with same password
     const res2 = await postSync(base, {
       username: "testuser",
@@ -676,7 +696,10 @@ describe("Edge Cases: Username Validation", () => {
     // Empty string is falsy, caught by required field check
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "username, passwordHash, deviceId and payload are required");
+    assert.strictEqual(
+      json.error,
+      "username, passwordHash, deviceId and payload are required",
+    );
   });
 
   test("POST /sync rejects null username", async () => {
@@ -758,8 +781,11 @@ describe("API Contract: Response Formats", () => {
       payload: { entries: [{ id: 1, value: "test" }] },
     });
     assert.strictEqual(res.status, 200);
-    assert.strictEqual(res.headers.get("content-type").includes("application/json"), true);
-    
+    assert.strictEqual(
+      res.headers.get("content-type").includes("application/json"),
+      true,
+    );
+
     const json = await res.json();
     assert.strictEqual(json.ok, true);
     assert.ok(json.device);
@@ -784,8 +810,11 @@ describe("API Contract: Response Formats", () => {
       deviceId: "test-device",
     });
     assert.strictEqual(res.status, 200);
-    assert.strictEqual(res.headers.get("content-type").includes("application/json"), true);
-    
+    assert.strictEqual(
+      res.headers.get("content-type").includes("application/json"),
+      true,
+    );
+
     const json = await res.json();
     assert.strictEqual(json.ok, true);
     assert.ok(json.device);
@@ -1159,7 +1188,7 @@ describe("Data Persistence", () => {
 
   test("Device updatedAt timestamp updates on sync", async () => {
     const beforeSync = Date.now();
-    
+
     await postSync(base, {
       username: "timestampuser",
       passwordHash,
@@ -1173,7 +1202,7 @@ describe("Data Persistence", () => {
       deviceId: "timestamp-device",
     });
     const json = await res.json();
-    
+
     assert.ok(json.device.updatedAt >= beforeSync);
     assert.ok(json.device.updatedAt <= Date.now());
   });

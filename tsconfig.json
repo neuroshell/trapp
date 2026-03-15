@@ -1,16 +1,10 @@
 {
   "compilerOptions": {
     "strict": true,
-    "types": [
-      "react",
-      "react-native"
-    ]
+    "types": ["react", "react-native"]
   },
   "extends": "expo/tsconfig.base",
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ],
+  "include": ["**/*.ts", "**/*.tsx"],
   "exclude": [
     "node_modules",
     "__tests__",

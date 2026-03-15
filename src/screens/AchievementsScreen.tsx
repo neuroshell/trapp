@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
-import { colors, spacing, typography } from "../theme";
-import { loadAppState } from "../storage";
+
 import { ActivityEntry } from "../models";
+import { loadAppState } from "../storage";
+import { colors, spacing, typography } from "../theme";
 
 const MILLIS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -65,10 +66,14 @@ export function AchievementsScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Achievements</Text>
 
-        <View style={[styles.card, firstLogUnlocked ? styles.cardActive : null]}>
+        <View
+          style={[styles.card, firstLogUnlocked ? styles.cardActive : null]}
+        >
           <Text style={styles.cardTitle}>First Log</Text>
           <Text style={styles.cardSubtitle}>
-            {firstLogUnlocked ? "Nice work!" : "Log your first activity to unlock this badge."}
+            {firstLogUnlocked
+              ? "Nice work!"
+              : "Log your first activity to unlock this badge."}
           </Text>
         </View>
 
@@ -129,4 +134,3 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
   },
 });
-

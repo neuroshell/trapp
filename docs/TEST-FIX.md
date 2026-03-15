@@ -33,6 +33,7 @@ npm install --save-dev jest-junit
 ```
 
 **Package added:**
+
 ```json
 {
   "devDependencies": {
@@ -52,13 +53,16 @@ module.exports = {
   // ... existing config
   reporters: [
     "default",
-    ["jest-junit", {
-      outputDirectory: ".",
-      outputName: "junit.xml",
-      addFileAttribute: "true",
-      classNameTemplate: "{classname}",
-      titleTemplate: "{title}"
-    }]
+    [
+      "jest-junit",
+      {
+        outputDirectory: ".",
+        outputName: "junit.xml",
+        addFileAttribute: "true",
+        classNameTemplate: "{classname}",
+        titleTemplate: "{title}",
+      },
+    ],
   ],
   coverageReporters: ["text", "lcov", "cobertura"],
 };
@@ -71,12 +75,14 @@ module.exports = {
 Updated `.github/workflows/ci.yml` to use the simpler command:
 
 **Before:**
+
 ```yaml
 - name: Run Jest tests (App)
   run: npm run test:app -- --coverage --ci --reporters=default --reporters=jest-junit
 ```
 
 **After:**
+
 ```yaml
 - name: Run Jest tests (App)
   run: npm run test:app -- --coverage --ci
@@ -95,6 +101,7 @@ npm run test:app -- --coverage --ci
 ```
 
 **Output:**
+
 ```
  PASS  __tests__/HomeScreen.test.tsx
  PASS  __tests__/LogScreen.test.tsx
@@ -126,17 +133,17 @@ All files       |   60.71 |    46.66 |      65 |   62.61 |
 ✅ `coverage/cobertura-coverage.xml` - Cobertura format  
 ✅ `coverage/coverage-final.json` - JSON coverage report  
 ✅ `coverage/lcov.info` - LCOV format  
-✅ `coverage/lcov-report/` - HTML coverage report  
+✅ `coverage/lcov-report/` - HTML coverage report
 
 ---
 
 ## Files Modified
 
-| File | Change |
-|------|--------|
-| `package.json` | Added `jest-junit` to devDependencies |
-| `jest.config.js` | Added `reporters` and `coverageReporters` config |
-| `.github/workflows/ci.yml` | Simplified test command |
+| File                       | Change                                           |
+| -------------------------- | ------------------------------------------------ |
+| `package.json`             | Added `jest-junit` to devDependencies            |
+| `jest.config.js`           | Added `reporters` and `coverageReporters` config |
+| `.github/workflows/ci.yml` | Simplified test command                          |
 
 ---
 
@@ -144,12 +151,12 @@ All files       |   60.71 |    46.66 |      65 |   62.61 |
 
 **Overall Coverage:** 60.71%
 
-| Category | Statements | Branch | Functions | Lines |
-|----------|-----------|--------|-----------|-------|
-| All files | 60.71% | 46.66% | 65% | 62.61% |
-| src | 30.43% | 16.66% | 22.22% | 32.55% |
-| components | 69.56% | 46.15% | 63.63% | 69.56% |
-| screens | 88.37% | 61.53% | 85% | 90.24% |
+| Category   | Statements | Branch | Functions | Lines  |
+| ---------- | ---------- | ------ | --------- | ------ |
+| All files  | 60.71%     | 46.66% | 65%       | 62.61% |
+| src        | 30.43%     | 16.66% | 22.22%    | 32.55% |
+| components | 69.56%     | 46.15% | 63.63%    | 69.56% |
+| screens    | 88.37%     | 61.53% | 85%       | 90.24% |
 
 **Note:** Low coverage in `storage.ts` (23.8%) - consider adding tests for AsyncStorage operations.
 
@@ -190,6 +197,7 @@ All files       |   60.71 |    46.66 |      65 |   62.61 |
 ### 1. JUnit XML Format
 
 The `junit.xml` file can be:
+
 - Uploaded to CI/CD platforms for test reporting
 - Used by Codecov for coverage tracking
 - Integrated with GitHub Checks API
@@ -198,6 +206,7 @@ The `junit.xml` file can be:
 ### 2. Multiple Coverage Formats
 
 Generated coverage reports support:
+
 - **lcov** - Standard for coverage tools
 - **cobertura** - Jenkins, Codecov support
 - **HTML** - Human-readable reports
@@ -222,11 +231,13 @@ With `CODECOV_TOKEN` secret configured, coverage will automatically upload to Co
 ## Recommendations
 
 ### Immediate
+
 1. ✅ **DONE** - Install jest-junit
 2. ✅ **DONE** - Configure jest.config.js
 3. ✅ **DONE** - Update CI workflow
 
 ### Short-Term
+
 1. Add tests for `storage.ts` (currently 23.8% coverage)
 2. Increase branch coverage in components (currently 46.15%)
 3. Configure Codecov integration
@@ -245,6 +256,7 @@ coverageThreshold: {
 ```
 
 ### Long-Term
+
 1. Add E2E tests (Detox or Maestro)
 2. Integrate with GitHub Status Checks
 3. Set up coverage badges in README

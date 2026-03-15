@@ -14,6 +14,7 @@
 **Issue:** Missing import for `URL` from `node:url`
 
 **Fix:**
+
 ```javascript
 // Added import
 import { URL } from "node:url";
@@ -27,6 +28,7 @@ import { URL } from "node:url";
 **Issue:** CodeQL flagged property access with user-controlled keys
 
 **Fix:** Added ESLint disable comments with security justification:
+
 ```javascript
 // SECURITY: safeDeviceId is already validated, safe to use as key
 // user.devices uses Object.create(null), preventing prototype pollution
@@ -39,6 +41,7 @@ db.data.devices[safeDeviceId] = newData;
 ```
 
 **Why Safe:**
+
 - `deviceId` is validated by `sanitizeKey()` before use
 - `sanitizeKey()` blocks `__proto__`, `constructor`, `prototype`, `__*`
 - Objects use `Object.create(null)` for prototype safety
@@ -52,6 +55,7 @@ db.data.devices[safeDeviceId] = newData;
 **Issue:** Plain SHA-256 is too fast and unsalted for password hashing
 
 **Fix:** Replaced with PBKDF2:
+
 ```javascript
 // Before
 function hashPassword(password) {
@@ -66,11 +70,14 @@ function hashPassword(password) {
   const iterations = 100_000;
   const keyLength = 32;
   const digest = "sha256";
-  return pbkdf2Sync(password, salt, iterations, keyLength, digest).toString("hex");
+  return pbkdf2Sync(password, salt, iterations, keyLength, digest).toString(
+    "hex",
+  );
 }
 ```
 
 **Security Improvements:**
+
 - ✅ Salted hashing (prevents rainbow tables)
 - ✅ 100,000 iterations (computationally expensive)
 - ✅ 32-byte key length (256-bit security)
@@ -84,9 +91,10 @@ function hashPassword(password) {
 **Issue:** Log entries depend on user-provided values (URL, IP)
 
 **Fix:** Enhanced `sanitizeForLog()` function:
+
 ```javascript
 function sanitizeForLog(str) {
-  if (typeof str !== 'string') {
+  if (typeof str !== "string") {
     str = String(str);
   }
   // Remove newline characters to prevent log line injection
@@ -102,6 +110,7 @@ function sanitizeForLog(str) {
 ```
 
 **Protection:**
+
 - ✅ Removes `\r`, `\n` (prevents log line injection)
 - ✅ Normalizes whitespace
 - ✅ Truncates to 1024 chars (prevents log flooding)
@@ -115,6 +124,7 @@ function sanitizeForLog(str) {
 **Issue:** DOM text reinterpreted as HTML without escaping
 
 **Fix:** Added coverage reports to `.eslintignore`:
+
 ```
 # Coverage reports (generated files)
 coverage/
@@ -122,6 +132,7 @@ backend/coverage/
 ```
 
 **Rationale:**
+
 - Generated file (not source code)
 - Not deployed to production
 - Used only for local development
@@ -131,11 +142,11 @@ backend/coverage/
 
 ## Files Modified
 
-| File | Changes | Lines Changed |
-|------|---------|---------------|
-| `backend/sync.test.js` | Added `URL` import, PBKDF2 hashing | +12 |
-| `backend/index.js` | Enhanced `sanitizeForLog()`, added ESLint disables | +15 |
-| `.eslintignore` | Created, added coverage reports | +20 |
+| File                   | Changes                                            | Lines Changed |
+| ---------------------- | -------------------------------------------------- | ------------- |
+| `backend/sync.test.js` | Added `URL` import, PBKDF2 hashing                 | +12           |
+| `backend/index.js`     | Enhanced `sanitizeForLog()`, added ESLint disables | +15           |
+| `.eslintignore`        | Created, added coverage reports                    | +20           |
 
 ---
 
@@ -168,24 +179,24 @@ npm test
 
 ## Security Improvements Summary
 
-| Issue | Before | After | Impact |
-|-------|--------|-------|--------|
-| **Password Hashing** | SHA-256 (fast, unsalted) | PBKDF2 (100k iterations, salted) | 🔒 High |
-| **Log Injection** | Basic sanitization | CRLF removal + truncation | 🔒 Medium |
-| **Prototype Pollution** | Validated but flagged | Validated + documented + silenced | 🔒 High |
-| **Lint Errors** | 1 error (`URL` undefined) | All imports correct | ✅ Fixed |
+| Issue                   | Before                    | After                             | Impact    |
+| ----------------------- | ------------------------- | --------------------------------- | --------- |
+| **Password Hashing**    | SHA-256 (fast, unsalted)  | PBKDF2 (100k iterations, salted)  | 🔒 High   |
+| **Log Injection**       | Basic sanitization        | CRLF removal + truncation         | 🔒 Medium |
+| **Prototype Pollution** | Validated but flagged     | Validated + documented + silenced | 🔒 High   |
+| **Lint Errors**         | 1 error (`URL` undefined) | All imports correct               | ✅ Fixed  |
 
 ---
 
 ## CodeQL Alerts Status
 
-| Alert | Location | Severity | Status |
-|-------|----------|----------|--------|
-| Remote property injection | `backend/index.js:153` | High | ✅ Silenced (safe) |
-| Remote property injection | `backend/index.js:171` | High | ✅ Silenced (safe) |
-| Insufficient password hashing | `backend/sync.test.js:19` | High | ✅ Fixed (PBKDF2) |
-| Log injection | `backend/index.js:36` | Medium | ✅ Enhanced |
-| DOM XSS | `coverage/lcov-report/sorter.js` | High | ✅ Ignored (generated) |
+| Alert                         | Location                         | Severity | Status                 |
+| ----------------------------- | -------------------------------- | -------- | ---------------------- |
+| Remote property injection     | `backend/index.js:153`           | High     | ✅ Silenced (safe)     |
+| Remote property injection     | `backend/index.js:171`           | High     | ✅ Silenced (safe)     |
+| Insufficient password hashing | `backend/sync.test.js:19`        | High     | ✅ Fixed (PBKDF2)      |
+| Log injection                 | `backend/index.js:36`            | Medium   | ✅ Enhanced            |
+| DOM XSS                       | `coverage/lcov-report/sorter.js` | High     | ✅ Ignored (generated) |
 
 ---
 
@@ -212,6 +223,7 @@ npm run test:app -- --coverage --ci
 ### Ready to Merge ✅
 
 All critical issues have been addressed:
+
 - ✅ Lint errors fixed
 - ✅ Security vulnerabilities resolved
 - ✅ All tests passing (74/74)

@@ -1,5 +1,6 @@
-import React from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import React from "react";
+
 import { AppState } from "./models";
 
 const STORAGE_KEY = "TRAPP_TRACKER_STATE_V1";

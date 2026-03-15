@@ -8,6 +8,7 @@
 ## Problem
 
 The GitHub Actions coverage summary was displaying file paths with:
+
 - Full Windows absolute paths: `C:\Users\neuroshell\Documents\src\trapp\src\storage.ts`
 - Full Linux absolute paths: `/home/runner/work/trapp/trapp/src/storage.ts`
 
@@ -20,11 +21,13 @@ This made the coverage report hard to read and platform-specific.
 Updated `scripts/parse-coverage.js` to normalize all file paths to relative paths from the project root.
 
 ### Before
+
 ```
 ❌ C:\Users\neuroshell\Documents\src\trapp\src\storage.ts | 42 stmts (9 funcs) | 10 (2) | 23.8%
 ```
 
 ### After
+
 ```
 ❌ trapp/src/storage.ts | 42 stmts (9 funcs) | 10 (2) | 23.8%
 ```
@@ -38,43 +41,44 @@ Updated `scripts/parse-coverage.js` to normalize all file paths to relative path
 ```javascript
 function normalizeFilePath(filePath) {
   // Normalize path separators to forward slashes
-  const normalized = filePath.replace(/\\/g, '/');
-  const parts = normalized.split('/');
-  
+  const normalized = filePath.replace(/\\/g, "/");
+  const parts = normalized.split("/");
+
   // Look for project indicators
-  const projectIndex = parts.findIndex(part => 
-    part === 'trapp' || 
-    part === 'workspace' || 
-    part === 'work' ||
-    part === 'home'
+  const projectIndex = parts.findIndex(
+    (part) =>
+      part === "trapp" ||
+      part === "workspace" ||
+      part === "work" ||
+      part === "home",
   );
-  
+
   if (projectIndex !== -1) {
     // Found 'trapp' - use that and everything after
-    if (parts[projectIndex] === 'trapp') {
-      const result = parts.slice(projectIndex).join('/');
+    if (parts[projectIndex] === "trapp") {
+      const result = parts.slice(projectIndex).join("/");
       // Handle GitHub Actions duplicate pattern: trapp/trapp/...
-      if (result.startsWith('trapp/trapp/')) {
-        return result.replace('trapp/trapp/', 'trapp/');
+      if (result.startsWith("trapp/trapp/")) {
+        return result.replace("trapp/trapp/", "trapp/");
       }
       return result;
     }
-    
+
     // Handle GitHub Actions Linux runner pattern
-    if (parts[projectIndex] === 'home' && parts.includes('runner')) {
-      const runnerIndex = parts.indexOf('runner');
-      if (runnerIndex !== -1 && parts[runnerIndex + 2] === 'trapp') {
-        const result = parts.slice(runnerIndex + 2).join('/');
-        if (result.startsWith('trapp/trapp/')) {
-          return result.replace('trapp/trapp/', 'trapp/');
+    if (parts[projectIndex] === "home" && parts.includes("runner")) {
+      const runnerIndex = parts.indexOf("runner");
+      if (runnerIndex !== -1 && parts[runnerIndex + 2] === "trapp") {
+        const result = parts.slice(runnerIndex + 2).join("/");
+        if (result.startsWith("trapp/trapp/")) {
+          return result.replace("trapp/trapp/", "trapp/");
         }
         return result;
       }
     }
   }
-  
+
   // Fallback: show last 3 parts
-  return parts.slice(-3).join('/');
+  return parts.slice(-3).join("/");
 }
 ```
 
@@ -82,29 +86,32 @@ function normalizeFilePath(filePath) {
 
 ## Path Transformations
 
-| Input Path | Output Path | Environment |
-|------------|-------------|-------------|
-| `C:\Users\neuroshell\Documents\src\trapp\src\storage.ts` | `trapp/src/storage.ts` | Windows (local) |
-| `/home/runner/work/trapp/trapp/src/storage.ts` | `trapp/src/storage.ts` | GitHub Actions (Linux) |
-| `D:/a/trapp/trapp/src/storage.ts` | `trapp/src/storage.ts` | GitHub Actions (Windows) |
-| `src/storage.ts` | `src/storage.ts` | Relative (already clean) |
+| Input Path                                               | Output Path            | Environment              |
+| -------------------------------------------------------- | ---------------------- | ------------------------ |
+| `C:\Users\neuroshell\Documents\src\trapp\src\storage.ts` | `trapp/src/storage.ts` | Windows (local)          |
+| `/home/runner/work/trapp/trapp/src/storage.ts`           | `trapp/src/storage.ts` | GitHub Actions (Linux)   |
+| `D:/a/trapp/trapp/src/storage.ts`                        | `trapp/src/storage.ts` | GitHub Actions (Windows) |
+| `src/storage.ts`                                         | `src/storage.ts`       | Relative (already clean) |
 
 ---
 
 ## Features
 
 ### 1. Cross-Platform Support
+
 - ✅ Windows paths (`C:\Users\...`)
 - ✅ Linux paths (`/home/runner/...`)
 - ✅ UNC paths (`\\server\share\...`)
 - ✅ Forward slash paths (`D:/a/...`)
 
 ### 2. GitHub Actions Handling
+
 - ✅ Linux runner: `/home/runner/work/trapp/trapp/...`
 - ✅ Windows runner: `D:/a/trapp/trapp/...`
 - ✅ Removes duplicate `trapp/trapp/` pattern
 
 ### 3. Fallback Logic
+
 - ✅ Shows last 3 path segments if project not found
 - ✅ Handles relative paths unchanged
 - ✅ Always uses forward slashes for consistency
@@ -114,11 +121,13 @@ function normalizeFilePath(filePath) {
 ## Testing
 
 ### Test Command
+
 ```bash
 node scripts/parse-coverage.js ./coverage/coverage-final.json
 ```
 
 ### Sample Output
+
 ```
 | File | Lines | Covered | % |
 |------|-------|---------|---|
@@ -156,8 +165,8 @@ The fix is automatically applied in the GitHub Actions coverage summary job:
 
 ## Files Modified
 
-| File | Changes |
-|------|---------|
+| File                        | Changes                              |
+| --------------------------- | ------------------------------------ |
 | `scripts/parse-coverage.js` | Added `normalizeFilePath()` function |
 
 ---

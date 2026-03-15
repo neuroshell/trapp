@@ -1,24 +1,21 @@
 #!/usr/bin/env ts-node
 /**
  * Agentic SDLC Pipeline Orchestrator
- * 
+ *
  * Main entry point for processing backlog items through the agent pipeline
- * 
+ *
  * Usage:
  *   npm run agents:process              # Process all ready items
  *   npm run agents:process -- --issue=123  # Process specific issue
  *   npm run agents:process -- --watch      # Watch mode (continuous)
  */
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import { Command } from 'commander';
-import {
-  BacklogManager,
-  createBacklogManagerFromEnv,
-} from './backlog-manager';
-import { ContextBuilder, createContextBuilder } from './context-builder';
-import { ApprovalGate, createApprovalGate } from './approval-gate';
+import * as fs from "fs/promises";
+import * as path from "path";
+import { Command } from "commander";
+import { BacklogManager, createBacklogManagerFromEnv } from "./backlog-manager";
+import { ContextBuilder, createContextBuilder } from "./context-builder";
+import { ApprovalGate, createApprovalGate } from "./approval-gate";
 import {
   BacklogItem,
   SDLC_PHASES,
@@ -27,7 +24,7 @@ import {
   AgentResult,
   getNextPhase,
   IssueStatus,
-} from './types';
+} from "./types";
 
 /**
  * Orchestrator configuration
@@ -69,24 +66,26 @@ class PipelineOrchestrator {
   async processItem(item: BacklogItem): Promise<void> {
     const { verbose, dryRun } = this.config;
 
-    this.log(`\n📋 Processing Issue #${item.issue.number}: ${item.issue.title}`);
+    this.log(
+      `\n📋 Processing Issue #${item.issue.number}: ${item.issue.title}`,
+    );
     this.log(`   Status: ${item.status}`);
-    this.log(`   Current Phase: ${item.currentPhase?.name || 'None'}`);
+    this.log(`   Current Phase: ${item.currentPhase?.name || "None"}`);
 
     if (dryRun) {
-      this.log('   [DRY RUN] No actions will be taken');
+      this.log("   [DRY RUN] No actions will be taken");
     }
 
     // Determine starting phase
     let currentPhase = item.currentPhase;
-    
+
     // If no current phase, start from beginning
     if (!currentPhase) {
       currentPhase = SDLC_PHASES[0];
       if (!dryRun) {
         await this.config.backlogManager.updateStatus(
           item.issue.number,
-          currentPhase.statusLabel
+          currentPhase.statusLabel,
         );
       }
     }
@@ -98,18 +97,18 @@ class PipelineOrchestrator {
       // Check approval gate
       if (currentPhase.requiresApproval && !item.approvalReceived) {
         this.log(`   ⏳ Waiting for approval (${currentPhase.approvalLabel})`);
-        
+
         const gateResult = await this.config.approvalGate.processGate(
           item,
-          currentPhase
+          currentPhase,
         );
 
-        if (gateResult.status === 'pending') {
+        if (gateResult.status === "pending") {
           this.log(`   ⏸️  Paused: Waiting for human approval`);
           break; // Exit, will continue on next run
         }
 
-        if (gateResult.status === 'timeout') {
+        if (gateResult.status === "timeout") {
           this.log(`   ⏰ Timeout: Approval not received`);
           break;
         }
@@ -120,11 +119,11 @@ class PipelineOrchestrator {
 
       if (!result.success) {
         this.log(`   ❌ Phase failed: ${result.error}`);
-        
+
         if (!dryRun) {
           await this.config.backlogManager.addComment(
             item.issue.number,
-            `❌ **${currentPhase.name} Phase Failed**\n\nError: ${result.error}\n\nPlease investigate and retry.`
+            `❌ **${currentPhase.name} Phase Failed**\n\nError: ${result.error}\n\nPlease investigate and retry.`,
           );
         }
         break;
@@ -136,25 +135,25 @@ class PipelineOrchestrator {
       if (!dryRun) {
         await this.config.backlogManager.addComment(
           item.issue.number,
-          `## ✅ ${currentPhase.name} Phase Complete\n\n${result.output}`
+          `## ✅ ${currentPhase.name} Phase Complete\n\n${result.output}`,
         );
       }
 
       // Move to next phase
       const nextPhase = getNextPhase(currentPhase.id);
-      
+
       if (!nextPhase) {
         // All phases complete
         this.log(`\n🎉 All phases complete!`);
-        
+
         if (!dryRun) {
           await this.config.backlogManager.updateStatus(
             item.issue.number,
-            'done'
+            "done",
           );
           await this.config.backlogManager.addComment(
             item.issue.number,
-            `🎉 **Issue Complete!** All SDLC phases finished successfully.`
+            `🎉 **Issue Complete!** All SDLC phases finished successfully.`,
           );
         }
         break;
@@ -167,7 +166,7 @@ class PipelineOrchestrator {
       if (!dryRun) {
         await this.config.backlogManager.updateStatus(
           item.issue.number,
-          nextPhase.statusLabel
+          nextPhase.statusLabel,
         );
       }
     }
@@ -178,7 +177,7 @@ class PipelineOrchestrator {
    */
   private async executeAgent(
     item: BacklogItem,
-    phase: SDLCPhase
+    phase: SDLCPhase,
   ): Promise<AgentResult> {
     const agentType = phase.agent;
     this.log(`   🤖 Invoking agent: ${agentType}`);
@@ -189,13 +188,13 @@ class PipelineOrchestrator {
         agentType,
         item,
         phase,
-        [] // TODO: Pass previous results
+        [], // TODO: Pass previous results
       );
 
       // In a real implementation, this would call Qwen Code's task tool
       // For now, we simulate the agent invocation
       this.log(`   📝 Context built (${context.length} chars)`);
-      
+
       // TODO: Integrate with Qwen Code API to invoke agents
       // For now, return a placeholder result
       return {
@@ -208,8 +207,8 @@ class PipelineOrchestrator {
       return {
         success: false,
         phase: phase.id,
-        output: '',
-        error: error instanceof Error ? error.message : 'Unknown error',
+        output: "",
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -219,21 +218,22 @@ class PipelineOrchestrator {
    */
   async processAll(): Promise<void> {
     if (this.isRunning) {
-      this.log('⚠️  Pipeline already running');
+      this.log("⚠️  Pipeline already running");
       return;
     }
 
     this.isRunning = true;
 
     try {
-      this.log('\n🚀 Starting Agentic SDLC Pipeline');
-      this.log('================================');
+      this.log("\n🚀 Starting Agentic SDLC Pipeline");
+      this.log("================================");
 
       // Get items ready for processing
-      const items = await this.config.backlogManager.getIssuesReadyForNextPhase();
-      
+      const items =
+        await this.config.backlogManager.getIssuesReadyForNextPhase();
+
       if (items.length === 0) {
-        this.log('✅ No items ready for processing');
+        this.log("✅ No items ready for processing");
         return;
       }
 
@@ -244,7 +244,7 @@ class PipelineOrchestrator {
         await this.processItem(item);
       }
 
-      this.log('\n✅ Pipeline run complete');
+      this.log("\n✅ Pipeline run complete");
     } finally {
       this.isRunning = false;
     }
@@ -255,7 +255,7 @@ class PipelineOrchestrator {
    */
   async processIssue(issueNumber: number): Promise<void> {
     this.log(`\n🎯 Processing specific issue #${issueNumber}`);
-    
+
     const item = await this.config.backlogManager.getIssue(issueNumber);
     await this.processItem(item);
   }
@@ -264,9 +264,9 @@ class PipelineOrchestrator {
    * Run in watch mode (continuous processing)
    */
   async runWatchMode(intervalMs: number = 60000): Promise<void> {
-    this.log('\n👁️  Starting watch mode...');
+    this.log("\n👁️  Starting watch mode...");
     this.log(`   Polling every ${intervalMs / 1000} seconds`);
-    this.log('   Press Ctrl+C to stop');
+    this.log("   Press Ctrl+C to stop");
 
     while (true) {
       await this.processAll();
@@ -278,7 +278,7 @@ class PipelineOrchestrator {
    * Log message (respects verbose flag)
    */
   private log(message: string): void {
-    if (this.config.verbose || !message.startsWith('   ')) {
+    if (this.config.verbose || !message.startsWith("   ")) {
       console.log(message);
     }
   }
@@ -287,7 +287,7 @@ class PipelineOrchestrator {
    * Sleep utility
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 
@@ -298,13 +298,13 @@ async function main() {
   const program = new Command();
 
   program
-    .name('agents:process')
-    .description('Process backlog items through the agentic SDLC pipeline')
-    .option('--issue <number>', 'Process specific issue number')
-    .option('--watch', 'Run in watch mode (continuous processing)')
-    .option('--dry-run', 'Simulate without making changes')
-    .option('--verbose', 'Show detailed output')
-    .option('--phase <phase>', 'Start from specific phase')
+    .name("agents:process")
+    .description("Process backlog items through the agentic SDLC pipeline")
+    .option("--issue <number>", "Process specific issue number")
+    .option("--watch", "Run in watch mode (continuous processing)")
+    .option("--dry-run", "Simulate without making changes")
+    .option("--verbose", "Show detailed output")
+    .option("--phase <phase>", "Start from specific phase")
     .action(async (options: CLIOptions) => {
       try {
         // Initialize components
@@ -312,8 +312,8 @@ async function main() {
         const contextBuilder = createContextBuilder(process.cwd());
         const approvalGate = createApprovalGate(backlogManager, {
           waitForApproval: !options.watch, // Blocking in non-watch mode
-          pollInterval: 5 * 60 * 1000,     // 5 minutes
-          timeout: 24 * 60 * 60 * 1000,    // 24 hours
+          pollInterval: 5 * 60 * 1000, // 5 minutes
+          timeout: 24 * 60 * 60 * 1000, // 24 hours
         });
 
         const orchestrator = new PipelineOrchestrator({
@@ -334,7 +334,10 @@ async function main() {
           await orchestrator.processAll();
         }
       } catch (error) {
-        console.error('❌ Pipeline error:', error instanceof Error ? error.message : error);
+        console.error(
+          "❌ Pipeline error:",
+          error instanceof Error ? error.message : error,
+        );
         process.exit(1);
       }
     });

@@ -10,10 +10,10 @@
 GitHub Actions does not allow the `secrets` context to be used directly in job-level `if:` conditions. This caused workflow validation errors:
 
 ```
-cd-web.yml (Line: 271, Col: 13): Unrecognized named-value: 'secrets'. 
+cd-web.yml (Line: 271, Col: 13): Unrecognized named-value: 'secrets'.
 Located at position 1 within expression: secrets.VERCEL_TOKEN != ''
 
-cd-web.yml (Line: 281, Col: 13): Unrecognized named-value: 'secrets'. 
+cd-web.yml (Line: 281, Col: 13): Unrecognized named-value: 'secrets'.
 Located at position 1 within expression: secrets.NETLIFY_AUTH_TOKEN != ''
 ```
 
@@ -22,21 +22,24 @@ Located at position 1 within expression: secrets.NETLIFY_AUTH_TOKEN != ''
 ## Root Cause
 
 The `secrets` context is **not available** in job-level `if:` expressions in GitHub Actions. It can only be used in:
+
 - Step-level `if:` conditions (via `env:` mapping)
 - `with:` inputs
 - `run:` commands
 
 **Invalid (job-level):**
+
 ```yaml
 deploy-alternative:
-  if: secrets.VERCEL_TOKEN != ''  # ❌ ERROR
+  if: secrets.VERCEL_TOKEN != '' # ❌ ERROR
   runs-on: ubuntu-latest
 ```
 
 **Valid (step-level with env):**
+
 ```yaml
 deploy-alternative:
-  if: github.ref == 'refs/heads/main'  # ✅ OK
+  if: github.ref == 'refs/heads/main' # ✅ OK
   steps:
     - name: Check credentials
       id: check
@@ -44,9 +47,9 @@ deploy-alternative:
         if [ -n "${{ secrets.VERCEL_TOKEN }}" ]; then
           echo "has-token=true" >> $GITHUB_OUTPUT
         fi
-    
+
     - name: Deploy
-      if: steps.check.outputs.has-token == 'true'  # ✅ OK
+      if: steps.check.outputs.has-token == 'true' # ✅ OK
 ```
 
 ---
@@ -56,11 +59,13 @@ deploy-alternative:
 ### 1. `.github/workflows/cd-web.yml`
 
 **Changed:**
+
 - Removed `secrets.*` from job-level `if:` condition
 - Added credential check steps with output variables
 - Moved conditional logic to step-level `if:` using `steps.*.outputs`
 
 **Before:**
+
 ```yaml
 deploy-alternative:
   if: |
@@ -69,6 +74,7 @@ deploy-alternative:
 ```
 
 **After:**
+
 ```yaml
 deploy-alternative:
   if: github.ref == 'refs/heads/main'
@@ -81,7 +87,7 @@ deploy-alternative:
         else
           echo "has-token=false" >> $GITHUB_OUTPUT
         fi
-    
+
     - name: Deploy to Vercel
       if: steps.vercel-check.outputs.has-token == 'true'
 ```
@@ -91,9 +97,11 @@ deploy-alternative:
 ### 2. `.github/workflows/cd-mobile.yml`
 
 **Changed:**
+
 - Updated Slack notification steps to use `env:` context in `if:` conditions
 
 **Before:**
+
 ```yaml
 - name: Notify build starting
   if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
@@ -102,6 +110,7 @@ deploy-alternative:
 ```
 
 **After:**
+
 ```yaml
 - name: Notify build starting
   if: ${{ env.SLACK_WEBHOOK_URL != '' }}
@@ -116,11 +125,13 @@ deploy-alternative:
 ### 3. `.github/workflows/agents-pipeline.yml`
 
 **Changed:**
+
 - Removed job-level `if:` with `secrets.GITHUB_TOKEN`
 - Added token check step that sets output variable
 - Made subsequent steps conditional on token availability
 
 **Before:**
+
 ```yaml
 process-backlog:
   if: ${{ secrets.GITHUB_TOKEN != '' }}
@@ -130,6 +141,7 @@ process-backlog:
 ```
 
 **After:**
+
 ```yaml
 process-backlog:
   steps:
@@ -141,7 +153,7 @@ process-backlog:
         else
           echo "::warning::GitHub token not configured"
         fi
-    
+
     - name: Checkout repository
       if: steps.token-check.outputs.has-token == 'true'
       uses: actions/checkout@v4
@@ -158,6 +170,7 @@ node scripts/validate-workflows.js
 ```
 
 **Results:**
+
 ```
 ✅ .github/workflows/ci.yml - VALID
 ✅ .github/workflows/cd-mobile.yml - VALID
@@ -171,6 +184,7 @@ node scripts/validate-workflows.js
 ## GitHub Actions Context Reference
 
 ### Available in `if:` conditions:
+
 - ✅ `github.*` - GitHub event and repository info
 - ✅ `env.*` - Environment variables (including mapped secrets)
 - ✅ `steps.*` - Step outputs (from previous steps)
@@ -180,6 +194,7 @@ node scripts/validate-workflows.js
 - ✅ `services.*` - Service container info
 
 ### NOT available in `if:` conditions:
+
 - ❌ `secrets.*` - Must be mapped to `env.` first
 - ❌ Direct secret access for security reasons
 
@@ -188,6 +203,7 @@ node scripts/validate-workflows.js
 ## Pattern for Secret-Based Conditions
 
 ### Step 1: Map secret to environment variable
+
 ```yaml
 - name: Check for credential
   id: cred-check
@@ -202,6 +218,7 @@ node scripts/validate-workflows.js
 ```
 
 ### Step 2: Use output in subsequent steps
+
 ```yaml
 - name: Use credential
   if: steps.cred-check.outputs.has-cred == 'true'

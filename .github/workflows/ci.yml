@@ -15,8 +15,8 @@ on:
       - develop
 
 env:
-  NODE_VERSION: '20'
-  CACHE_VERSION: 'v1'
+  NODE_VERSION: "20"
+  CACHE_VERSION: "v1"
 
 # Cancel in-progress runs for the same branch/PR
 concurrency:
@@ -44,7 +44,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -107,7 +107,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Restore node_modules cache
         uses: actions/cache@v4
@@ -147,7 +147,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Restore node_modules cache
         uses: actions/cache@v4
@@ -207,7 +207,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Restore node_modules cache
         uses: actions/cache@v4
@@ -257,7 +257,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Restore node_modules cache
         uses: actions/cache@v4
@@ -317,7 +317,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
       - name: Download coverage artifacts
         uses: actions/download-artifact@v4
@@ -386,23 +386,23 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| File | Size | Purpose |" >> $GITHUB_STEP_SUMMARY
           echo "|------|------|---------|" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ -f "$LCOV_FILE" ]; then
             LCOV_SIZE=$(wc -c < "$LCOV_FILE")
             echo "| lcov.info | ${LCOV_SIZE} bytes | LCOV format (Codecov) |" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           if [ -f "$FINAL_JSON" ]; then
             JSON_SIZE=$(wc -c < "$FINAL_JSON")
             echo "| coverage-final.json | ${JSON_SIZE} bytes | JSON report |" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           COBERTURA_FILE="./coverage-artifacts/coverage/cobertura-coverage.xml"
           if [ -f "$COBERTURA_FILE" ]; then
             COB_SIZE=$(wc -c < "$COBERTURA_FILE")
             echo "| cobertura-coverage.xml | ${COB_SIZE} bytes | Cobertura XML |" >> $GITHUB_STEP_SUMMARY
           fi
-          
+
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 💡 Download Artifacts" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY

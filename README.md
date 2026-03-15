@@ -5,10 +5,13 @@ This project is a cross-platform fitness tracker app built with **React Native +
 ## 🚀 Getting Started (Required)
 
 ### 1) Install Node.js (LTS)
+
 This project depends on Node.js and npm. Install them from:
+
 - https://nodejs.org/en/download/
 
 ### 2) Install Expo CLI (optional)
+
 You can use `npx` to run Expo without installing globally, but installing the CLI can be convenient:
 
 ```bash

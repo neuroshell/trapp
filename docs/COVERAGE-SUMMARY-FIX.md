@@ -8,6 +8,7 @@
 ## Problem
 
 The GitHub Actions coverage summary was displaying:
+
 ```
 📊 Test Coverage Summary
 Coverage Report
@@ -24,6 +25,7 @@ This provided no useful information about actual code coverage.
 ## Solution
 
 Created an informative coverage summary with:
+
 1. **Overall coverage statistics** (lines, functions, branches)
 2. **Per-file breakdown** with emoji indicators
 3. **Coverage files table** with sizes
@@ -38,23 +40,27 @@ Created an informative coverage summary with:
 A Node.js script that parses Jest's `coverage-final.json` and outputs a formatted markdown table:
 
 ```javascript
-const fs = require('fs');
-const coverageFile = process.argv[2] || './coverage/coverage-final.json';
-const data = JSON.parse(fs.readFileSync(coverageFile, 'utf8'));
+const fs = require("fs");
+const coverageFile = process.argv[2] || "./coverage/coverage-final.json";
+const data = JSON.parse(fs.readFileSync(coverageFile, "utf8"));
 
-console.log('| File | Lines | Covered | % |');
-console.log('|------|-------|---------|---|');
+console.log("| File | Lines | Covered | % |");
+console.log("|------|-------|---------|---|");
 
 Object.entries(data).forEach(([file, stats]) => {
-  const fileName = file.split('/').slice(-2).join('/');
+  const fileName = file.split("/").slice(-2).join("/");
   const totalLines = Object.keys(stats.statementMap || {}).length;
-  const coveredLines = Object.values(stats.s || {}).filter(v => v > 0).length;
+  const coveredLines = Object.values(stats.s || {}).filter((v) => v > 0).length;
   const totalFuncs = Object.keys(stats.fnMap || {}).length;
-  const coveredFuncs = Object.values(stats.f || {}).filter(v => v > 0).length;
-  const pct = totalLines > 0 ? ((coveredLines / totalLines) * 100).toFixed(1) : 0;
-  const funcPct = totalFuncs > 0 ? ((coveredFuncs / totalFuncs) * 100).toFixed(1) : 0;
-  const emoji = pct >= 80 ? '✅' : pct >= 50 ? '⚠️' : '❌';
-  console.log(`| ${emoji} ${fileName} | ${totalLines} stmts (${totalFuncs} funcs) | ${coveredLines} (${coveredFuncs}) | ${pct}% (funcs: ${funcPct}%) |`);
+  const coveredFuncs = Object.values(stats.f || {}).filter((v) => v > 0).length;
+  const pct =
+    totalLines > 0 ? ((coveredLines / totalLines) * 100).toFixed(1) : 0;
+  const funcPct =
+    totalFuncs > 0 ? ((coveredFuncs / totalFuncs) * 100).toFixed(1) : 0;
+  const emoji = pct >= 80 ? "✅" : pct >= 50 ? "⚠️" : "❌";
+  console.log(
+    `| ${emoji} ${fileName} | ${totalLines} stmts (${totalFuncs} funcs) | ${coveredLines} (${coveredFuncs}) | ${pct}% (funcs: ${funcPct}%) |`,
+  );
 });
 ```
 
@@ -82,11 +88,11 @@ coverage-summary:
         TOTAL_LINES=$(grep -c "^DA:" "$LCOV_FILE" || echo "0")
         HIT_LINES=$(grep "^DA:" "$LCOV_FILE" | awk -F, '$2 > 0' | wc -l || echo "0")
         LINE_PCT=$(awk "BEGIN {printf \"%.1f\", ($HIT_LINES/$TOTAL_LINES)*100}")
-        
+
         # Display overall coverage table
         echo "| Metric | Covered | Total | Percentage |" >> $GITHUB_STEP_SUMMARY
         echo "| 📝 Lines | $HIT_LINES | $TOTAL_LINES | ${LINE_PCT}% |" >> $GITHUB_STEP_SUMMARY
-        
+
         # Parse JSON for per-file breakdown
         node /tmp/parse-coverage.js "$FINAL_JSON" >> $GITHUB_STEP_SUMMARY
 ```
@@ -96,6 +102,7 @@ coverage-summary:
 ## Example Output
 
 ### Before ❌
+
 ```
 📊 Test Coverage Summary
 Coverage Report
@@ -108,6 +115,7 @@ Download coverage reports from the workflow artifacts
 ```
 
 ### After ✅
+
 ```
 📊 Test Coverage Summary
 
@@ -153,32 +161,35 @@ To download the full coverage reports:
 
 ## Emoji Legend
 
-| Emoji | Meaning | Coverage Range |
-|-------|---------|----------------|
-| ✅ | Excellent | 80% - 100% |
-| ⚠️ | Needs Improvement | 50% - 79% |
-| ❌ | Critical | 0% - 49% |
+| Emoji | Meaning           | Coverage Range |
+| ----- | ----------------- | -------------- |
+| ✅    | Excellent         | 80% - 100%     |
+| ⚠️    | Needs Improvement | 50% - 79%      |
+| ❌    | Critical          | 0% - 49%       |
 
 ---
 
 ## Files Modified/Created
 
-| File | Action | Purpose |
-|------|--------|---------|
+| File                        | Action  | Purpose                         |
+| --------------------------- | ------- | ------------------------------- |
 | `scripts/parse-coverage.js` | Created | Parse coverage JSON to markdown |
-| `.github/workflows/ci.yml` | Updated | Enhanced coverage summary job |
+| `.github/workflows/ci.yml`  | Updated | Enhanced coverage summary job   |
 
 ---
 
 ## Coverage Metrics Explained
 
 ### Lines (Statements)
+
 Total executable statements in the code. A statement is "covered" if it was executed during tests.
 
 ### Functions
+
 Total function declarations. A function is "covered" if it was called at least once during tests.
 
 ### Branches
+
 Decision points in code (if/else, switch cases, ternary operators). A branch is "covered" if both true and false paths were executed.
 
 ---
@@ -196,7 +207,9 @@ Decision points in code (if/else, switch cases, ternary operators). A branch is 
 ## Future Enhancements
 
 ### 1. Coverage Thresholds
+
 Add minimum coverage requirements:
+
 ```yaml
 - name: Check coverage thresholds
   run: |
@@ -207,7 +220,9 @@ Add minimum coverage requirements:
 ```
 
 ### 2. Coverage Diff
+
 Show coverage change from previous run:
+
 ```yaml
 - name: Coverage diff
   uses: coverage-diff/coverage-diff@v1
@@ -217,7 +232,9 @@ Show coverage change from previous run:
 ```
 
 ### 3. Codecov Integration
+
 Upload to Codecov for historical tracking:
+
 ```yaml
 - name: Upload to Codecov
   uses: codecov/codecov-action@v4

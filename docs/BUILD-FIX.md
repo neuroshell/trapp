@@ -1,17 +1,21 @@
 # CI/CD Build Fix Summary
 
 ## Issue
+
 ```
 Error: tsconfig.json(2,3): error TS5098: Option 'customConditions' can only be used when 'moduleResolution' is set to 'node16', 'nodenext', or 'bundler'.
 ```
 
 ## Root Cause
+
 The Expo base configuration (`expo/tsconfig.base`) includes `customConditions: ['react-native']`, but our `tsconfig.json` was overriding `moduleResolution` to `"node"` (the legacy mode), which is incompatible with `customConditions`.
 
 ## Changes Made
 
 ### 1. tsconfig.json
+
 **Before:**
+
 ```json
 {
   "compilerOptions": {
@@ -27,6 +31,7 @@ The Expo base configuration (`expo/tsconfig.base`) includes `customConditions: [
 ```
 
 **After:**
+
 ```json
 {
   "compilerOptions": {
@@ -40,7 +45,9 @@ The Expo base configuration (`expo/tsconfig.base`) includes `customConditions: [
 ```
 
 ### 2. tsconfig.ci.json (New File)
+
 Created dedicated CI configuration with relaxed settings for Expo compatibility:
+
 ```json
 {
   "extends": "./tsconfig.json",
@@ -53,12 +60,21 @@ Created dedicated CI configuration with relaxed settings for Expo compatibility:
     "noUnusedParameters": false
   },
   "include": ["src/**/*", "App.tsx"],
-  "exclude": ["node_modules", "__tests__", "__mocks__", "scripts", "backend", "web-build"]
+  "exclude": [
+    "node_modules",
+    "__tests__",
+    "__mocks__",
+    "scripts",
+    "backend",
+    "web-build"
+  ]
 }
 ```
 
 ### 3. .github/workflows/ci.yml
+
 Updated type-check job to use the CI-specific config:
+
 ```yaml
 - name: Run TypeScript compiler check (app only)
   run: npx tsc --noEmit --project tsconfig.ci.json --skipLibCheck
@@ -69,6 +85,7 @@ Updated type-check job to use the CI-specific config:
 ```
 
 ## Verification
+
 ```bash
 $ npx tsc --showConfig | grep -E "moduleResolution|customConditions"
 "moduleResolution": "bundler",
@@ -87,6 +104,7 @@ $ npx tsc --showConfig | grep -E "moduleResolution|customConditions"
 ## Standard for Expo Projects
 
 This is the recommended approach for Expo projects because:
+
 - Expo uses conditional exports (`react-native` condition)
 - Many React Native packages don't have full TypeScript declarations
 - `skipLibCheck` is standard for React Native/Expo projects
@@ -95,6 +113,7 @@ This is the recommended approach for Expo projects because:
 ## Next Steps
 
 The CI pipeline should now pass the type-check step. The workflow:
+
 1. ✅ Lint (ESLint)
 2. ✅ Type Check (TypeScript) - **FIXED**
 3. ⏭️ Test App (Jest)
@@ -102,4 +121,5 @@ The CI pipeline should now pass the type-check step. The workflow:
 5. ⏭️ Build
 
 ---
-*Fixed: March 15, 2026*
+
+_Fixed: March 15, 2026_

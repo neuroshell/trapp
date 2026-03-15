@@ -9,6 +9,7 @@
 ## Summary
 
 Fixed 4 CodeQL security alerts in the Express.js backend:
+
 - **3x High Severity:** Remote property injection (prototype pollution)
 - **1x Medium Severity:** Log injection
 
@@ -23,6 +24,7 @@ Fixed 4 CodeQL security alerts in the Express.js backend:
 **Issue:** User-controlled values (`username`, `deviceId`) were used directly as object property keys without validation, enabling prototype pollution attacks.
 
 **Attack Vector:**
+
 ```javascript
 // Malicious request
 POST /sync
@@ -39,6 +41,7 @@ db.data.users["__proto__"] = { malicious: true }
 ```
 
 **Impact:**
+
 - Denial of Service (crash Node.js)
 - Potential remote code execution
 - Data corruption
@@ -52,6 +55,7 @@ db.data.users["__proto__"] = { malicious: true }
 **Issue:** User-controlled data (URL, IP, method) logged without sanitization.
 
 **Attack Vector:**
+
 ```javascript
 // Malicious request with CRLF injection
 GET /health%0D%0ASet-Cookie:%20session=stolen
@@ -63,6 +67,7 @@ Fake-Log-Entry: Attack successful - 200 OK - 1ms - 127.0.0.1
 ```
 
 **Impact:**
+
 - Log forgery
 - Audit trail corruption
 - Security monitoring bypass
@@ -74,19 +79,20 @@ Fake-Log-Entry: Attack successful - 200 OK - 1ms - 127.0.0.1
 ### 1. Input Validation with `sanitizeKey()`
 
 ```javascript
-const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+const FORBIDDEN_KEYS = new Set(["__proto__", "constructor", "prototype"]);
 
 function sanitizeKey(key) {
-  if (typeof key !== 'string') return null;
+  if (typeof key !== "string") return null;
   const trimmed = key.trim();
   if (trimmed.length === 0 || trimmed.length > 256) return null;
   if (FORBIDDEN_KEYS.has(trimmed)) return null;
-  if (trimmed.startsWith('__')) return null;
+  if (trimmed.startsWith("__")) return null;
   return trimmed;
 }
 ```
 
 **Blocks:**
+
 - `__proto__` - Prototype pollution
 - `constructor` - Object constructor access
 - `prototype` - Function prototype access
@@ -116,13 +122,17 @@ db.data.devices = db.data.devices || Object.create(null);
 
 ```javascript
 function sanitizeForLog(str) {
-  if (typeof str !== 'string') return String(str);
+  if (typeof str !== "string") return String(str);
   // Remove newlines, carriage returns, and control chars
-  return str.replace(/[\r\n\t]/g, ' ').replace(/\s+/g, ' ').trim();
+  return str
+    .replace(/[\r\n\t]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 ```
 
 **Removes:**
+
 - `\r` - Carriage return
 - `\n` - Newline
 - `\t` - Tab
@@ -190,32 +200,32 @@ cd backend && npm test
 ```javascript
 // Test prototype pollution prevention
 const testCases = [
-  { input: '__proto__', expected: null },
-  { input: 'constructor', expected: null },
-  { input: 'prototype', expected: null },
-  { input: '__custom__', expected: null },
-  { input: '', expected: null },
-  { input: '   ', expected: null },
-  { input: 'a'.repeat(257), expected: null },
-  { input: 'valid-device-123', expected: 'valid-device-123' },
+  { input: "__proto__", expected: null },
+  { input: "constructor", expected: null },
+  { input: "prototype", expected: null },
+  { input: "__custom__", expected: null },
+  { input: "", expected: null },
+  { input: "   ", expected: null },
+  { input: "a".repeat(257), expected: null },
+  { input: "valid-device-123", expected: "valid-device-123" },
 ];
 
 // Test log sanitization
-sanitizeForLog('test\ninjection') === 'test injection'
-sanitizeForLog('test\r\ninjection') === 'test injection'
+sanitizeForLog("test\ninjection") === "test injection";
+sanitizeForLog("test\r\ninjection") === "test injection";
 ```
 
 ---
 
 ## Security Improvements
 
-| Aspect | Before | After |
-|--------|--------|-------|
-| **Prototype Pollution** | ❌ Vulnerable | ✅ Protected |
-| **Log Injection** | ❌ Vulnerable | ✅ Sanitized |
-| **Input Validation** | ❌ None | ✅ Comprehensive |
-| **Object Safety** | ❌ `{}` literals | ✅ `Object.create(null)` |
-| **Key Length Limits** | ❌ None | ✅ Max 256 chars |
+| Aspect                  | Before           | After                    |
+| ----------------------- | ---------------- | ------------------------ |
+| **Prototype Pollution** | ❌ Vulnerable    | ✅ Protected             |
+| **Log Injection**       | ❌ Vulnerable    | ✅ Sanitized             |
+| **Input Validation**    | ❌ None          | ✅ Comprehensive         |
+| **Object Safety**       | ❌ `{}` literals | ✅ `Object.create(null)` |
+| **Key Length Limits**   | ❌ None          | ✅ Max 256 chars         |
 
 ---
 
@@ -225,13 +235,16 @@ sanitizeForLog('test\r\ninjection') === 'test injection'
 # ADR-006: Prototype Pollution Prevention Strategy
 
 ## Status
+
 Accepted - March 15, 2026
 
 ## Context
-CodeQL identified 3 high-severity prototype pollution vulnerabilities 
+
+CodeQL identified 3 high-severity prototype pollution vulnerabilities
 and 1 medium-severity log injection in the Express backend.
 
 ## Decision
+
 1. Use `Object.create(null)` for all maps with user-controlled keys
 2. Implement `sanitizeKey()` to block dangerous property names
 3. Implement `sanitizeForLog()` to prevent log injection
@@ -240,17 +253,20 @@ and 1 medium-severity log injection in the Express backend.
 ## Consequences
 
 ### Positive
+
 - ✅ Prevents prototype pollution attacks
 - ✅ Prevents log injection attacks
 - ✅ Input validation catches malformed data early
 - ✅ Defense in depth (multiple layers of protection)
 
 ### Negative
+
 - ⚠️ Slight performance overhead (~0.1ms per request)
 - ⚠️ Rejects some edge-case usernames/deviceIds (by design)
 - ⚠️ Additional code complexity
 
 ## Compliance
+
 - OWASP Top 10: A03:2021 - Injection
 - CWE-1321: Improperly Controlled Modification of Object Prototype
 - CWE-117: Improper Output Neutralization for Logs
@@ -261,18 +277,21 @@ and 1 medium-severity log injection in the Express backend.
 ## Recommendations
 
 ### Immediate
+
 - [x] Apply security fixes
 - [x] Test backend functionality
 - [ ] Run CodeQL scan to verify fixes
 - [ ] Deploy to production
 
 ### Short-Term
+
 - [ ] Add security unit tests
 - [ ] Implement rate limiting
 - [ ] Add request size limits
 - [ ] Enable helmet.js security headers
 
 ### Long-Term
+
 - [ ] Regular security audits (quarterly)
 - [ ] Penetration testing
 - [ ] Security monitoring (Sentry, Datadog)

@@ -9,6 +9,7 @@
 ## Document Overview
 
 This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each screen includes:
+
 - **Default State:** Primary layout and content
 - **Loading State:** Skeleton/placeholder representation
 - **Error State:** Error message and recovery options
@@ -94,6 +95,7 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 **Annotations:**
+
 - Logo: 80×80px, centered
 - Email/Password inputs: 48px height, 8px radius
 - Sign In button: Primary, 44px height, full width
@@ -162,7 +164,8 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 #### Empty State (N/A)
-*Login screen doesn't have an empty state*
+
+_Login screen doesn't have an empty state_
 
 ---
 
@@ -212,6 +215,7 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 **Annotations:**
+
 - Password requirements update in real-time
 - Terms checkbox must be checked to enable Create Account button
 - Create Account button disabled until all fields valid
@@ -304,6 +308,7 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 **Annotations:**
+
 - Streak card: Primary gradient background
 - Quick action buttons: 80×80px each, 44px touch target
 - Week stats: Horizontal scroll if needed
@@ -442,6 +447,7 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 **Annotations:**
+
 - Each card: 120px height, tap to select
 - Selected state: Primary border (3px), primary background tint
 - Cards are full-width with 16px horizontal padding
@@ -533,6 +539,7 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 **Annotations:**
+
 - Date/Time: Defaults to current, tap to change
 - Distance/Duration: Numeric keyboard
 - Pace: Auto-calculated, read-only
@@ -632,6 +639,7 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 **Annotations:**
+
 - Total Reps: Auto-calculated (sets × reps)
 - Weight: Optional, for weighted exercises
 - All numeric inputs use numeric keyboard
@@ -677,6 +685,7 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 **Annotations:**
+
 - Current day: Highlighted with primary color circle
 - Days with workouts: Dot indicator below date
 - Multiple workouts: Filled dot or number badge
@@ -909,6 +918,7 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 **Annotations:**
+
 - Modal: Centered, 320px max width
 - Backdrop: 50% black, tap to dismiss
 - Confetti: 2-second animation
@@ -954,6 +964,7 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 **Specifications:**
+
 - Tab bar height: 80px (including safe area)
 - Icon size: 24×24px
 - Label: 11px, caption style
@@ -988,6 +999,7 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 ```
 
 **Annotations:**
+
 - Logo: 120×120px centered
 - Loading indicator: Primary color spinner
 - Background: Primary color or white
@@ -1379,28 +1391,28 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 
 ## Screen State Summary
 
-| Screen ID | Default | Loading | Error | Empty | Success |
-|-----------|---------|---------|-------|-------|---------|
-| SCR-01 Splash | ✓ | - | - | - | - |
-| SCR-02 Login | ✓ | ✓ | ✓ | N/A | - |
-| SCR-03 Register | ✓ | ✓ | ✓ | N/A | ✓ |
-| SCR-04 Home | ✓ | ✓ | ✓ | ✓ | - |
-| SCR-05 Workout Select | ✓ | - | - | - | - |
-| SCR-06 Running Form | ✓ | ✓ | ✓ | N/A | ✓ |
-| SCR-07 Strength Form | ✓ | ✓ | ✓ | N/A | ✓ |
-| SCR-08 Success | ✓ | - | - | - | N/A |
-| SCR-09 Calendar | ✓ | ✓ | ✓ | ✓ | - |
-| SCR-10 Day Detail | ✓ | ✓ | ✓ | ✓ | - |
-| SCR-11 Stats | ✓ | ✓ | ✓ | ✓ | - |
-| SCR-12 Achievements | ✓ | ✓ | ✓ | ✓ | - |
-| SCR-13 Unlock Modal | ✓ | - | - | - | N/A |
-| SCR-14 Edit | ✓ | ✓ | ✓ | N/A | ✓ |
-| SCR-15 Delete Confirm | ✓ | - | - | - | - |
-| SCR-16 Tab Nav | ✓ | - | - | - | - |
-| SCR-17 Empty States | ✓ | - | - | N/A | - |
-| SCR-18 Error States | ✓ | - | N/A | - | - |
-| SCR-19 Loading | ✓ | N/A | - | - | - |
-| SCR-20 Settings | ✓ | ✓ | ✓ | - | - |
+| Screen ID             | Default | Loading | Error | Empty | Success |
+| --------------------- | ------- | ------- | ----- | ----- | ------- |
+| SCR-01 Splash         | ✓       | -       | -     | -     | -       |
+| SCR-02 Login          | ✓       | ✓       | ✓     | N/A   | -       |
+| SCR-03 Register       | ✓       | ✓       | ✓     | N/A   | ✓       |
+| SCR-04 Home           | ✓       | ✓       | ✓     | ✓     | -       |
+| SCR-05 Workout Select | ✓       | -       | -     | -     | -       |
+| SCR-06 Running Form   | ✓       | ✓       | ✓     | N/A   | ✓       |
+| SCR-07 Strength Form  | ✓       | ✓       | ✓     | N/A   | ✓       |
+| SCR-08 Success        | ✓       | -       | -     | -     | N/A     |
+| SCR-09 Calendar       | ✓       | ✓       | ✓     | ✓     | -       |
+| SCR-10 Day Detail     | ✓       | ✓       | ✓     | ✓     | -       |
+| SCR-11 Stats          | ✓       | ✓       | ✓     | ✓     | -       |
+| SCR-12 Achievements   | ✓       | ✓       | ✓     | ✓     | -       |
+| SCR-13 Unlock Modal   | ✓       | -       | -     | -     | N/A     |
+| SCR-14 Edit           | ✓       | ✓       | ✓     | N/A   | ✓       |
+| SCR-15 Delete Confirm | ✓       | -       | -     | -     | -       |
+| SCR-16 Tab Nav        | ✓       | -       | -     | -     | -       |
+| SCR-17 Empty States   | ✓       | -       | -     | N/A   | -       |
+| SCR-18 Error States   | ✓       | -       | N/A   | -     | -       |
+| SCR-19 Loading        | ✓       | N/A     | -     | -     | -       |
+| SCR-20 Settings       | ✓       | ✓       | ✓     | -     | -       |
 
 ---
 
@@ -1408,28 +1420,28 @@ This document contains wireframes for all 20 MVP screens of Trapp Tracker. Each 
 
 ### Gesture Support
 
-| Gesture | Action | Screen |
-|---------|--------|--------|
-| Tap | Select/Activate | All |
-| Swipe Left | Delete workout | Home, Calendar, History |
-| Swipe Right | Edit workout | Home, Calendar, History |
-| Pull Down | Refresh data | Home, Calendar, Stats |
-| Pinch | Zoom calendar (web) | Calendar |
+| Gesture     | Action              | Screen                  |
+| ----------- | ------------------- | ----------------------- |
+| Tap         | Select/Activate     | All                     |
+| Swipe Left  | Delete workout      | Home, Calendar, History |
+| Swipe Right | Edit workout        | Home, Calendar, History |
+| Pull Down   | Refresh data        | Home, Calendar, Stats   |
+| Pinch       | Zoom calendar (web) | Calendar                |
 
 ### Keyboard Shortcuts (Web)
 
-| Shortcut | Action |
-|----------|--------|
-| `H` | Go to Home |
-| `C` | Go to Calendar |
-| `S` | Go to Stats |
-| `A` | Go to Achievements |
-| `L` | Log new workout |
-| `?` | Show keyboard shortcuts |
+| Shortcut | Action                  |
+| -------- | ----------------------- |
+| `H`      | Go to Home              |
+| `C`      | Go to Calendar          |
+| `S`      | Go to Stats             |
+| `A`      | Go to Achievements      |
+| `L`      | Log new workout         |
+| `?`      | Show keyboard shortcuts |
 
 ---
 
-*These wireframes should be referenced during implementation. Any deviations must be documented and approved.*
+_These wireframes should be referenced during implementation. Any deviations must be documented and approved._
 
 **Last Updated:** March 15, 2026  
 **Next Review:** After developer implementation begins

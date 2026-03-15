@@ -1,18 +1,19 @@
 import "react-native-gesture-handler";
-import * as React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { StatusBar } from "expo-status-bar";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
+import * as React from "react";
+
+import { AuthProvider, useAuth } from "./src/auth/AuthContext";
+import { RootTabParamList } from "./src/navigation/types";
+import { AchievementsScreen } from "./src/screens/AchievementsScreen";
+import { CalendarScreen } from "./src/screens/CalendarScreen";
 import { HomeScreen } from "./src/screens/HomeScreen";
 import { LogScreen } from "./src/screens/LogScreen";
-import { CalendarScreen } from "./src/screens/CalendarScreen";
-import { AchievementsScreen } from "./src/screens/AchievementsScreen";
-import { SettingsScreen } from "./src/screens/SettingsScreen";
 import { LoginScreen } from "./src/screens/LoginScreen";
+import { SettingsScreen } from "./src/screens/SettingsScreen";
 import { SplashScreen } from "./src/screens/SplashScreen";
-import { RootTabParamList } from "./src/navigation/types";
-import { AuthProvider, useAuth } from "./src/auth/AuthContext";
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
@@ -31,7 +32,9 @@ function AppContent() {
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarIcon: ({ color, size }) => {
-            let iconName: React.ComponentProps<typeof MaterialCommunityIcons>["name"] = "help-circle";
+            let iconName: React.ComponentProps<
+              typeof MaterialCommunityIcons
+            >["name"] = "help-circle";
 
             if (route.name === "Home") iconName = "home";
             else if (route.name === "Log") iconName = "plus-box";
@@ -39,7 +42,13 @@ function AppContent() {
             else if (route.name === "Achievements") iconName = "trophy";
             else if (route.name === "Settings") iconName = "cog";
 
-            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
+            return (
+              <MaterialCommunityIcons
+                name={iconName}
+                size={size}
+                color={color}
+              />
+            );
           },
         })}
       >

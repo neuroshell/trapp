@@ -1,6 +1,7 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import { colors, spacing, typography } from "../theme";
 
 type Props = {
@@ -23,9 +24,16 @@ export function IconButton({ icon, label, onPress, active, style }: Props) {
       ]}
     >
       <View style={styles.iconWrapper}>
-        <MaterialCommunityIcons name={icon} size={22} color={active ? "#fff" : colors.primary} />
+        <MaterialCommunityIcons
+          name={icon}
+          size={22}
+          color={active ? "#fff" : colors.primary}
+        />
       </View>
-      <Text style={[styles.label, active && styles.labelActive]} numberOfLines={1}>
+      <Text
+        style={[styles.label, active && styles.labelActive]}
+        numberOfLines={1}
+      >
         {label}
       </Text>
     </Pressable>

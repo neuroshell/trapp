@@ -1,4 +1,9 @@
-export type ActivityType = "running" | "squats" | "pushups" | "pullups" | "other";
+export type ActivityType =
+  | "running"
+  | "squats"
+  | "pushups"
+  | "pullups"
+  | "other";
 
 export interface ActivityEntry {
   id: string;

@@ -8,10 +8,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": [
-    "src/**/*",
-    "App.tsx"
-  ],
+  "include": ["src/**/*", "App.tsx"],
   "exclude": [
     "node_modules",
     "__tests__",

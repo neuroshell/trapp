@@ -11,7 +11,7 @@
 CodeQL security scanning identified 4 vulnerabilities in the Express.js backend:
 
 1. **Alert #1** (High): Remote property injection at line 33
-2. **Alert #2** (High): Remote property injection at line 79  
+2. **Alert #2** (High): Remote property injection at line 79
 3. **Alert #3** (High): Remote property injection at line 91
 4. **Alert #4** (Medium): Log injection at line 52
 
@@ -25,7 +25,7 @@ POST /sync
 {
   "username": "__proto__",
   "passwordHash": "anything",
-  "deviceId": "constructor", 
+  "deviceId": "constructor",
   "payload": { "isAdmin": true }
 }
 
@@ -49,22 +49,19 @@ All user-controlled keys must pass validation:
 
 ```javascript
 function sanitizeKey(key) {
-  if (typeof key !== 'string') return null;
+  if (typeof key !== "string") return null;
   const trimmed = key.trim();
   if (trimmed.length === 0 || trimmed.length > 256) return null;
   if (FORBIDDEN_KEYS.has(trimmed)) return null;
-  if (trimmed.startsWith('__')) return null;
+  if (trimmed.startsWith("__")) return null;
   return trimmed;
 }
 
-const FORBIDDEN_KEYS = new Set([
-  '__proto__', 
-  'constructor', 
-  'prototype'
-]);
+const FORBIDDEN_KEYS = new Set(["__proto__", "constructor", "prototype"]);
 ```
 
 **Blocks:**
+
 - Prototype pollution keys (`__proto__`, `constructor`, `prototype`)
 - Double-underscore prefix keys (`__*`)
 - Empty or whitespace-only keys
@@ -78,7 +75,7 @@ All maps with user-controlled keys use `Object.create(null)`:
 // Before
 db.data.users = db.data.users || {};
 
-// After  
+// After
 db.data.users = db.data.users || Object.create(null);
 db.data.devices = db.data.devices || Object.create(null);
 
@@ -94,8 +91,11 @@ All user-controlled data is sanitized before logging:
 
 ```javascript
 function sanitizeForLog(str) {
-  if (typeof str !== 'string') return String(str);
-  return str.replace(/[\r\n\t]/g, ' ').replace(/\s+/g, ' ').trim();
+  if (typeof str !== "string") return String(str);
+  return str
+    .replace(/[\r\n\t]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 // Usage
@@ -105,6 +105,7 @@ console.log(`[${timestamp}] ${method} ${url} - ${status}`);
 ```
 
 **Prevents:**
+
 - Log forgery via CRLF injection (`%0D%0A`)
 - Fake log entries
 - Audit trail corruption
@@ -116,17 +117,20 @@ console.log(`[${timestamp}] ${method} ${url} - ${status}`);
 ### Positive
 
 ✅ **Security**
+
 - Prevents prototype pollution attacks (CWE-1321)
 - Prevents log injection attacks (CWE-117)
 - Defense in depth (multiple layers)
 - Input validation catches malformed data
 
 ✅ **Compliance**
+
 - Meets OWASP Top 10 requirements
 - Passes CodeQL security scanning
 - Audit-safe logging
 
 ✅ **Reliability**
+
 - Prevents crashes from edge cases
 - Predictable behavior with invalid input
 - Clear error messages for clients
@@ -134,14 +138,17 @@ console.log(`[${timestamp}] ${method} ${url} - ${status}`);
 ### Negative
 
 ⚠️ **Performance**
+
 - ~0.1ms overhead per request for validation
 - Negligible impact (<1% of total request time)
 
 ⚠️ **Compatibility**
+
 - Rejects some edge-case usernames/deviceIds
 - Example: `__backup__` is now invalid (by design)
 
 ⚠️ **Complexity**
+
 - Additional utility functions
 - More code to maintain and test
 
@@ -156,12 +163,14 @@ console.log(`[${timestamp}] ${method} ${url} - ${status}`);
 ### Code Changes
 
 **Added:**
+
 - `FORBIDDEN_KEYS` constant
 - `sanitizeKey()` function
 - `sanitizeForLog()` function
 - `Object.create(null)` for all user-controlled maps
 
 **Modified:**
+
 - `ensureUser()` - validates username
 - `POST /sync` - validates deviceId
 - `GET /sync` - validates deviceId
@@ -185,12 +194,12 @@ sanitizeForLog('test\ninjection') === 'test injection'
 
 ## Compliance
 
-| Standard | Requirement | Status |
-|----------|-------------|--------|
-| **OWASP Top 10** | A03:2021 - Injection | ✅ Compliant |
-| **CWE** | CWE-1321 - Prototype Pollution | ✅ Mitigated |
-| **CWE** | CWE-117 - Log Injection | ✅ Mitigated |
-| **CodeQL** | Security scanning | ✅ All alerts resolved |
+| Standard         | Requirement                    | Status                 |
+| ---------------- | ------------------------------ | ---------------------- |
+| **OWASP Top 10** | A03:2021 - Injection           | ✅ Compliant           |
+| **CWE**          | CWE-1321 - Prototype Pollution | ✅ Mitigated           |
+| **CWE**          | CWE-117 - Log Injection        | ✅ Mitigated           |
+| **CodeQL**       | Security scanning              | ✅ All alerts resolved |
 
 ---
 
@@ -204,6 +213,7 @@ users.set(username, userData);
 ```
 
 **Rejected because:**
+
 - Requires refactoring all data access patterns
 - lowdb uses plain objects
 - More complex serialization
@@ -215,6 +225,7 @@ Object.freeze(db.data.users);
 ```
 
 **Rejected because:**
+
 - Prevents legitimate updates
 - Doesn't solve the root problem
 - Performance overhead
@@ -222,11 +233,12 @@ Object.freeze(db.data.users);
 ### 3. Use a Schema Validation Library
 
 ```javascript
-const Joi = require('joi');
+const Joi = require("joi");
 const schema = Joi.object({ username: Joi.string() });
 ```
 
 **Considered for future:**
+
 - Would add comprehensive validation
 - More overhead for simple use case
 - May implement in Phase 4
@@ -236,12 +248,14 @@ const schema = Joi.object({ username: Joi.string() });
 ## Future Work
 
 ### Short-Term
+
 - [ ] Add security unit tests
 - [ ] Implement rate limiting
 - [ ] Add helmet.js security headers
 - [ ] Enable request size limits
 
 ### Long-Term
+
 - [ ] Regular security audits (quarterly)
 - [ ] Penetration testing
 - [ ] Security monitoring integration

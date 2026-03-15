@@ -10,12 +10,12 @@
 The backend tests failed with the following error:
 
 ```
-Error [ERR_REQUIRE_ESM]: require() of ES Module 
-/home/runner/work/trapp/trapp/backend/node_modules/lowdb/lib/index.js 
+Error [ERR_REQUIRE_ESM]: require() of ES Module
+/home/runner/work/trapp/trapp/backend/node_modules/lowdb/lib/index.js
 from /home/runner/work/trapp/trapp/backend/index.js not supported.
 
-Instead change the require of /home/runner/work/trapp/trapp/backend/node_modules/lowdb/lib/index.js 
-in /home/runner/work/trapp/trapp/backend/index.js to a dynamic import() 
+Instead change the require of /home/runner/work/trapp/trapp/backend/node_modules/lowdb/lib/index.js
+in /home/runner/work/trapp/trapp/backend/index.js to a dynamic import()
 which is available in all CommonJS modules.
 ```
 
@@ -51,6 +51,7 @@ Added `"type": "module"` to enable ES Modules:
 #### 2. backend/index.js
 
 **Before (CommonJS):**
+
 ```javascript
 const express = require("express");
 const cors = require("cors");
@@ -71,6 +72,7 @@ module.exports = { createServer };
 ```
 
 **After (ES Modules):**
+
 ```javascript
 import express from "express";
 import cors from "cors";
@@ -94,6 +96,7 @@ export { createServer };
 #### 3. backend/sync.test.js
 
 **Before (CommonJS):**
+
 ```javascript
 const { test } = require("node:test");
 const assert = require("node:assert").strict;
@@ -106,6 +109,7 @@ const { createHash } = require("crypto");
 ```
 
 **After (ES Modules):**
+
 ```javascript
 import { test } from "node:test";
 import assert from "node:assert";
@@ -123,34 +127,34 @@ import { createServer } from "./index.js";
 
 ### 1. Import Syntax
 
-| CommonJS | ES Modules |
-|----------|------------|
-| `const x = require('x')` | `import x from 'x'` |
-| `const { a } = require('x')` | `import { a } from 'x'` |
+| CommonJS                      | ES Modules                  |
+| ----------------------------- | --------------------------- |
+| `const x = require('x')`      | `import x from 'x'`         |
+| `const { a } = require('x')`  | `import { a } from 'x'`     |
 | `const x = require('./file')` | `import x from './file.js'` |
 
 **Note:** ES modules require the `.js` extension for relative imports.
 
 ### 2. Export Syntax
 
-| CommonJS | ES Modules |
-|----------|------------|
+| CommonJS             | ES Modules         |
+| -------------------- | ------------------ |
 | `module.exports = x` | `export default x` |
-| `exports.x = x` | `export { x }` |
+| `exports.x = x`      | `export { x }`     |
 
 ### 3. Main Module Detection
 
-| CommonJS | ES Modules |
-|----------|------------|
+| CommonJS                       | ES Modules                                               |
+| ------------------------------ | -------------------------------------------------------- |
 | `if (require.main === module)` | `if (import.meta.url === \`file://${process.argv[1]}\`)` |
 
-### 4. __dirname and __filename
+### 4. **dirname and **filename
 
 ES Modules don't have `__dirname` or `__filename`. Use:
 
 ```javascript
-import { fileURLToPath } from 'node:url';
-import { dirname } from 'node:path';
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -161,6 +165,7 @@ const __dirname = dirname(__filename);
 ## Test Results
 
 ### Before Fix ❌
+
 ```
 not ok 1 - sync.test.js
   ---
@@ -172,6 +177,7 @@ not ok 1 - sync.test.js
 ```
 
 ### After Fix ✅
+
 ```
 ✔ backend /health and /sync endpoints work (45.3996ms)
 ℹ tests 1
@@ -188,6 +194,7 @@ npm test
 ```
 
 **Results:**
+
 ```
 Test Suites: 2 passed, 2 total (App)
 Tests:       2 passed, 2 total (App)
@@ -203,11 +210,11 @@ Duration: 186ms
 
 ## Files Modified
 
-| File | Changes |
-|------|---------|
-| `backend/package.json` | Added `"type": "module"` |
-| `backend/index.js` | Converted to ES modules (imports, exports, main check) |
-| `backend/sync.test.js` | Converted to ES modules |
+| File                   | Changes                                                |
+| ---------------------- | ------------------------------------------------------ |
+| `backend/package.json` | Added `"type": "module"`                               |
+| `backend/index.js`     | Converted to ES modules (imports, exports, main check) |
+| `backend/sync.test.js` | Converted to ES modules                                |
 
 ---
 

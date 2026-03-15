@@ -1,7 +1,8 @@
 # Build & Coverage Fix
 
 **Date:** March 15, 2026  
-**Issues:** 
+**Issues:**
+
 1. Build artifacts failing due to outdated Node.js and deprecated command
 2. Coverage summary empty in GitHub Actions
 
@@ -12,10 +13,10 @@
 ### Error Messages
 
 ```
-Node.js (v18.20.8) is outdated and unsupported. 
+Node.js (v18.20.8) is outdated and unsupported.
 Please update to a newer Node.js LTS version (required: >=20.19.4)
 
-CommandError: expo export:web can only be used with Webpack. 
+CommandError: expo export:web can only be used with Webpack.
 Use expo export for other bundlers.
 ```
 
@@ -30,26 +31,30 @@ Use expo export for other bundlers.
 #### 1. Updated Node.js Version (`.github/workflows/ci.yml`)
 
 **Before:**
+
 ```yaml
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: "18"
 ```
 
 **After:**
+
 ```yaml
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
 ```
 
 #### 2. Updated Build Command (`.github/workflows/ci.yml`)
 
 **Before:**
+
 ```yaml
 - name: Build web version (Expo)
   run: npx expo export:web
 ```
 
 **After:**
+
 ```yaml
 - name: Build web version (Expo)
   run: npx expo export -p web
@@ -58,6 +63,7 @@ env:
 #### 3. Updated Output Directory (`.github/workflows/ci.yml`)
 
 **Before:**
+
 ```yaml
 - name: Copy web build to artifacts
   run: |
@@ -65,6 +71,7 @@ env:
 ```
 
 **After:**
+
 ```yaml
 - name: Copy web build to artifacts
   run: |
@@ -88,6 +95,7 @@ env:
 ### Problem
 
 The coverage summary job was showing empty because:
+
 1. Coverage files weren't being properly downloaded
 2. No actual coverage data was being displayed
 3. Generic "not available" message shown
@@ -95,6 +103,7 @@ The coverage summary job was showing empty because:
 ### Fix Applied
 
 Updated the coverage summary job to:
+
 1. Download coverage artifacts correctly
 2. Display actual coverage file information
 3. Show file sizes and availability
@@ -122,18 +131,18 @@ coverage-summary:
     - name: Generate coverage summary
       run: |
         echo "## 📊 Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
-        
+
         if [ -f "./coverage-artifacts/coverage/lcov.info" ]; then
           echo "### Coverage Report" >> $GITHUB_STEP_SUMMARY
           echo "Coverage file: lcov.info ($(wc -c < ./coverage-artifacts/coverage/lcov.info) bytes)"
         fi
-        
+
         if [ -f "./coverage-artifacts/coverage/coverage-final.json" ]; then
           echo "### Coverage Details" >> $GITHUB_STEP_SUMMARY
           echo "- Coverage file: coverage-final.json"
           echo "- Size: $(wc -c < ./coverage-artifacts/coverage/coverage-final.json) bytes"
         fi
-        
+
         echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
         echo "- Download: \`test-results-app\`"
 ```
@@ -149,6 +158,7 @@ npm run build:web
 ```
 
 **Result:**
+
 ```
 ✅ Web Bundled 295ms (623 modules)
 ✅ Assets (30): Fonts, icons, images
@@ -180,21 +190,21 @@ Coverage Summary:
 
 ## Files Modified
 
-| File | Changes |
-|------|---------|
+| File                       | Changes                                                     |
+| -------------------------- | ----------------------------------------------------------- |
 | `.github/workflows/ci.yml` | Node.js 18→20, build command, output path, coverage summary |
-| `package.json` | Added `build:web` script |
+| `package.json`             | Added `build:web` script                                    |
 
 ---
 
 ## Expo SDK 55 Requirements
 
-| Requirement | Value |
-|-------------|-------|
-| Node.js | >= 20.19.4 (LTS) |
-| Command | `npx expo export -p web` |
-| Output | `dist/` directory |
-| Bundler | Metro (default) |
+| Requirement | Value                    |
+| ----------- | ------------------------ |
+| Node.js     | >= 20.19.4 (LTS)         |
+| Command     | `npx expo export -p web` |
+| Output      | `dist/` directory        |
+| Bundler     | Metro (default)          |
 
 ---
 
@@ -202,13 +212,13 @@ Coverage Summary:
 
 After tests run, these files are created:
 
-| File | Purpose | Size |
-|------|---------|------|
-| `coverage/lcov.info` | LCOV format for Codecov | ~4KB |
-| `coverage/coverage-final.json` | JSON coverage report | ~24KB |
-| `coverage/cobertura-coverage.xml` | Cobertura XML format | ~16KB |
-| `coverage/lcov-report/index.html` | HTML coverage report | Directory |
-| `junit.xml` | JUnit test results | ~1KB |
+| File                              | Purpose                 | Size      |
+| --------------------------------- | ----------------------- | --------- |
+| `coverage/lcov.info`              | LCOV format for Codecov | ~4KB      |
+| `coverage/coverage-final.json`    | JSON coverage report    | ~24KB     |
+| `coverage/cobertura-coverage.xml` | Cobertura XML format    | ~16KB     |
+| `coverage/lcov-report/index.html` | HTML coverage report    | Directory |
+| `junit.xml`                       | JUnit test results      | ~1KB      |
 
 ---
 
@@ -233,6 +243,7 @@ coverage-summary job
 ## Commands Reference
 
 ### Local Development
+
 ```bash
 # Build web
 npm run build:web
@@ -245,6 +256,7 @@ open coverage/lcov-report/index.html
 ```
 
 ### CI Commands
+
 ```bash
 # Install dependencies
 npm ci

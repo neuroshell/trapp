@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+
 import { colors, spacing, typography } from "../theme";
 
 type Props = {
@@ -10,7 +11,13 @@ type Props = {
   disabled?: boolean;
 };
 
-export function PrimaryButton({ children, onPress, style, active, disabled }: Props) {
+export function PrimaryButton({
+  children,
+  onPress,
+  style,
+  active,
+  disabled,
+}: Props) {
   return (
     <Pressable
       onPress={onPress}
@@ -23,7 +30,9 @@ export function PrimaryButton({ children, onPress, style, active, disabled }: Pr
       ]}
       disabled={disabled}
     >
-      <Text style={[styles.text, disabled && styles.textDisabled]}>{children}</Text>
+      <Text style={[styles.text, disabled && styles.textDisabled]}>
+        {children}
+      </Text>
     </Pressable>
   );
 }

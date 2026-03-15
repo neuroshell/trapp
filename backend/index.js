@@ -7,14 +7,14 @@ import { nanoid } from "nanoid";
 // ─────────────────────────────────────────────────────────────────────────────
 // SECURITY: Forbidden property names that could cause prototype pollution
 // ─────────────────────────────────────────────────────────────────────────────
-const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+const FORBIDDEN_KEYS = new Set(["__proto__", "constructor", "prototype"]);
 
 /**
  * SECURITY: Validate a user-controlled key to prevent prototype pollution.
  * Returns null if the key is dangerous, otherwise returns the sanitized key.
  */
 function sanitizeKey(key) {
-  if (typeof key !== 'string') {
+  if (typeof key !== "string") {
     return null;
   }
   const trimmed = key.trim();
@@ -25,7 +25,7 @@ function sanitizeKey(key) {
     return null;
   }
   // Block keys starting with __ (reserved)
-  if (trimmed.startsWith('__')) {
+  if (trimmed.startsWith("__")) {
     return null;
   }
   return trimmed;
@@ -36,7 +36,7 @@ function sanitizeKey(key) {
  * Removes control characters that could inject fake log entries.
  */
 function sanitizeForLog(str) {
-  if (typeof str !== 'string') {
+  if (typeof str !== "string") {
     str = String(str);
   }
   // Remove newline characters to prevent log line injection
@@ -58,7 +58,7 @@ async function createServer(opts = {}) {
   const db = new Low(adapter);
   await db.read();
   db.data = db.data || {};
-  
+
   // SECURITY: Use Object.create(null) for maps with user-controlled keys
   // This prevents prototype pollution even if a bad key slips through
   db.data.users = db.data.users || Object.create(null);
@@ -66,7 +66,7 @@ async function createServer(opts = {}) {
 
   const ensureUser = (username, passwordHash) => {
     if (!username || !passwordHash) return null;
-    
+
     // SECURITY: Sanitize the username key
     const normalized = sanitizeKey(username.toLowerCase());
     if (!normalized) {
@@ -110,7 +110,7 @@ async function createServer(opts = {}) {
       const url = sanitizeForLog(req.originalUrl);
       const statusMessage = sanitizeForLog(res.statusMessage || "");
       const ip = sanitizeForLog(clientIp);
-      
+
       console.log(
         `[${new Date().toISOString()}] ${method} ${url} - ${res.statusCode} ${statusMessage} - ${duration}ms - ${ip}`,
       );
@@ -127,7 +127,7 @@ async function createServer(opts = {}) {
   app.post("/sync", async (req, res) => {
     try {
       const { username, passwordHash, deviceId, payload } = req.body;
-      
+
       // SECURITY: Validate deviceId is a safe key
       const safeDeviceId = sanitizeKey(deviceId);
       if (!safeDeviceId) {
@@ -135,8 +135,13 @@ async function createServer(opts = {}) {
           error: "Invalid deviceId format",
         });
       }
-      
-      if (!username || !passwordHash || typeof payload !== "object" || payload === null) {
+
+      if (
+        !username ||
+        !passwordHash ||
+        typeof payload !== "object" ||
+        payload === null
+      ) {
         return res.status(400).json({
           error: "username, passwordHash, deviceId and payload are required",
         });
@@ -147,16 +152,16 @@ async function createServer(opts = {}) {
         return res.status(401).json({ error: "Invalid username or password" });
       }
 
-      // SECURITY: safeDeviceId is already validated, safe to use as key
+      // SECURITY: safeDeviceId is already validated by sanitizeKey()
       // user.devices uses Object.create(null), preventing prototype pollution
-      // eslint-disable-next-line security/detect-object-injection
+      // This is safe - deviceId is validated to block __proto__, constructor, prototype
       user.devices[safeDeviceId] = true;
 
-      const existing = db.data.devices[safeDeviceId] || { 
-        id: safeDeviceId, 
-        updatedAt: 0, 
-        payload: {}, 
-        owner: username 
+      const existing = db.data.devices[safeDeviceId] || {
+        id: safeDeviceId,
+        updatedAt: 0,
+        payload: {},
+        owner: username,
       };
       const updatedAt = Date.now();
       const newData = {
@@ -168,7 +173,8 @@ async function createServer(opts = {}) {
       };
 
       // SECURITY: db.data.devices uses Object.create(null)
-      // eslint-disable-next-line security/detect-object-injection
+      // safeDeviceId is validated by sanitizeKey() to block dangerous keys
+      // This is safe - deviceId is validated to block __proto__, constructor, prototype
       db.data.devices[safeDeviceId] = newData;
       await db.write();
 
@@ -183,7 +189,7 @@ async function createServer(opts = {}) {
   app.get("/sync", async (req, res) => {
     try {
       const { username, passwordHash, deviceId } = req.query;
-      
+
       // SECURITY: Validate deviceId is a safe key
       const safeDeviceId = sanitizeKey(deviceId);
       if (!safeDeviceId) {
@@ -191,10 +197,11 @@ async function createServer(opts = {}) {
           error: "Invalid deviceId format",
         });
       }
-      
+
       if (!username || !passwordHash) {
         return res.status(400).json({
-          error: "username, passwordHash and deviceId query parameters are required",
+          error:
+            "username, passwordHash and deviceId query parameters are required",
         });
       }
 
@@ -205,7 +212,9 @@ async function createServer(opts = {}) {
 
       // SECURITY: safeDeviceId validated, user.devices is prototype-safe
       if (!user.devices[safeDeviceId]) {
-        return res.status(403).json({ error: "Device not registered for this user" });
+        return res
+          .status(403)
+          .json({ error: "Device not registered for this user" });
       }
 
       const device = db.data.devices[safeDeviceId];

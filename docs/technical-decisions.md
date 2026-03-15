@@ -12,31 +12,32 @@ This document captures Architecture Decision Records (ADRs) for Trapp Tracker. E
 
 ### ADR Status Definitions
 
-| Status | Meaning |
-|--------|---------|
-| **Proposed** | Decision suggested, awaiting team review |
-| **Accepted** | Decision approved and being implemented |
-| **Deprecated** | Decision no longer recommended |
-| **Superseded** | Decision replaced by a newer ADR |
-| **Implemented** | Decision fully implemented in codebase |
+| Status          | Meaning                                  |
+| --------------- | ---------------------------------------- |
+| **Proposed**    | Decision suggested, awaiting team review |
+| **Accepted**    | Decision approved and being implemented  |
+| **Deprecated**  | Decision no longer recommended           |
+| **Superseded**  | Decision replaced by a newer ADR         |
+| **Implemented** | Decision fully implemented in codebase   |
 
 ---
 
 ## ADR Index
 
-| ADR | Title | Status | Date |
-|-----|-------|--------|------|
+| ADR                                                              | Title                                         | Status   | Date       |
+| ---------------------------------------------------------------- | --------------------------------------------- | -------- | ---------- |
 | [ADR-001](#adr-001-react-native--expo-for-cross-platform-mobile) | React Native + Expo for Cross-Platform Mobile | Accepted | 2026-03-15 |
-| [ADR-002](#adr-002-asyncstorage-for-local-persistence) | AsyncStorage for Local Persistence | Accepted | 2026-03-15 |
-| [ADR-003](#adr-003-context-api-for-state-management) | Context API for State Management | Accepted | 2026-03-15 |
-| [ADR-004](#adr-004-expressjs--lowdb-for-backend) | Express.js + lowdb for Backend | Accepted | 2026-03-15 |
-| [ADR-005](#adr-005-typescript-for-type-safety) | TypeScript for Type Safety | Accepted | 2026-03-15 |
+| [ADR-002](#adr-002-asyncstorage-for-local-persistence)           | AsyncStorage for Local Persistence            | Accepted | 2026-03-15 |
+| [ADR-003](#adr-003-context-api-for-state-management)             | Context API for State Management              | Accepted | 2026-03-15 |
+| [ADR-004](#adr-004-expressjs--lowdb-for-backend)                 | Express.js + lowdb for Backend                | Accepted | 2026-03-15 |
+| [ADR-005](#adr-005-typescript-for-type-safety)                   | TypeScript for Type Safety                    | Accepted | 2026-03-15 |
 
 ---
 
 ## ADR-001: React Native + Expo for Cross-Platform Mobile
 
 ### Status
+
 **Accepted** - 2026-03-15
 
 ### Context
@@ -44,12 +45,14 @@ This document captures Architecture Decision Records (ADRs) for Trapp Tracker. E
 Trapp Tracker needs to support both iOS and Android platforms to reach the target audience (Product Vision: "Cross-Platform: Seamless experience across all devices"). The team is small (1-3 developers) and needs to ship an MVP within 8-12 weeks.
 
 **Requirements:**
+
 - Single codebase for iOS and Android (US-6.1, US-7.1)
 - Fast iteration and deployment
 - Access to native features (crypto, storage, notifications)
 - Support for Expo managed workflow preferred (simplifies native dependencies)
 
 **Constraints:**
+
 - Small team with limited native mobile expertise
 - Need to support both app stores
 - OTA updates desirable for bug fixes
@@ -59,6 +62,7 @@ Trapp Tracker needs to support both iOS and Android platforms to reach the targe
 **Use React Native with Expo (managed workflow) for mobile development.**
 
 **Specific choices:**
+
 - React Native 0.81.5 (via Expo SDK ~55.0.6)
 - Expo managed workflow (not bare)
 - React Navigation v6 for navigation
@@ -67,17 +71,18 @@ Trapp Tracker needs to support both iOS and Android platforms to reach the targe
 
 ### Alternatives Considered
 
-| Alternative | Pros | Cons | Verdict |
-|-------------|------|------|---------|
-| **Native iOS (Swift) + Native Android (Kotlin)** | Best performance, full API access | 2x development effort, requires native expertise | Rejected - team too small |
-| **React Native (bare workflow)** | More native module flexibility | Complex setup, manual native dependency management | Rejected - MVP doesn't need custom native modules |
-| **Flutter** | Good performance, single codebase | Dart language learning curve, smaller ecosystem | Rejected - team has React experience |
-| **Ionic/Capacitor** | Web technologies, single codebase | Performance limitations, less native feel | Rejected - RN provides better UX |
-| **Expo (managed)** | Fast setup, OTA updates, managed native deps | Limited native module access | **Selected** - best fit for MVP |
+| Alternative                                      | Pros                                         | Cons                                               | Verdict                                           |
+| ------------------------------------------------ | -------------------------------------------- | -------------------------------------------------- | ------------------------------------------------- |
+| **Native iOS (Swift) + Native Android (Kotlin)** | Best performance, full API access            | 2x development effort, requires native expertise   | Rejected - team too small                         |
+| **React Native (bare workflow)**                 | More native module flexibility               | Complex setup, manual native dependency management | Rejected - MVP doesn't need custom native modules |
+| **Flutter**                                      | Good performance, single codebase            | Dart language learning curve, smaller ecosystem    | Rejected - team has React experience              |
+| **Ionic/Capacitor**                              | Web technologies, single codebase            | Performance limitations, less native feel          | Rejected - RN provides better UX                  |
+| **Expo (managed)**                               | Fast setup, OTA updates, managed native deps | Limited native module access                       | **Selected** - best fit for MVP                   |
 
 ### Consequences
 
 #### Positive
+
 - **Single codebase**: ~60% code reuse between iOS and Android
 - **Fast iteration**: Expo Go for instant testing, fast refresh
 - **OTA updates**: Can push JS updates without app store review (expo-updates)
@@ -85,24 +90,26 @@ Trapp Tracker needs to support both iOS and Android platforms to reach the targe
 - **Team alignment**: Leverages existing React/JavaScript skills
 
 #### Negative
+
 - **Limited native modules**: Cannot use arbitrary native libraries without ejecting
 - **App size**: Expo apps are larger (~25-30MB) than bare RN
 - **Build control**: Less control over native build configuration
 - **Dependency on Expo**: Must follow Expo SDK release cycle
 
 #### Mitigation Strategies
+
 - **Native module limitation**: Evaluate bare workflow if required modules unavailable
 - **App size**: Optimize assets, code split for Phase 2+
 - **Expo dependency**: Maintain escape hatch to bare workflow if needed
 
 ### Compliance
 
-| Requirement | Compliance |
-|-------------|------------|
-| Cross-platform (US-6.1) | ✓ Supported |
-| Fast iteration | ✓ Supported |
+| Requirement                       | Compliance                                |
+| --------------------------------- | ----------------------------------------- |
+| Cross-platform (US-6.1)           | ✓ Supported                               |
+| Fast iteration                    | ✓ Supported                               |
 | Native features (crypto, storage) | ✓ Supported via expo-crypto, AsyncStorage |
-| OTA updates | ✓ Supported via expo-updates |
+| OTA updates                       | ✓ Supported via expo-updates              |
 
 ### Related Decisions
 
@@ -120,6 +127,7 @@ Trapp Tracker needs to support both iOS and Android platforms to reach the targe
 ## ADR-002: AsyncStorage for Local Persistence
 
 ### Status
+
 **Accepted** - 2026-03-15
 
 ### Context
@@ -127,6 +135,7 @@ Trapp Tracker needs to support both iOS and Android platforms to reach the targe
 Trapp Tracker is an offline-first application (US-6.1: "App must work offline"). All workout data must persist locally and be available immediately. The MVP does not require cloud sync (Phase 3 feature).
 
 **Requirements:**
+
 - Local data persistence for workouts, user profile, achievements (US-6.1)
 - Fast read/write for workout logging (< 10 seconds, ASR-PERF-01)
 - Simple API for CRUD operations
@@ -134,6 +143,7 @@ Trapp Tracker is an offline-first application (US-6.1: "App must work offline").
 - Sufficient capacity for expected data volume (< 10MB for MVP)
 
 **Constraints:**
+
 - Must work offline
 - Must be available in Expo managed workflow
 - Team has limited mobile database experience
@@ -143,6 +153,7 @@ Trapp Tracker is an offline-first application (US-6.1: "App must work offline").
 **Use @react-native-async-storage/async-storage for local data persistence in MVP.**
 
 **Implementation approach:**
+
 - Wrap AsyncStorage in `src/storage.ts` abstraction layer
 - Store data as JSON strings
 - Include schema version for future migrations
@@ -150,30 +161,33 @@ Trapp Tracker is an offline-first application (US-6.1: "App must work offline").
 
 ### Alternatives Considered
 
-| Alternative | Pros | Cons | Verdict |
-|-------------|------|------|---------|
-| **AsyncStorage** | Simple API, Expo-compatible, no setup | ~6MB limit on some Android, no queries | **Selected** - sufficient for MVP |
-| **expo-sqlite** | Full SQL queries, better for complex data | More complex, larger bundle, overkill for MVP | Rejected - premature optimization |
-| **WatermelonDB** | Reactive, offline-first, good sync support | Complex setup, learning curve | Rejected - too complex for MVP |
-| **Realm** | Fast, object-oriented, built-in sync | Larger bundle, MongoDB dependency | Rejected - overkill for MVP |
-| **expo-secure-store** | Encrypted, secure | Limited to small values (~2KB per item) | Rejected - not suitable for workout data |
-| **File system (expo-file-system)** | Full control, no size limits | Manual serialization, more complex | Rejected - unnecessary complexity |
+| Alternative                        | Pros                                       | Cons                                          | Verdict                                  |
+| ---------------------------------- | ------------------------------------------ | --------------------------------------------- | ---------------------------------------- |
+| **AsyncStorage**                   | Simple API, Expo-compatible, no setup      | ~6MB limit on some Android, no queries        | **Selected** - sufficient for MVP        |
+| **expo-sqlite**                    | Full SQL queries, better for complex data  | More complex, larger bundle, overkill for MVP | Rejected - premature optimization        |
+| **WatermelonDB**                   | Reactive, offline-first, good sync support | Complex setup, learning curve                 | Rejected - too complex for MVP           |
+| **Realm**                          | Fast, object-oriented, built-in sync       | Larger bundle, MongoDB dependency             | Rejected - overkill for MVP              |
+| **expo-secure-store**              | Encrypted, secure                          | Limited to small values (~2KB per item)       | Rejected - not suitable for workout data |
+| **File system (expo-file-system)** | Full control, no size limits               | Manual serialization, more complex            | Rejected - unnecessary complexity        |
 
 ### Consequences
 
 #### Positive
+
 - **Simplicity**: Key-value API is straightforward
 - **Expo compatibility**: Works out-of-box in managed workflow
 - **Fast for small data**: Sub-100ms reads/writes for MVP data volume
 - **No dependencies**: Part of React Native core ecosystem
 
 #### Negative
+
 - **Size limits**: ~6MB on some Android devices (RISK-001)
 - **No queries**: Must load entire dataset to filter
 - **No encryption**: Data stored in plaintext (mitigated in Phase 2)
 - **Performance degrades**: Slower with large values (> 1MB)
 
 #### Mitigation Strategies
+
 - **Size limits**: Monitor storage usage; warn users at 80% capacity
 - **No queries**: Keep dataset denormalized; use indexes in memory
 - **No encryption**: Add expo-secure-store for sensitive data in Phase 2
@@ -193,12 +207,12 @@ Phase 3: SQLite or WatermelonDB (for workout data)
 
 ### Compliance
 
-| Requirement | Compliance |
-|-------------|------------|
-| Offline persistence (US-6.1) | ✓ Supported |
+| Requirement                        | Compliance  |
+| ---------------------------------- | ----------- |
+| Offline persistence (US-6.1)       | ✓ Supported |
 | Fast workout logging (ASR-PERF-01) | ✓ Supported |
-| Expo managed workflow | ✓ Supported |
-| Data capacity (< 10MB MVP) | ✓ Supported |
+| Expo managed workflow              | ✓ Supported |
+| Data capacity (< 10MB MVP)         | ✓ Supported |
 
 ### Related Decisions
 
@@ -216,11 +230,13 @@ Phase 3: SQLite or WatermelonDB (for workout data)
 ## ADR-003: Context API for State Management
 
 ### Status
+
 **Accepted** - 2026-03-15
 
 ### Context
 
 Trapp Tracker requires global state management for:
+
 - User authentication state (AuthProvider)
 - App-wide theme/settings
 - Workout data (shared across screens)
@@ -229,6 +245,7 @@ Trapp Tracker requires global state management for:
 The team is small and values simplicity. The MVP has limited state complexity.
 
 **Requirements:**
+
 - Global state accessible from any screen
 - Minimal boilerplate for small team
 - TypeScript support
@@ -236,6 +253,7 @@ The team is small and values simplicity. The MVP has limited state complexity.
 - Sufficient for MVP scale (< 10 global state slices)
 
 **Constraints:**
+
 - Small team (1-3 developers)
 - Need to ship MVP quickly
 - Team has React experience
@@ -245,6 +263,7 @@ The team is small and values simplicity. The MVP has limited state complexity.
 **Use React Context API for global state management in MVP.**
 
 **Implementation approach:**
+
 - Create context providers for each domain (AuthContext, ThemeContext)
 - Keep state slices separate (not one monolithic store)
 - Use `useMemo` to prevent unnecessary re-renders
@@ -252,30 +271,33 @@ The team is small and values simplicity. The MVP has limited state complexity.
 
 ### Alternatives Considered
 
-| Alternative | Pros | Cons | Verdict |
-|-------------|------|------|---------|
-| **Context API** | Built-in, no dependencies, simple | Can cause re-renders, no devtools | **Selected** - best for MVP |
-| **Redux Toolkit** | Devtools, middleware, predictable | Boilerplate, learning curve, overkill | Rejected - too complex for MVP |
-| **Zustand** | Simple API, devtools, no boilerplate | External dependency, newer library | Rejected - not needed yet |
-| **Jotai/Recoil** | Atomic updates, great for derived state | Newer, smaller community | Rejected - team unfamiliar |
-| **MobX** | Reactive, minimal boilerplate | Magic behavior, larger bundle | Rejected - team prefers explicit |
-| **useReducer + Context** | More structured than plain Context | Still requires careful optimization | Considered - may adopt per-context |
+| Alternative              | Pros                                    | Cons                                  | Verdict                            |
+| ------------------------ | --------------------------------------- | ------------------------------------- | ---------------------------------- |
+| **Context API**          | Built-in, no dependencies, simple       | Can cause re-renders, no devtools     | **Selected** - best for MVP        |
+| **Redux Toolkit**        | Devtools, middleware, predictable       | Boilerplate, learning curve, overkill | Rejected - too complex for MVP     |
+| **Zustand**              | Simple API, devtools, no boilerplate    | External dependency, newer library    | Rejected - not needed yet          |
+| **Jotai/Recoil**         | Atomic updates, great for derived state | Newer, smaller community              | Rejected - team unfamiliar         |
+| **MobX**                 | Reactive, minimal boilerplate           | Magic behavior, larger bundle         | Rejected - team prefers explicit   |
+| **useReducer + Context** | More structured than plain Context      | Still requires careful optimization   | Considered - may adopt per-context |
 
 ### Consequences
 
 #### Positive
+
 - **Zero dependencies**: Built into React
 - **Simple API**: Easy for team to understand
 - **TypeScript support**: Full type inference
 - **Flexible**: Can create multiple contexts for different domains
 
 #### Negative
+
 - **Re-render risk**: Context updates trigger re-renders in all consumers
 - **No devtools**: Harder to debug state changes
 - **No middleware**: Cannot easily add logging, persistence, etc.
 - **Testing complexity**: Need to wrap components with providers
 
 #### Mitigation Strategies
+
 - **Re-renders**: Split contexts by domain; use `useMemo` for values
 - **Devtools**: Add React DevTools for inspection
 - **Testing**: Create test utilities with pre-wrapped providers
@@ -296,22 +318,24 @@ Phase 3: Redux Toolkit (only if complex state needed)
 ### Usage Guidelines
 
 **Do:**
+
 - Create separate contexts for unrelated state (AuthContext, ThemeContext)
 - Use `useMemo` for context values
 - Keep state slices small and focused
 
 **Don't:**
+
 - Create one monolithic app context
 - Store frequently-updating state in Context (use local state instead)
 - Pass complex objects without memoization
 
 ### Compliance
 
-| Requirement | Compliance |
-|-------------|------------|
-| Global state access | ✓ Supported |
-| Minimal boilerplate | ✓ Supported |
-| TypeScript support | ✓ Supported |
+| Requirement             | Compliance  |
+| ----------------------- | ----------- |
+| Global state access     | ✓ Supported |
+| Minimal boilerplate     | ✓ Supported |
+| TypeScript support      | ✓ Supported |
 | MVP scale (< 10 slices) | ✓ Supported |
 
 ### Related Decisions
@@ -329,11 +353,13 @@ Phase 3: Redux Toolkit (only if complex state needed)
 ## ADR-004: Express.js + lowdb for Backend
 
 ### Status
+
 **Accepted** - 2026-03-15
 
 ### Context
 
 Phase 3 of the roadmap introduces cloud sync for multi-device users (US-6.2). The backend needs to:
+
 - Store user accounts and workout data
 - Provide sync API for mobile clients
 - Handle conflict resolution
@@ -342,6 +368,7 @@ Phase 3 of the roadmap introduces cloud sync for multi-device users (US-6.2). Th
 The team is small with limited backend experience. The MVP (Phase 1-2) does not require a backend.
 
 **Requirements:**
+
 - Simple setup and deployment
 - RESTful API for mobile clients
 - User authentication
@@ -350,6 +377,7 @@ The team is small with limited backend experience. The MVP (Phase 1-2) does not 
 - Cost-effective for early stages
 
 **Constraints:**
+
 - Small team (1-3 developers)
 - Limited backend expertise
 - Budget constraints (Phase 1-2)
@@ -360,6 +388,7 @@ The team is small with limited backend experience. The MVP (Phase 1-2) does not 
 **Use Express.js with lowdb (JSON file storage) for Phase 3 backend.**
 
 **Implementation approach:**
+
 - Single Express.js server (`backend/index.js`)
 - lowdb for JSON file-based persistence
 - Simple user authentication (username + password hash)
@@ -368,18 +397,19 @@ The team is small with limited backend experience. The MVP (Phase 1-2) does not 
 
 ### Alternatives Considered
 
-| Alternative | Pros | Cons | Verdict |
-|-------------|------|------|---------|
-| **Express.js + lowdb** | Simple, zero DB setup, single file deploy | Not scalable, file-based concurrency limits | **Selected** - best for Phase 3 |
-| **Express.js + PostgreSQL** | Scalable, ACID transactions, mature | More setup, DB management, overkill for MVP | Rejected - premature for Phase 3 |
-| **Firebase** | Managed, real-time sync, auth included | Vendor lock-in, cost at scale, less control | Rejected - prefer self-hosted |
-| **Supabase** | Open-source Firebase, PostgreSQL | Still managed service, learning curve | Rejected - team wants control |
-| **AWS Amplify** | Full backend suite, managed | Complex, AWS lock-in, cost | Rejected - too complex |
-| **Serverless (Lambda)** | Pay-per-use, auto-scaling | Cold starts, more complex deployment | Rejected - not needed yet |
+| Alternative                 | Pros                                      | Cons                                        | Verdict                          |
+| --------------------------- | ----------------------------------------- | ------------------------------------------- | -------------------------------- |
+| **Express.js + lowdb**      | Simple, zero DB setup, single file deploy | Not scalable, file-based concurrency limits | **Selected** - best for Phase 3  |
+| **Express.js + PostgreSQL** | Scalable, ACID transactions, mature       | More setup, DB management, overkill for MVP | Rejected - premature for Phase 3 |
+| **Firebase**                | Managed, real-time sync, auth included    | Vendor lock-in, cost at scale, less control | Rejected - prefer self-hosted    |
+| **Supabase**                | Open-source Firebase, PostgreSQL          | Still managed service, learning curve       | Rejected - team wants control    |
+| **AWS Amplify**             | Full backend suite, managed               | Complex, AWS lock-in, cost                  | Rejected - too complex           |
+| **Serverless (Lambda)**     | Pay-per-use, auto-scaling                 | Cold starts, more complex deployment        | Rejected - not needed yet        |
 
 ### Consequences
 
 #### Positive
+
 - **Simplicity**: Single file database, no DB setup
 - **Fast prototyping**: Can iterate quickly on API design
 - **Low cost**: Free/cheap hosting for early stages
@@ -387,12 +417,14 @@ The team is small with limited backend experience. The MVP (Phase 1-2) does not 
 - **Easy deployment**: Single Node.js process
 
 #### Negative
+
 - **Scalability limits**: File-based DB cannot handle high concurrency (RISK-005)
 - **No ACID transactions**: Potential data corruption on concurrent writes
 - **Single point of failure**: No built-in redundancy
 - **Backup complexity**: Must manage file backups manually
 
 #### Mitigation Strategies
+
 - **Scalability**: Plan PostgreSQL migration at 1,000+ concurrent users
 - **Concurrency**: Single-writer design; queue writes
 - **Reliability**: Regular file backups; consider managed hosting
@@ -415,13 +447,13 @@ The team is small with limited backend experience. The MVP (Phase 1-2) does not 
 
 ### API Endpoints (Phase 3)
 
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| POST | /auth/register | User registration |
-| POST | /auth/login | User login |
-| POST | /sync | Upload sync payload |
-| GET | /sync | Download sync payload |
-| GET | /health | Health check |
+| Method | Endpoint       | Purpose               |
+| ------ | -------------- | --------------------- |
+| POST   | /auth/register | User registration     |
+| POST   | /auth/login    | User login            |
+| POST   | /sync          | Upload sync payload   |
+| GET    | /sync          | Download sync payload |
+| GET    | /health        | Health check          |
 
 ### Migration Path (Phase 4)
 
@@ -437,12 +469,12 @@ Phase 4+: Consider microservices if team scales
 
 ### Compliance
 
-| Requirement | Compliance |
-|-------------|------------|
-| Cloud sync (US-6.2) | ✓ Supported |
-| User authentication | ✓ Supported |
-| 10,000 users (Phase 4) | ○ Requires migration |
-| Low operational overhead | ✓ Supported |
+| Requirement              | Compliance           |
+| ------------------------ | -------------------- |
+| Cloud sync (US-6.2)      | ✓ Supported          |
+| User authentication      | ✓ Supported          |
+| 10,000 users (Phase 4)   | ○ Requires migration |
+| Low operational overhead | ✓ Supported          |
 
 ### Related Decisions
 
@@ -461,6 +493,7 @@ Phase 4+: Consider microservices if team scales
 ## ADR-005: TypeScript for Type Safety
 
 ### Status
+
 **Accepted** - 2026-03-15
 
 ### Context
@@ -470,6 +503,7 @@ Trapp Tracker is a cross-platform application with multiple layers (UI, domain, 
 The team values code quality and maintainability. TypeScript is widely adopted in the React Native ecosystem.
 
 **Requirements:**
+
 - Catch errors at compile time
 - Better IDE autocomplete and refactoring
 - Document code intent through types
@@ -477,6 +511,7 @@ The team values code quality and maintainability. TypeScript is widely adopted i
 - Manageable learning curve
 
 **Constraints:**
+
 - Team has JavaScript/TypeScript experience
 - Need to balance type safety with development speed
 - Must work with Expo and React Native
@@ -486,6 +521,7 @@ The team values code quality and maintainability. TypeScript is widely adopted i
 **Use TypeScript for all frontend and backend code.**
 
 **Implementation approach:**
+
 - Strict mode enabled in `tsconfig.json`
 - Define interfaces for all domain models (`src/models.ts`)
 - Type all function parameters and return values
@@ -494,16 +530,17 @@ The team values code quality and maintainability. TypeScript is widely adopted i
 
 ### Alternatives Considered
 
-| Alternative | Pros | Cons | Verdict |
-|-------------|------|------|---------|
-| **TypeScript** | Type safety, IDE support, refactoring | Compile step, learning curve | **Selected** - best for maintainability |
-| **JavaScript (JSDoc)** | No compile step, flexible | Less type safety, weaker IDE support | Rejected - team prefers types |
-| **JavaScript (plain)** | Fast prototyping, no setup | Runtime errors, harder refactoring | Rejected - not maintainable |
-| **Flow** | Type checking for JS | Deprecated, smaller ecosystem | Rejected - TypeScript is standard |
+| Alternative            | Pros                                  | Cons                                 | Verdict                                 |
+| ---------------------- | ------------------------------------- | ------------------------------------ | --------------------------------------- |
+| **TypeScript**         | Type safety, IDE support, refactoring | Compile step, learning curve         | **Selected** - best for maintainability |
+| **JavaScript (JSDoc)** | No compile step, flexible             | Less type safety, weaker IDE support | Rejected - team prefers types           |
+| **JavaScript (plain)** | Fast prototyping, no setup            | Runtime errors, harder refactoring   | Rejected - not maintainable             |
+| **Flow**               | Type checking for JS                  | Deprecated, smaller ecosystem        | Rejected - TypeScript is standard       |
 
 ### Consequences
 
 #### Positive
+
 - **Type safety**: Catch errors before runtime
 - **IDE support**: Better autocomplete, go-to-definition, refactoring
 - **Documentation**: Types serve as living documentation
@@ -511,12 +548,14 @@ The team values code quality and maintainability. TypeScript is widely adopted i
 - **Ecosystem**: TypeScript is the React Native standard
 
 #### Negative
+
 - **Compile step**: Adds build time (minimal with Expo)
 - **Learning curve**: Team members need TypeScript knowledge
 - **Boilerplate**: More code for type definitions
 - **False security**: Types don't guarantee correctness
 
 #### Mitigation Strategies
+
 - **Compile time**: Use fast refresh; compile is incremental
 - **Learning curve**: Provide TypeScript guidelines; pair programming
 - **Boilerplate**: Use type inference where possible; avoid over-typing
@@ -540,12 +579,14 @@ The team values code quality and maintainability. TypeScript is widely adopted i
 ### Type Guidelines
 
 **Do:**
+
 - Define interfaces for domain models
 - Use type inference for local variables
 - Type function parameters and return values
 - Use union types for constrained values
 
 **Don't:**
+
 - Use `any` unless absolutely necessary
 - Over-engineer types (avoid excessive generics)
 - Duplicate types between frontend and backend (consider shared package Phase 4)
@@ -554,7 +595,12 @@ The team values code quality and maintainability. TypeScript is widely adopted i
 
 ```typescript
 // src/models.ts
-export type ActivityType = "running" | "squats" | "pushups" | "pullups" | "other";
+export type ActivityType =
+  | "running"
+  | "squats"
+  | "pushups"
+  | "pullups"
+  | "other";
 
 export interface ActivityEntry {
   id: string;
@@ -573,12 +619,12 @@ export interface AppState {
 
 ### Compliance
 
-| Requirement | Compliance |
-|-------------|------------|
-| Type safety | ✓ Supported |
-| IDE support | ✓ Supported |
-| React Native compatibility | ✓ Supported |
-| Backend compatibility | ✓ Supported (Phase 3) |
+| Requirement                | Compliance            |
+| -------------------------- | --------------------- |
+| Type safety                | ✓ Supported           |
+| IDE support                | ✓ Supported           |
+| React Native compatibility | ✓ Supported           |
+| Backend compatibility      | ✓ Supported (Phase 3) |
 
 ### Related Decisions
 
@@ -594,13 +640,13 @@ export interface AppState {
 
 ## Decision Log
 
-| Date | Decision | Author | Status |
-|------|----------|--------|--------|
+| Date       | Decision                     | Author    | Status   |
+| ---------- | ---------------------------- | --------- | -------- |
 | 2026-03-15 | ADR-001: React Native + Expo | Architect | Accepted |
-| 2026-03-15 | ADR-002: AsyncStorage | Architect | Accepted |
-| 2026-03-15 | ADR-003: Context API | Architect | Accepted |
-| 2026-03-15 | ADR-004: Express.js + lowdb | Architect | Accepted |
-| 2026-03-15 | ADR-005: TypeScript | Architect | Accepted |
+| 2026-03-15 | ADR-002: AsyncStorage        | Architect | Accepted |
+| 2026-03-15 | ADR-003: Context API         | Architect | Accepted |
+| 2026-03-15 | ADR-004: Express.js + lowdb  | Architect | Accepted |
+| 2026-03-15 | ADR-005: TypeScript          | Architect | Accepted |
 
 ---
 
@@ -608,13 +654,13 @@ export interface AppState {
 
 The following ADRs should be created as the project evolves:
 
-| ADR | Title | Target Phase |
-|-----|-------|--------------|
-| ADR-006 | Data Export Format (JSON vs CSV) | Phase 2 |
-| ADR-007 | Chart Library Selection | Phase 2 |
-| ADR-008 | Sync Conflict Resolution Strategy | Phase 3 |
-| ADR-009 | Backend Database Migration (lowdb → PostgreSQL) | Phase 4 |
-| ADR-010 | Push Notification Strategy | Phase 3 |
+| ADR     | Title                                           | Target Phase |
+| ------- | ----------------------------------------------- | ------------ |
+| ADR-006 | Data Export Format (JSON vs CSV)                | Phase 2      |
+| ADR-007 | Chart Library Selection                         | Phase 2      |
+| ADR-008 | Sync Conflict Resolution Strategy               | Phase 3      |
+| ADR-009 | Backend Database Migration (lowdb → PostgreSQL) | Phase 4      |
+| ADR-010 | Push Notification Strategy                      | Phase 3      |
 
 ---
 
@@ -627,4 +673,4 @@ The following ADRs should be created as the project evolves:
 
 ---
 
-*This document should be updated when new significant technical decisions are made. Review quarterly.*
+_This document should be updated when new significant technical decisions are made. Review quarterly._

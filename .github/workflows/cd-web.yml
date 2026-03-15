@@ -9,7 +9,7 @@ on:
   push:
     branches:
       - main
-  
+
   # Preview deployments for PRs
   pull_request:
     branches:
@@ -20,18 +20,18 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deployment Environment'
+        description: "Deployment Environment"
         required: true
         type: choice
         options:
           - production
           - staging
           - preview
-        default: 'preview'
+        default: "preview"
 
 env:
-  NODE_VERSION: '18'
-  CACHE_VERSION: 'v1'
+  NODE_VERSION: "18"
+  CACHE_VERSION: "v1"
 
 # Cancel in-progress runs for the same PR
 concurrency:
@@ -60,7 +60,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -205,33 +205,33 @@ jobs:
             const buildVersion = '${{ needs.build-web.outputs.version }}';
             const previewUrl = '${{ steps.netlify-preview.outputs.url }}';
             const pagesUrl = 'https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/';
-            
+
             let commentBody = `## 🌐 Web Preview Deployment\n\n`;
             commentBody += `| Property | Value |\n`;
             commentBody += `|----------|-------|\n`;
             commentBody += `| **Commit** | \`${commitSha.substring(0, 7)}\` |\n`;
             commentBody += `| **Version** | ${buildVersion} |\n`;
             commentBody += `| **PR** | #${prNumber} |\n`;
-            
+
             if (previewUrl) {
               commentBody += `| **Preview URL** | [${previewUrl}](${previewUrl}) |\n`;
             } else {
               commentBody += `| **GitHub Pages** | Will be available at merge |\n`;
             }
-            
+
             commentBody += `\n---\n*Automated deployment preview from GitHub Actions*`;
-            
+
             // Find existing comment to update
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber
             });
-            
+
             const existingComment = comments.find(c => 
               c.user.type === 'Bot' && c.body.includes('Web Preview Deployment')
             );
-            
+
             if (existingComment) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
@@ -282,7 +282,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./web-build
-          vercel-args: '--prod'
+          vercel-args: "--prod"
 
       - name: Check for Netlify credentials
         id: netlify-check
@@ -300,7 +300,7 @@ jobs:
           publish_dir: ./web-build
           production_branch: main
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          deploy_message: 'Deploy web app ${{ needs.build-web.outputs.version }}'
+          deploy_message: "Deploy web app ${{ needs.build-web.outputs.version }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

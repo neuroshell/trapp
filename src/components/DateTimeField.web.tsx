@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
+
 import { colors, spacing, typography } from "../theme";
 
 type Props = {
@@ -31,7 +32,9 @@ export function DateTimeField({ label, value, onChange }: Props) {
         autoCorrect={false}
         autoCapitalize="none"
       />
-      <Text style={styles.hint}>Enter date/time in local format (YYYY-MM-DDTHH:MM)</Text>
+      <Text style={styles.hint}>
+        Enter date/time in local format (YYYY-MM-DDTHH:MM)
+      </Text>
     </View>
   );
 }
