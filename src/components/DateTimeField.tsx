@@ -60,7 +60,6 @@ export function DateTimeField({ label, value, onChange }: Props) {
           date={value}
           onConfirm={handleConfirm}
           onCancel={() => setShow(false)}
-          headerTextIOS="Select date & time"
           confirmTextIOS="Confirm"
           cancelTextIOS="Cancel"
         />

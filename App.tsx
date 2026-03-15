@@ -26,6 +26,7 @@ function AppContent() {
     <NavigationContainer>
       <StatusBar style="auto" />
       <Tab.Navigator
+        id="root-tab-navigator"
         initialRouteName="Home"
         screenOptions={({ route }) => ({
           headerShown: false,
