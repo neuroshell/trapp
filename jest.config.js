@@ -10,4 +10,15 @@ module.exports = {
     "^expo-font$": "<rootDir>/__mocks__/expo-font.js",
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  reporters: [
+    "default",
+    ["jest-junit", {
+      outputDirectory: ".",
+      outputName: "junit.xml",
+      addFileAttribute: "true",
+      classNameTemplate: "{classname}",
+      titleTemplate: "{title}"
+    }]
+  ],
+  coverageReporters: ["text", "lcov", "cobertura"],
 };
