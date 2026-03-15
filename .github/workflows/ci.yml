@@ -15,7 +15,7 @@ on:
       - develop
 
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
   CACHE_VERSION: 'v1'
 
 # Cancel in-progress runs for the same branch/PR
@@ -275,13 +275,13 @@ jobs:
         run: mkdir -p build/artifacts
 
       - name: Build web version (Expo)
-        run: npx expo export:web
+        run: npx expo export -p web
         env:
           CI: true
 
       - name: Copy web build to artifacts
         run: |
-          cp -r web-build/* build/artifacts/ || echo "Web build not found, skipping..."
+          cp -r dist/* build/artifacts/ || echo "Web build not found, skipping..."
 
       - name: Create build manifest
         run: |
@@ -314,21 +314,43 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download test results
+      - name: Download coverage artifacts
         uses: actions/download-artifact@v4
         with:
           name: test-results-app
-          path: ./coverage
+          path: ./coverage-artifacts
 
       - name: Generate coverage summary
         run: |
-          echo "## Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          if [ -f "./coverage/coverage-summary.json" ]; then
-            echo "Coverage report generated successfully" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "Coverage report not available" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -f "./coverage-artifacts/coverage/lcov.info" ]; then
+            echo "### Coverage Report" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            # Extract summary from lcov if available
+            if command -v lcov &> /dev/null; then
+              lcov --list ./coverage-artifacts/coverage/lcov.info >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
+            else
+              echo "Coverage file: lcov.info ($(wc -c < ./coverage-artifacts/coverage/lcov.info) bytes)" >> $GITHUB_STEP_SUMMARY
+            fi
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
           fi
+          
+          if [ -f "./coverage-artifacts/coverage/coverage-final.json" ]; then
+            echo "### Coverage Details" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "- Coverage file: coverage-final.json" >> $GITHUB_STEP_SUMMARY
+            echo "- Size: $(wc -c < ./coverage-artifacts/coverage/coverage-final.json) bytes" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "### Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Download coverage reports from the workflow artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- Look for: \`test-results-app\`" >> $GITHUB_STEP_SUMMARY
 
   # ===========================================
   # STATUS CHECK JOB
