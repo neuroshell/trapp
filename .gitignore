@@ -1,0 +1,21 @@
+# Node
+node_modules/
+
+# Expo
+.expo/
+.expo-shared/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build
+web-build/
+
+# Backend storage
+backend/data.json

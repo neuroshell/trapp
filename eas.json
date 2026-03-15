@@ -1,0 +1,96 @@
+{
+  "cli": {
+    "version": ">= 7.0.0",
+    "appVersionSource": "remote",
+    "requireCommit": false,
+    "promptToConfigurePushNotifications": true
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development",
+      "ios": {
+        "simulator": true,
+        "resourceClass": "m-medium"
+      },
+      "env": {
+        "EXPO_ENV": "development"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "channel": "preview",
+      "ios": {
+        "simulator": false,
+        "resourceClass": "m-medium"
+      },
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
+      },
+      "env": {
+        "EXPO_ENV": "preview"
+      }
+    },
+    "production": {
+      "channel": "production",
+      "ios": {
+        "resourceClass": "m-medium",
+        "autoIncrement": true
+      },
+      "android": {
+        "buildType": "app-bundle",
+        "gradleCommand": ":app:bundleRelease",
+        "autoIncrement": true
+      },
+      "env": {
+        "EXPO_ENV": "production"
+      }
+    },
+    "ios-simulator": {
+      "extends": "development",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "apk": {
+      "extends": "preview",
+      "android": {
+        "buildType": "apk"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "ios": {
+        "ascAppId": "${APPLE_APP_ID}",
+        "appleId": "${APPLE_ID}",
+        "ascApiKey": "${APPLE_ASC_API_KEY}",
+        "ascApiKeyId": "${APPLE_ASC_API_KEY_ID}",
+        "ascApiIssuer": "${APPLE_ASC_API_ISSUER}"
+      },
+      "android": {
+        "serviceAccountKeyPath": "${GOOGLE_SERVICE_ACCOUNT_KEY_PATH}",
+        "track": "internal",
+        "releaseStatus": "draft"
+      }
+    },
+    "internal": {
+      "ios": {
+        "ascAppId": "${APPLE_APP_ID}",
+        "appleId": "${APPLE_ID}",
+        "ascApiKey": "${APPLE_ASC_API_KEY}",
+        "ascApiKeyId": "${APPLE_ASC_API_KEY_ID}",
+        "ascApiIssuer": "${APPLE_ASC_API_ISSUER}"
+      },
+      "android": {
+        "serviceAccountKeyPath": "${GOOGLE_SERVICE_ACCOUNT_KEY_PATH}",
+        "track": "internal"
+      }
+    }
+  },
+  "eas": {
+    "projectId": "${EAS_PROJECT_ID}"
+  }
+}

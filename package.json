@@ -1,0 +1,35 @@
+{
+  "name": "trapp",
+  "version": "0.1.0",
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test:app": "jest",
+    "test:backend": "cd backend && npm test",
+    "test": "npm run test:app && npm run test:backend",
+    "agents:process": "ts-node scripts/agents/process-backlog.ts",
+    "agents:watch": "ts-node scripts/agents/process-backlog.ts --watch",
+    "agents:issue": "ts-node scripts/agents/process-backlog.ts --issue",
+    "agents:setup": "node scripts/setup-agents.js"
+  },
+  "devDependencies": {
+    "@octokit/rest": "^20.0.2",
+    "@testing-library/jest-native": "^5.0.0",
+    "@testing-library/react-native": "^12.1.4",
+    "@types/node": "^20.11.0",
+    "@types/react": "~19.1.10",
+    "commander": "^12.0.0",
+    "eslint": "8.57.0",
+    "eslint-config-universe": "^8.0.0",
+    "jest": "^29.6.0",
+    "jest-expo": "~54.0.17",
+    "react-test-renderer": "19.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.9.2"
+  }
+}
