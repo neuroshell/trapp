@@ -89,11 +89,13 @@ jobs:
           echo "EAS configuration found"
 
       - name: Notify build starting
-        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
             --data "{\"text\":\"🚀 Trapp Tracker mobile build starting for version ${{ steps.version.outputs.version }}\"}" \
             ${{ secrets.SLACK_WEBHOOK_URL }} || echo "Slack notification skipped"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   # ===========================================
   # IOS BUILD
@@ -312,21 +314,23 @@ jobs:
           fi
 
       - name: Send Slack notification
-        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         run: |
           STATUS="${{ steps.status.outputs.status }}"
           EMOJI="${{ steps.status.outputs.emoji }}"
           VERSION="${{ needs.validate.outputs.version }}"
-          
+
           if [ "$STATUS" == "success" ]; then
             MESSAGE="${EMOJI} Trapp Tracker mobile build *SUCCESS* for version ${VERSION}"
           else
             MESSAGE="${EMOJI} Trapp Tracker mobile build *FAILED* for version ${VERSION}"
           fi
-          
+
           curl -X POST -H 'Content-type: application/json' \
             --data "{\"text\":\"${MESSAGE}\", \"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"${MESSAGE}\"}}]}" \
             ${{ secrets.SLACK_WEBHOOK_URL }} || echo "Slack notification skipped"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Create GitHub Release (on tag)
         if: startsWith(github.ref, 'refs/tags/') && steps.status.outputs.status == 'success'

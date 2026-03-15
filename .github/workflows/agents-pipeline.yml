@@ -37,21 +37,30 @@ jobs:
     name: Process Backlog Items
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    
-    # Only run if GitHub token is configured
-    if: ${{ secrets.GITHUB_TOKEN != '' }}
-    
+
     steps:
+      - name: Check for GitHub token
+        id: token-check
+        run: |
+          if [ -n "${{ secrets.GITHUB_TOKEN }}" ]; then
+            echo "has-token=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-token=false" >> $GITHUB_OUTPUT
+            echo "::warning::GitHub token not configured. Skipping backlog processing."
+          fi
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
+        if: steps.token-check.outputs.has-token == 'true'
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+        if: steps.token-check.outputs.has-token == 'true'
 
       - name: Install dependencies
         run: npm ci

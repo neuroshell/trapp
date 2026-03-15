@@ -256,9 +256,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: build-web
-    if: |
-      github.ref == 'refs/heads/main' && 
-      (secrets.VERCEL_TOKEN != '' || secrets.NETLIFY_AUTH_TOKEN != '')
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Download web build
@@ -267,8 +265,17 @@ jobs:
           name: web-build
           path: ./web-build
 
+      - name: Check for Vercel credentials
+        id: vercel-check
+        run: |
+          if [ -n "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "has-token=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-token=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Deploy to Vercel
-        if: ${{ secrets.VERCEL_TOKEN != '' }}
+        if: steps.vercel-check.outputs.has-token == 'true'
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
@@ -277,8 +284,17 @@ jobs:
           working-directory: ./web-build
           vercel-args: '--prod'
 
+      - name: Check for Netlify credentials
+        id: netlify-check
+        run: |
+          if [ -n "${{ secrets.NETLIFY_AUTH_TOKEN }}" ]; then
+            echo "has-token=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-token=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Deploy to Netlify
-        if: ${{ secrets.NETLIFY_AUTH_TOKEN != '' }}
+        if: steps.netlify-check.outputs.has-token == 'true'
         uses: nwtgck/actions-netlify@v3
         with:
           publish_dir: ./web-build
