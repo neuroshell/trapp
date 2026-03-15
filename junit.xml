@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="2" failures="0" errors="0" time="1.175">
-  <testsuite name="HomeScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-15T22:27:58" time="0.718" tests="1">
-    <testcase classname="HomeScreen" name="renders title and buttons" time="0.286" file="__tests__\HomeScreen.test.tsx">
+<testsuites name="jest tests" tests="2" failures="0" errors="0" time="0.891">
+  <testsuite name="LogScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-15T22:33:42" time="0.712" tests="1">
+    <testcase classname="LogScreen" name="renders form and saves entry" time="0.3" file="__tests__\LogScreen.test.tsx">
     </testcase>
   </testsuite>
-  <testsuite name="LogScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-15T22:27:58" time="0.789" tests="1">
-    <testcase classname="LogScreen" name="renders form and saves entry" time="0.317" file="__tests__\LogScreen.test.tsx">
+  <testsuite name="HomeScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-15T22:33:42" time="0.089" tests="1">
+    <testcase classname="HomeScreen" name="renders title and buttons" time="0.038" file="__tests__\HomeScreen.test.tsx">
     </testcase>
   </testsuite>
 </testsuites>

@@ -1,8 +1,8 @@
-const express = require("express");
-const cors = require("cors");
-const { Low } = require("lowdb");
-const { JSONFile } = require("lowdb/node");
-const { nanoid } = require("nanoid");
+import express from "express";
+import cors from "cors";
+import { Low } from "lowdb";
+import { JSONFile } from "lowdb/node";
+import { nanoid } from "nanoid";
 
 async function createServer(opts = {}) {
   const PORT = opts.port ?? process.env.PORT ?? 4000;
@@ -136,11 +136,12 @@ async function createServer(opts = {}) {
   return server;
 }
 
-if (require.main === module) {
+// Start server if run directly
+if (import.meta.url === `file://${process.argv[1]}`) {
   createServer().catch((err) => {
     console.error(err);
     process.exit(1);
   });
 }
 
-module.exports = { createServer };
+export { createServer };

@@ -1,10 +1,11 @@
-const { test } = require("node:test");
-const assert = require("node:assert").strict;
-const { mkdtemp, rm } = require("node:fs/promises");
-const { tmpdir } = require("node:os");
-const { join } = require("node:path");
+import { test } from "node:test";
+import assert from "node:assert";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { createHash } from "node:crypto";
 
-const { createServer } = require("./index");
+import { createServer } from "./index.js";
 
 async function closeServer(server) {
   await new Promise((resolve) => server.close(resolve));
@@ -23,8 +24,7 @@ test("backend /health and /sync endpoints work", async () => {
   assert.strictEqual(healthJson.ok, true);
 
   const username = "testuser";
-  const passwordHash = require("crypto")
-    .createHash("sha256")
+  const passwordHash = createHash("sha256")
     .update("secret", "utf8")
     .digest("hex");
 
