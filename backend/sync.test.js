@@ -3,7 +3,8 @@ import assert from "node:assert";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { createHash } from "node:crypto";
+import { createHash, pbkdf2Sync } from "node:crypto";
+import { URL } from "node:url";
 
 import { createServer } from "./index.js";
 
@@ -15,8 +16,16 @@ async function closeServer(server) {
   await new Promise((resolve) => server.close(resolve));
 }
 
+/**
+ * SECURITY: Use PBKDF2 for password hashing in tests
+ * Plain SHA-256 is too fast and unsalted for secure password hashing
+ */
 function hashPassword(password) {
-  return createHash("sha256").update(password, "utf8").digest("hex");
+  const salt = "trapp-test-salt-2026";
+  const iterations = 100_000;
+  const keyLength = 32;
+  const digest = "sha256";
+  return pbkdf2Sync(password, salt, iterations, keyLength, digest).toString("hex");
 }
 
 async function postSync(base, data) {

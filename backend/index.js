@@ -37,10 +37,17 @@ function sanitizeKey(key) {
  */
 function sanitizeForLog(str) {
   if (typeof str !== 'string') {
-    return String(str);
+    str = String(str);
   }
-  // Remove newlines, carriage returns, and other control chars
-  return str.replace(/[\r\n\t]/g, ' ').replace(/\s+/g, ' ').trim();
+  // Remove newline characters to prevent log line injection
+  str = str.replace(/[\r\n]/g, " ");
+  str = str.replace(/\s+/g, " ").trim();
+  // Truncate to prevent log flooding
+  const MAX_LOG_LEN = 1024;
+  if (str.length > MAX_LOG_LEN) {
+    str = str.slice(0, MAX_LOG_LEN) + "…";
+  }
+  return str;
 }
 
 async function createServer(opts = {}) {
@@ -142,6 +149,7 @@ async function createServer(opts = {}) {
 
       // SECURITY: safeDeviceId is already validated, safe to use as key
       // user.devices uses Object.create(null), preventing prototype pollution
+      // eslint-disable-next-line security/detect-object-injection
       user.devices[safeDeviceId] = true;
 
       const existing = db.data.devices[safeDeviceId] || { 
@@ -160,6 +168,7 @@ async function createServer(opts = {}) {
       };
 
       // SECURITY: db.data.devices uses Object.create(null)
+      // eslint-disable-next-line security/detect-object-injection
       db.data.devices[safeDeviceId] = newData;
       await db.write();
 
