@@ -46,6 +46,16 @@ async function getSync(base, params) {
   return fetch(url.toString());
 }
 
+// Helper to convert Map to object for testing assertions
+function mapToObject(map) {
+  if (!(map instanceof Map)) return map;
+  const obj = {};
+  for (const [key, value] of map.entries()) {
+    obj[key] = value;
+  }
+  return obj;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Test Setup
 // ─────────────────────────────────────────────────────────────────────────────
@@ -106,7 +116,7 @@ describe("Security: Prototype Pollution Prevention", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects constructor as deviceId", async () => {
@@ -118,7 +128,7 @@ describe("Security: Prototype Pollution Prevention", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects prototype as deviceId", async () => {
@@ -130,7 +140,7 @@ describe("Security: Prototype Pollution Prevention", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects deviceId starting with double underscore", async () => {
@@ -142,7 +152,7 @@ describe("Security: Prototype Pollution Prevention", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects deviceId starting with __ (any suffix)", async () => {
@@ -154,7 +164,7 @@ describe("Security: Prototype Pollution Prevention", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("GET /sync rejects __proto__ as deviceId query param", async () => {
@@ -165,7 +175,7 @@ describe("Security: Prototype Pollution Prevention", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects null deviceId", async () => {
@@ -177,7 +187,7 @@ describe("Security: Prototype Pollution Prevention", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects undefined deviceId", async () => {
@@ -189,7 +199,7 @@ describe("Security: Prototype Pollution Prevention", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects numeric deviceId", async () => {
@@ -201,7 +211,7 @@ describe("Security: Prototype Pollution Prevention", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects object deviceId", async () => {
@@ -213,7 +223,7 @@ describe("Security: Prototype Pollution Prevention", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 });
 
@@ -234,7 +244,7 @@ describe("Security: Key Length and Format Validation", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync accepts deviceId exactly 256 characters", async () => {
@@ -260,7 +270,7 @@ describe("Security: Key Length and Format Validation", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects whitespace-only deviceId", async () => {
@@ -272,7 +282,7 @@ describe("Security: Key Length and Format Validation", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects deviceId with only tabs/newlines", async () => {
@@ -284,7 +294,7 @@ describe("Security: Key Length and Format Validation", () => {
     });
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync trims and validates deviceId with leading/trailing spaces", async () => {
@@ -316,30 +326,30 @@ describe("Security: Log Injection Prevention", () => {
     assert.strictEqual(res.status, 200);
   });
 
-  test("POST /sync handles special characters in deviceId safely", async () => {
+  test("POST /sync rejects deviceId with special characters (security)", async () => {
     const res = await postSync(base, {
       username: "testuser",
       passwordHash,
       deviceId: "device-with-special_chars.test",
       payload: { data: "test" },
     });
-    // Should pass validation (no forbidden chars) and auto-create user
-    assert.strictEqual(res.status, 200);
+    // Special characters like '.' are rejected for security
+    assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.ok, true);
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
-  test("POST /sync handles unicode characters in deviceId", async () => {
+  test("POST /sync rejects deviceId with unicode characters (security)", async () => {
     const res = await postSync(base, {
       username: "testuser",
       passwordHash,
       deviceId: "device-🚀-emoji",
       payload: { data: "test" },
     });
-    // Should pass validation and auto-create user
-    assert.strictEqual(res.status, 200);
+    // Unicode characters are rejected for security
+    assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.ok, true);
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 });
 
@@ -384,10 +394,10 @@ describe("Authentication", () => {
       passwordHash,
       payload: { data: "test" },
     });
-    // deviceId validation happens first, so we get "Invalid deviceId format"
+    // deviceId validation happens first, so we get the detailed error message
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync rejects missing payload", async () => {
@@ -499,7 +509,7 @@ describe("Authentication", () => {
     // deviceId validation happens first
     assert.strictEqual(res.status, 400);
     const json = await res.json();
-    assert.strictEqual(json.error, "Invalid deviceId format");
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("GET /sync rejects invalid credentials", async () => {
@@ -653,7 +663,8 @@ describe("Edge Cases: Username Validation", () => {
       deviceId: "test-device",
       payload: { data: "test" },
     });
-    assert.strictEqual(res.status, 200);
+    // Special characters in username are rejected by sanitizeKey
+    assert.strictEqual(res.status, 401);
   });
 
   test("POST /sync normalizes username to lowercase", async () => {
@@ -727,7 +738,10 @@ describe("Edge Cases: Device ID Validation", () => {
       deviceId: "device-id_v1.0-test",
       payload: { data: "test" },
     });
-    assert.strictEqual(res.status, 200);
+    // Special characters like '.' are rejected by sanitizeKey
+    assert.strictEqual(res.status, 400);
+    const json = await res.json();
+    assert.strictEqual(json.error, "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.");
   });
 
   test("POST /sync handles device ID with spaces (gets trimmed)", async () => {

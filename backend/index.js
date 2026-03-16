@@ -6,28 +6,57 @@ import { nanoid } from "nanoid";
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECURITY: Forbidden property names that could cause prototype pollution
+// Whitelist approach with comprehensive blocklist
 // ─────────────────────────────────────────────────────────────────────────────
-const FORBIDDEN_KEYS = new Set(["__proto__", "constructor", "prototype"]);
+const FORBIDDEN_KEYS = new Set([
+  "__proto__",
+  "constructor",
+  "prototype",
+  "__defineGetter__",
+  "__defineSetter__",
+  "__lookupGetter__",
+  "__lookupSetter__",
+  "hasOwnProperty",
+  "isPrototypeOf",
+  "propertyIsEnumerable",
+  "toString",
+  "valueOf",
+  "toLocaleString",
+]);
 
 /**
- * SECURITY: Validate a user-controlled key to prevent prototype pollution.
- * Returns null if the key is dangerous, otherwise returns the sanitized key.
+ * SECURITY: Validate and sanitize a user-controlled key.
+ * Uses whitelist approach with strict regex validation.
+ * Returns null if the key is dangerous or invalid.
  */
 function sanitizeKey(key) {
   if (typeof key !== "string") {
     return null;
   }
+
   const trimmed = key.trim();
+
+  // Length validation
   if (trimmed.length === 0 || trimmed.length > 256) {
     return null;
   }
+
+  // Whitelist: Only allow alphanumeric, hyphens, underscores
+  const validKeyPattern = /^[a-zA-Z0-9_-]+$/;
+  if (!validKeyPattern.test(trimmed)) {
+    return null;
+  }
+
+  // Block forbidden keys (prototype pollution prevention)
   if (FORBIDDEN_KEYS.has(trimmed)) {
     return null;
   }
-  // Block keys starting with __ (reserved)
-  if (trimmed.startsWith("__")) {
+
+  // Block any key starting with special characters
+  if (trimmed.startsWith("_") || trimmed.startsWith("$")) {
     return null;
   }
+
   return trimmed;
 }
 
@@ -59,33 +88,35 @@ async function createServer(opts = {}) {
   await db.read();
   db.data = db.data || {};
 
-  // SECURITY: Use Object.create(null) for maps with user-controlled keys
-  // This prevents prototype pollution even if a bad key slips through
-  db.data.users = db.data.users || Object.create(null);
-  db.data.devices = db.data.devices || Object.create(null);
+  // SECURITY: Use Map for user-controlled keys to prevent prototype pollution
+  // Maps don't have prototype chain, making them immune to prototype pollution
+  db.data.users = new Map();
+  db.data.devices = new Map();
 
   const ensureUser = (username, passwordHash) => {
     if (!username || !passwordHash) return null;
 
-    // SECURITY: Sanitize the username key
+    // SECURITY: Sanitize the username key with strict validation
     const normalized = sanitizeKey(username.toLowerCase());
     if (!normalized) {
       return null; // Invalid username format
     }
 
-    // Ensure the users map exists before accessing it.
-    db.data.users = db.data.users || Object.create(null);
+    // Ensure the users map exists
+    if (!(db.data.users instanceof Map)) {
+      db.data.users = new Map();
+    }
 
-    let user = db.data.users[normalized];
+    let user = db.data.users.get(normalized);
     if (!user) {
       user = {
         username: normalized,
         passwordHash,
-        // SECURITY: Use Object.create(null) for devices map
-        devices: Object.create(null),
+        // SECURITY: Use Map for devices to prevent prototype pollution
+        devices: new Map(),
         createdAt: Date.now(),
       };
-      db.data.users[normalized] = user;
+      db.data.users.set(normalized, user);
     }
 
     if (user.passwordHash !== passwordHash) return null;
@@ -97,7 +128,7 @@ async function createServer(opts = {}) {
   app.use(express.json({ limit: "2mb" }));
 
   // ───────────────────────────────────────────────────────────────────────────
-  // SECURITY FIX #4: Sanitize log output to prevent log injection
+  // SECURITY FIX: Sanitize log output to prevent log injection
   // ───────────────────────────────────────────────────────────────────────────
   app.use((req, res, next) => {
     const start = Date.now();
@@ -128,20 +159,15 @@ async function createServer(opts = {}) {
     try {
       const { username, passwordHash, deviceId, payload } = req.body;
 
-      // SECURITY: Validate deviceId is a safe key
+      // SECURITY: Validate deviceId with strict whitelist regex
       const safeDeviceId = sanitizeKey(deviceId);
       if (!safeDeviceId) {
-        return res.status(400).json({
-          error: "Invalid deviceId format",
-        });
+        return res
+          .status(400)
+          .json({ error: "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed." });
       }
 
-      if (
-        !username ||
-        !passwordHash ||
-        typeof payload !== "object" ||
-        payload === null
-      ) {
+      if (!username || !passwordHash || typeof payload !== "object" || payload === null) {
         return res.status(400).json({
           error: "username, passwordHash, deviceId and payload are required",
         });
@@ -152,12 +178,10 @@ async function createServer(opts = {}) {
         return res.status(401).json({ error: "Invalid username or password" });
       }
 
-      // SECURITY: safeDeviceId is already validated by sanitizeKey()
-      // user.devices uses Object.create(null), preventing prototype pollution
-      // This is safe - deviceId is validated to block __proto__, constructor, prototype
-      user.devices[safeDeviceId] = true;
+      // SECURITY: safeDeviceId is validated, Map prevents prototype pollution
+      user.devices.set(safeDeviceId, true);
 
-      const existing = db.data.devices[safeDeviceId] || {
+      const existing = db.data.devices.get(safeDeviceId) || {
         id: safeDeviceId,
         updatedAt: 0,
         payload: {},
@@ -172,10 +196,8 @@ async function createServer(opts = {}) {
         payload,
       };
 
-      // SECURITY: db.data.devices uses Object.create(null)
-      // safeDeviceId is validated by sanitizeKey() to block dangerous keys
-      // This is safe - deviceId is validated to block __proto__, constructor, prototype
-      db.data.devices[safeDeviceId] = newData;
+      // SECURITY: Map prevents prototype pollution
+      db.data.devices.set(safeDeviceId, newData);
       await db.write();
 
       res.json({ ok: true, device: newData });
@@ -190,18 +212,17 @@ async function createServer(opts = {}) {
     try {
       const { username, passwordHash, deviceId } = req.query;
 
-      // SECURITY: Validate deviceId is a safe key
+      // SECURITY: Validate deviceId with strict whitelist regex
       const safeDeviceId = sanitizeKey(deviceId);
       if (!safeDeviceId) {
-        return res.status(400).json({
-          error: "Invalid deviceId format",
-        });
+        return res
+          .status(400)
+          .json({ error: "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed." });
       }
 
       if (!username || !passwordHash) {
         return res.status(400).json({
-          error:
-            "username, passwordHash and deviceId query parameters are required",
+          error: "username, passwordHash and deviceId query parameters are required",
         });
       }
 
@@ -210,14 +231,12 @@ async function createServer(opts = {}) {
         return res.status(401).json({ error: "Invalid username or password" });
       }
 
-      // SECURITY: safeDeviceId validated, user.devices is prototype-safe
-      if (!user.devices[safeDeviceId]) {
-        return res
-          .status(403)
-          .json({ error: "Device not registered for this user" });
+      // SECURITY: safeDeviceId validated, Map prevents prototype pollution
+      if (!user.devices.has(safeDeviceId)) {
+        return res.status(403).json({ error: "Device not registered for this user" });
       }
 
-      const device = db.data.devices[safeDeviceId];
+      const device = db.data.devices.get(safeDeviceId);
       if (!device) {
         return res.json({ ok: true, device: null });
       }
@@ -238,14 +257,12 @@ async function createServer(opts = {}) {
 
 // Start server if run directly
 // Check if this file is being run directly (not imported)
-const isMainModule = process.argv[1] && (
-  process.argv[1].endsWith('index.js') || 
-  process.argv[1].endsWith('index.mjs')
-);
+const isMainModule =
+  process.argv[1] && (process.argv[1].endsWith("index.js") || process.argv[1].endsWith("index.mjs"));
 
 if (isMainModule) {
   createServer().catch((err) => {
-    console.error('Failed to start server:', err);
+    console.error("Failed to start server:", err);
     process.exit(1);
   });
 }

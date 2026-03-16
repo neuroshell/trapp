@@ -7,7 +7,7 @@ dist/
 web-build/
 build/
 
-# Coverage reports (generated files)
+# Coverage reports (generated files - not checked for security)
 coverage/
 backend/coverage/
 
