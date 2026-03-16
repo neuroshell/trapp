@@ -3,7 +3,7 @@ import assert from "node:assert";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { createHash, pbkdf2Sync } from "node:crypto";
+import { pbkdf2Sync } from "node:crypto";
 import { URL } from "node:url";
 
 import { createServer } from "./index.js";

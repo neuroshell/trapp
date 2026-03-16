@@ -1,5 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useFocusEffect } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { useFocusEffect, useRoute, RouteProp } from "@react-navigation/native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AccessibilityInfo,
@@ -19,6 +20,7 @@ import { LogRunningForm } from "../components/LogRunningForm";
 import { LogStrengthForm } from "../components/LogStrengthForm";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { ActivityType, WorkoutEntry } from "../models";
+import { RootTabParamList } from "../navigation/types";
 import {
   deleteWorkout,
   getDeviceId,
@@ -34,19 +36,36 @@ import {
   validateTimestamp,
 } from "../validation";
 
+type LogScreenRouteProp = RouteProp<RootTabParamList, "Log">;
+type LogScreenNavigationProp = BottomTabNavigationProp<RootTabParamList, "Log">;
+
 const activityTypes: { label: string; value: ActivityType; icon: string }[] = [
   { label: "Running", value: "running", icon: "run" },
-  { label: "Squats", value: "squats", icon: "weight-lifter" },
+  { label: "Squats", value: "squats", icon: "dumbbell" },
   { label: "Push-ups", value: "pushups", icon: "arm-flex" },
-  { label: "Pull-ups", value: "pullups", icon: "pull-up" },
-  { label: "Other", value: "other", icon: "dumbbell" },
+  { label: "Pull-ups", value: "pullups", icon: "weight-lifter" },
+  { label: "Other", value: "other", icon: "shoe-sneaker" },
 ];
 
 function uuid() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-export function LogScreen() {
+type LogScreenProps = {
+  navigation: LogScreenNavigationProp;
+};
+
+export function LogScreen({ navigation }: LogScreenProps) {
+  const route = useRoute<LogScreenRouteProp>();
+
+  // Extract selectedDate from route params
+  const selectedDateParam = route.params?.selectedDate;
+
+  // Initialize date state with selected date from params or current date
+  const initialDate = selectedDateParam
+    ? new Date(selectedDateParam)
+    : new Date();
+
   // State
   const [workouts, setWorkouts] = useState<WorkoutEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -54,7 +73,7 @@ export function LogScreen() {
 
   // Form state
   const [type, setType] = useState<ActivityType>("running");
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date>(initialDate);
   const [notes, setNotes] = useState<string>("");
 
   // Running form state
@@ -307,10 +326,10 @@ export function LogScreen() {
   const getWorkoutIcon = (type: ActivityType): string => {
     const icons: Record<ActivityType, string> = {
       running: "run",
-      squats: "weight-lifter",
+      squats: "dumbbell",
       pushups: "arm-flex",
-      pullups: "pull-up",
-      other: "dumbbell",
+      pullups: "weight-lifter",
+      other: "shoe-sneaker",
     };
     return icons[type] || "dumbbell";
   };

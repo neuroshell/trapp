@@ -106,14 +106,14 @@ export const QUICK_LOG_BUTTONS: {
   {
     type: "squats",
     label: "Squats",
-    icon: "weight-lifter",
+    icon: "dumbbell",
     color: "#9C27B0",
     backgroundColor: "#F3E5F5",
   },
   {
     type: "pullups",
     label: "Pull-up",
-    icon: "pull-up",
+    icon: "weight-lifter",
     color: "#4CAF50",
     backgroundColor: "#E8F5E9",
   },

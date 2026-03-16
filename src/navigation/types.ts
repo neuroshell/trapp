@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type RootTabParamList = {
   Home: undefined;
-  Log: undefined;
+  Log: { selectedDate?: string } | undefined;
   Calendar: undefined;
   Achievements: undefined;
   Settings: undefined;

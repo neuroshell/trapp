@@ -564,7 +564,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 | Running | `run`      | `running` (#FF6B35) |
 | Squats  | `dumbbell` | `squats` (#9C27B0)  |
 | Pushups | `arm-flex` | `pushups` (#2196F3) |
-| Pullups | `pull-up`  | `pullups` (#4CAF50) |
+| Pullups | `weight-lifter`  | `pullups` (#4CAF50) |
 
 ### 6.4 Navigation Icons
 

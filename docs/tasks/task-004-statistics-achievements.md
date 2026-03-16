@@ -317,7 +317,7 @@ const ACHIEVEMENT_DEFINITIONS: Omit<Achievement, 'unlocked' | 'progress' | 'unlo
     title: 'Pullup Champion',
     description: 'Complete 200 pullups total',
     requirement: 200,
-    icon: 'pull-up',
+    icon: 'weight-lifter',
   },
 ];
 ```

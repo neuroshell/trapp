@@ -615,7 +615,7 @@ const workoutConfig = {
     bgColor: "#E3F2FD",
   },
   pullups: {
-    icon: "pull-up",
+    icon: "weight-lifter",
     color: "#4CAF50",
     bgColor: "#E8F5E9",
   },
@@ -1282,7 +1282,7 @@ export function useWorkouts() {
 | `run`                    | Running workout        | 24px |
 | `dumbbell`               | Squats workout         | 24px |
 | `arm-flex`               | Pushups workout        | 24px |
-| `pull-up`                | Pullups workout        | 24px |
+| `weight-lifter`          | Pullups workout        | 24px |
 | `plus`                   | Add button             | 24px |
 | `pencil-outline`         | Edit button            | 20px |
 | `trash-can-outline`      | Delete button          | 20px |

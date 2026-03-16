@@ -238,3 +238,49 @@ export async function clearWorkouts(): Promise<void> {
     console.warn("Failed to clear workouts", error);
   }
 }
+
+/**
+ * Get workouts within a date range (inclusive)
+ * @param startDate - ISO date string for start of range
+ * @param endDate - ISO date string for end of range
+ * @returns Array of workouts within the specified date range
+ */
+export async function getWorkoutsByDateRange(
+  startDate: string,
+  endDate: string,
+): Promise<WorkoutEntry[]> {
+  try {
+    const workouts = await loadWorkouts();
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    // Set end date to end of day
+    end.setHours(23, 59, 59, 999);
+
+    return workouts.filter((workout) => {
+      const workoutDate = new Date(workout.timestamp);
+      return workoutDate >= start && workoutDate <= end;
+    });
+  } catch (error) {
+    console.warn("Failed to get workouts by date range", error);
+    return [];
+  }
+}
+
+/**
+ * Get all workouts grouped by date for history list display
+ * @returns Array of workout entries sorted by date (newest first)
+ */
+export async function getWorkoutsForHistory(): Promise<WorkoutEntry[]> {
+  try {
+    const workouts = await loadWorkouts();
+    // Sort by date descending (newest first)
+    return workouts.sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+    );
+  } catch (error) {
+    console.warn("Failed to get workouts for history", error);
+    return [];
+  }
+}
