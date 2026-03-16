@@ -215,7 +215,7 @@
     </testcase>
     <testcase classname="Accessibility Tests LogRunningForm Accessibility" name="should have accessibility hints on all inputs" time="0.002" file="__tests__\accessibility.test.tsx">
     </testcase>
-    <testcase classname="Accessibility Tests LogRunningForm Accessibility" name="should mark invalid inputs with accessibilityInvalid" time="0.001" file="__tests__\accessibility.test.tsx">
+    <testcase classname="Accessibility Tests LogRunningForm Accessibility" name="should mark invalid inputs with aria-invalid" time="0.001" file="__tests__\accessibility.test.tsx">
     </testcase>
     <testcase classname="Accessibility Tests LogRunningForm Accessibility" name="should use alert role for error messages" time="0.001" file="__tests__\accessibility.test.tsx">
     </testcase>
@@ -227,7 +227,7 @@
     </testcase>
     <testcase classname="Accessibility Tests LogStrengthForm Accessibility" name="should have exercise-specific accessibility hints" time="0.001" file="__tests__\accessibility.test.tsx">
     </testcase>
-    <testcase classname="Accessibility Tests LogStrengthForm Accessibility" name="should mark invalid inputs with accessibilityInvalid" time="0.001" file="__tests__\accessibility.test.tsx">
+    <testcase classname="Accessibility Tests LogStrengthForm Accessibility" name="should mark invalid inputs with aria-invalid" time="0.001" file="__tests__\accessibility.test.tsx">
     </testcase>
     <testcase classname="Accessibility Tests LogStrengthForm Accessibility" name="should use alert role for error messages" time="0.001" file="__tests__\accessibility.test.tsx">
     </testcase>

@@ -379,7 +379,7 @@ export const Input: React.FC<InputProps> = ({
           numberOfLines={numberOfLines}
           editable={!disabled}
           accessibilityLabel={accessibilityLabel || label}
-          accessibilityInvalid={!!error}
+          aria-invalid={!!error}
           testID={testID}
           style={inputStyles}
           onFocus={() => setIsFocused(true)}

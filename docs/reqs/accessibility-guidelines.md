@@ -646,7 +646,7 @@ function AccessibleInput({ label, error, value, onChangeText }) {
         value={value}
         onChangeText={onChangeText}
         accessibilityLabel={label}
-        accessibilityInvalid={!!error}
+        aria-invalid={!!error}
         accessibilityDescribedBy={error ? "error-message" : undefined}
         style={[styles.input, error && styles.inputError]}
       />

@@ -50,7 +50,7 @@ describe("Accessibility Tests", () => {
       expect(durationInput.props.accessibilityHint).toContain("minutes");
     });
 
-    it("should mark invalid inputs with accessibilityInvalid", () => {
+    it("should mark invalid inputs with aria-invalid", () => {
       render(
         <LogRunningForm
           distance=""
@@ -62,7 +62,7 @@ describe("Accessibility Tests", () => {
       );
 
       const distanceInput = screen.getByTestId("distance-input");
-      expect(distanceInput.props.accessibilityInvalid).toBe(true);
+      expect(distanceInput.props["aria-invalid"]).toBe(true);
     });
 
     it("should use alert role for error messages", () => {
@@ -162,7 +162,7 @@ describe("Accessibility Tests", () => {
       expect(repsInput.props.accessibilityHint).toContain("push-ups");
     });
 
-    it("should mark invalid inputs with accessibilityInvalid", () => {
+    it("should mark invalid inputs with aria-invalid", () => {
       render(
         <LogStrengthForm
           exerciseType="squats"
@@ -177,7 +177,7 @@ describe("Accessibility Tests", () => {
       );
 
       const repsInput = screen.getByTestId("reps-input");
-      expect(repsInput.props.accessibilityInvalid).toBe(true);
+      expect(repsInput.props["aria-invalid"]).toBe(true);
     });
 
     it("should use alert role for error messages", () => {
