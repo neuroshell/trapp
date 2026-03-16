@@ -7,73 +7,180 @@ import React, {
   useState,
 } from "react";
 
-import { loadAuthState, saveAuthState, clearAuthState } from "../storage";
+import { User } from "../models";
+import {
+  loadAuthState,
+  saveAuthState,
+  clearAuthState,
+  findUserByEmail,
+  saveUser,
+} from "../storage";
 
-export type AuthUser = {
-  username: string;
-};
-
-type AuthState = {
-  user?: AuthUser;
-  passwordHash?: string; // stored for demo purposes only
-};
+export type AuthUser = User;
 
 type AuthContextValue = {
-  user?: AuthUser;
-  passwordHash?: string;
+  user: AuthUser | null;
   loading: boolean;
-  signIn: (username: string, password: string) => Promise<void>;
+  error: string | null;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  clearError: () => void;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+// Email validation regex (RFC 5322 simplified)
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export function validateEmail(email: string): boolean {
+  return EMAIL_REGEX.test(email);
+}
+
+export function validatePassword(password: string): {
+  valid: boolean;
+  message?: string;
+} {
+  if (password.length < 8) {
+    return {
+      valid: false,
+      message: "Password must be at least 8 characters",
+    };
+  }
+  if (!/\d/.test(password)) {
+    return {
+      valid: false,
+      message: "Password should contain at least one number",
+    };
+  }
+  return { valid: true };
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<AuthState>({});
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
-      const loaded = await loadAuthState();
-      // Ensure stored auth state includes the minimum required fields.
-      if (loaded?.user?.username && loaded?.passwordHash) {
-        setState(loaded);
-      } else {
-        setState({});
+      try {
+        const loaded = await loadAuthState();
+        if (loaded.user) {
+          setUser(loaded.user);
+        } else {
+          setUser(null);
+        }
+      } catch (err) {
+        console.warn("Failed to load auth state", err);
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     })();
   }, []);
 
   const hash = async (text: string) =>
     await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, text);
 
-  const signIn = async (username: string, password: string) => {
-    const passwordHash = await hash(password);
+  const signIn = async (email: string, password: string) => {
+    setError(null);
 
-    const authState: AuthState = {
-      user: { username: username.trim() },
-      passwordHash,
+    // Validate email format
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    // Validate password
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.valid) {
+      setError(passwordValidation.message || "Invalid password");
+      return;
+    }
+
+    const passwordHash = await hash(password);
+    const storedUser = await findUserByEmail(email.trim().toLowerCase());
+
+    if (!storedUser) {
+      // Generic error for security (don't reveal if email exists)
+      setError("Invalid email or password");
+      return;
+    }
+
+    if (storedUser.passwordHash !== passwordHash) {
+      setError("Invalid email or password");
+      return;
+    }
+
+    const authUser: AuthUser = {
+      id: storedUser.id,
+      email: storedUser.email,
+      displayName: storedUser.displayName,
+      createdAt: storedUser.createdAt,
     };
 
-    setState(authState);
-    await saveAuthState(authState);
+    setUser(authUser);
+    await saveAuthState({ user: authUser, passwordHash });
+  };
+
+  const signUp = async (email: string, password: string) => {
+    setError(null);
+
+    // Validate email format
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    // Validate password
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.valid) {
+      setError(passwordValidation.message || "Invalid password");
+      return;
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const existingUser = await findUserByEmail(normalizedEmail);
+
+    if (existingUser) {
+      setError("This email is already registered");
+      return;
+    }
+
+    const passwordHash = await hash(password);
+    const newUser: AuthUser = {
+      id: `user_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+      email: normalizedEmail,
+      displayName: undefined,
+      createdAt: new Date().toISOString(),
+    };
+
+    await saveUser({ ...newUser, passwordHash });
+    setUser(newUser);
+    await saveAuthState({ user: newUser, passwordHash });
   };
 
   const signOut = async () => {
-    setState({});
+    setUser(null);
+    setError(null);
     await clearAuthState();
+  };
+
+  const clearError = () => {
+    setError(null);
   };
 
   const value = useMemo(
     () => ({
-      user: state.user,
-      passwordHash: state.passwordHash,
+      user,
       loading,
+      error,
       signIn,
+      signUp,
       signOut,
+      clearError,
     }),
-    [state.user, state.passwordHash, loading],
+    [user, loading, error],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

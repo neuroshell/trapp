@@ -260,18 +260,22 @@ describe("storage", () => {
   });
 
   describe("loadAuthState", () => {
-    it("returns empty object when no auth data exists", async () => {
+    it("returns empty object with null user when no auth data exists", async () => {
       (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
 
       const result = await loadAuthState();
 
-      expect(result).toEqual({});
+      expect(result).toEqual({ user: null });
       expect(AsyncStorage.getItem).toHaveBeenCalledWith("TRAPP_TRACKER_AUTH_V1");
     });
 
     it("loads saved auth state from AsyncStorage", async () => {
       const mockAuthState = {
-        user: { username: "testuser" },
+        user: {
+          id: "user_123",
+          email: "test@example.com",
+          createdAt: new Date().toISOString(),
+        },
         passwordHash: "hashed_password_123",
       };
 
@@ -284,26 +288,32 @@ describe("storage", () => {
       expect(result).toEqual(mockAuthState);
     });
 
-    it("returns empty object on JSON parse error", async () => {
+    it("returns empty object with null user on JSON parse error", async () => {
       (AsyncStorage.getItem as jest.Mock).mockResolvedValue("invalid json");
 
       const result = await loadAuthState();
 
-      expect(result).toEqual({});
+      expect(result).toEqual({ user: null });
     });
 
-    it("returns empty object on AsyncStorage error", async () => {
+    it("returns empty object with null user on AsyncStorage error", async () => {
       (AsyncStorage.getItem as jest.Mock).mockRejectedValue(
         new Error("Storage error")
       );
 
       const result = await loadAuthState();
 
-      expect(result).toEqual({});
+      expect(result).toEqual({ user: null });
     });
 
     it("handles partial auth state", async () => {
-      const partialState = { user: { username: "user" } };
+      const partialState = { 
+        user: { 
+          id: "user_123",
+          email: "test@example.com",
+          createdAt: new Date().toISOString(),
+        } 
+      };
       (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
         JSON.stringify(partialState)
       );
@@ -317,7 +327,11 @@ describe("storage", () => {
   describe("saveAuthState", () => {
     it("saves auth state to AsyncStorage", async () => {
       const mockAuthState = {
-        user: { username: "testuser" },
+        user: {
+          id: "user_123",
+          email: "test@example.com",
+          createdAt: new Date().toISOString(),
+        },
         passwordHash: "hashed_password",
       };
 
@@ -329,12 +343,14 @@ describe("storage", () => {
       );
     });
 
-    it("saves empty auth state", async () => {
-      await saveAuthState({});
+    it("saves auth state with null user", async () => {
+      const emptyState = { user: null };
+
+      await saveAuthState(emptyState);
 
       expect(AsyncStorage.setItem).toHaveBeenCalledWith(
         "TRAPP_TRACKER_AUTH_V1",
-        "{}"
+        JSON.stringify(emptyState)
       );
     });
 
@@ -343,11 +359,17 @@ describe("storage", () => {
         new Error("Save failed")
       );
 
-      await expect(saveAuthState({})).resolves.toBeUndefined();
+      await expect(saveAuthState({ user: null })).resolves.toBeUndefined();
     });
 
     it("saves auth state with only user", async () => {
-      const userOnlyState = { user: { username: "user" } };
+      const userOnlyState = { 
+        user: { 
+          id: "user_123",
+          email: "test@example.com",
+          createdAt: new Date().toISOString(),
+        } 
+      };
 
       await saveAuthState(userOnlyState);
 
@@ -358,7 +380,7 @@ describe("storage", () => {
     });
 
     it("saves auth state with only passwordHash", async () => {
-      const hashOnlyState = { passwordHash: "hash123" };
+      const hashOnlyState = { user: null, passwordHash: "hash123" };
 
       await saveAuthState(hashOnlyState);
 

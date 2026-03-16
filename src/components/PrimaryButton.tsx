@@ -9,6 +9,8 @@ type Props = {
   style?: ViewStyle;
   active?: boolean;
   disabled?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
 };
 
 export function PrimaryButton({
@@ -17,6 +19,8 @@ export function PrimaryButton({
   style,
   active,
   disabled,
+  accessibilityLabel,
+  accessibilityHint,
 }: Props) {
   return (
     <Pressable
@@ -29,6 +33,10 @@ export function PrimaryButton({
         style,
       ]}
       disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityHint={accessibilityHint}
+      accessibilityState={{ disabled: disabled || false }}
     >
       <Text style={[styles.text, disabled && styles.textDisabled]}>
         {children}

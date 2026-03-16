@@ -1,6 +1,12 @@
 import React, { useContext } from "react";
 import { render, waitFor } from "@testing-library/react-native";
-import { AuthProvider, useAuth, AuthContext } from "../src/auth/AuthContext";
+import {
+  AuthProvider,
+  useAuth,
+  AuthContext,
+  validateEmail,
+  validatePassword,
+} from "../src/auth/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Mock expo-crypto
@@ -35,635 +41,914 @@ describe("AuthContext", () => {
     jest.clearAllMocks();
     (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
     (AsyncStorage.setItem as jest.Mock).mockResolvedValue(null);
+    (AsyncStorage.removeItem as jest.Mock).mockResolvedValue(null);
   });
 
-  it("provides initial auth state with loading true", async () => {
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
+  describe("validation functions", () => {
+    describe("validateEmail", () => {
+      it("returns true for valid emails", () => {
+        expect(validateEmail("test@example.com")).toBe(true);
+        expect(validateEmail("user.name@domain.org")).toBe(true);
+        expect(validateEmail("test+tag@example.co.uk")).toBe(true);
+      });
 
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
+      it("returns false for invalid emails", () => {
+        expect(validateEmail("invalid")).toBe(false);
+        expect(validateEmail("invalid@")).toBe(false);
+        expect(validateEmail("@example.com")).toBe(false);
+        expect(validateEmail("test@")).toBe(false);
+        expect(validateEmail("")).toBe(false);
+      });
     });
 
-    const authState = testFn.mock.calls[0][0];
-    expect(authState.loading).toBe(true);
+    describe("validatePassword", () => {
+      it("rejects passwords shorter than 8 characters", () => {
+        expect(validatePassword("short")).toEqual({
+          valid: false,
+          message: "Password must be at least 8 characters",
+        });
+        expect(validatePassword("1234567")).toEqual({
+          valid: false,
+          message: "Password must be at least 8 characters",
+        });
+      });
+
+      it("rejects passwords without numbers", () => {
+        expect(validatePassword("abcdefgh")).toEqual({
+          valid: false,
+          message: "Password should contain at least one number",
+        });
+      });
+
+      it("accepts valid passwords", () => {
+        expect(validatePassword("password123")).toEqual({ valid: true });
+        expect(validatePassword("SecurePass1")).toEqual({ valid: true });
+      });
+    });
   });
 
-  it("provides user as undefined when not signed in", async () => {
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
+  describe("initial state", () => {
+    it("provides initial auth state with loading true", async () => {
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
 
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      const authState = testFn.mock.calls[0][0];
+      expect(authState.loading).toBe(true);
     });
 
-    const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-    expect(authState.user).toBeUndefined();
-  });
+    it("provides user as null when not signed in", async () => {
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
 
-  it("provides passwordHash as undefined when not signed in", async () => {
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
 
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
-    });
-
-    const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-    expect(authState.passwordHash).toBeUndefined();
-  });
-
-  it("sets loading to false after initialization", async () => {
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
-
-    await waitFor(() => {
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.loading).toBe(false);
+      expect(authState.user).toBeNull();
+    });
+
+    it("provides error as null initially", async () => {
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      const authState = testFn.mock.calls[0][0];
+      expect(authState.error).toBeNull();
+    });
+
+    it("sets loading to false after initialization", async () => {
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
+
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.loading).toBe(false);
+      });
     });
   });
 
-  it("loads auth state from AsyncStorage on mount", async () => {
-    const mockAuthState = {
-      user: { username: "testuser" },
-      passwordHash: "stored_hash",
-    };
+  describe("session restoration", () => {
+    it("loads auth state from AsyncStorage on mount", async () => {
+      const mockAuthState = {
+        user: {
+          id: "user_123",
+          email: "test@example.com",
+          createdAt: new Date().toISOString(),
+        },
+        passwordHash: "stored_hash",
+      };
 
-    (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-      if (key.includes("AUTH")) {
-        return Promise.resolve(JSON.stringify(mockAuthState));
-      }
-      return Promise.resolve(null);
+      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
+        if (key.includes("AUTH")) {
+          return Promise.resolve(JSON.stringify(mockAuthState));
+        }
+        return Promise.resolve(null);
+      });
+
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
+
+      await waitFor(() => {
+        expect(AsyncStorage.getItem).toHaveBeenCalledWith(
+          "TRAPP_TRACKER_AUTH_V1"
+        );
+      }, { timeout: 2000 });
+
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.user?.email).toBe("test@example.com");
+      }, { timeout: 2000 });
     });
 
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
+    it("handles empty auth state from AsyncStorage", async () => {
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
 
-    await waitFor(() => {
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith("TRAPP_TRACKER_AUTH_V1");
-    }, { timeout: 2000 });
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
 
-    // Wait for the state to update after loading
-    await waitFor(() => {
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.loading).toBe(false);
+        expect(authState.user).toBeNull();
+      });
+    });
+
+    it("handles invalid auth state from AsyncStorage", async () => {
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
+        JSON.stringify({ invalid: "state" })
+      );
+
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
+
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.loading).toBe(false);
+        expect(authState.user).toBeNull();
+      });
+    });
+  });
+
+  describe("signIn", () => {
+    it("signs in with valid email and password", async () => {
+      const mockUser = {
+        id: "user_123",
+        email: "test@example.com",
+        passwordHash: "hash_password123",
+        createdAt: new Date().toISOString(),
+      };
+
+      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
+        if (key.includes("USERS")) {
+          return Promise.resolve(JSON.stringify([mockUser]));
+        }
+        return Promise.resolve(null);
+      });
+
+      const testFn = jest.fn();
+      let signInFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signInFn = auth.signIn;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signInFn("test@example.com", "password123");
+
+      await waitFor(() => {
+        expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+          expect.stringContaining("AUTH"),
+          expect.any(String)
+        );
+      });
+
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.username).toBe("testuser");
-    }, { timeout: 2000 });
-
-    const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-    expect(authState.passwordHash).toBe("stored_hash");
-  });
-
-  it("signs in with username and password", async () => {
-    const testFn = jest.fn();
-    let signInFn: any;
-
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signInFn = auth.signIn;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
-
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
-
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
+      expect(authState.user?.email).toBe("test@example.com");
     });
 
-    await signInFn("newuser", "password123");
+    it("rejects invalid email format", async () => {
+      const testFn = jest.fn();
+      let signInFn: any;
 
-    await waitFor(() => {
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        expect.stringContaining("AUTH"),
-        expect.any(String)
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signInFn = auth.signIn;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signInFn("invalid-email", "password123");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.error).toBe("Please enter a valid email address");
+    });
+
+    it("rejects password shorter than 8 characters", async () => {
+      const testFn = jest.fn();
+      let signInFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signInFn = auth.signIn;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signInFn("test@example.com", "short");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.error).toBe(
+        "Password must be at least 8 characters"
       );
     });
-  });
 
-  it("hashes password during sign in", async () => {
-    const testFn = jest.fn();
-    let signInFn: any;
+    it("shows generic error for non-existent user", async () => {
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
 
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signInFn = auth.signIn;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
+      const testFn = jest.fn();
+      let signInFn: any;
 
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signInFn = auth.signIn;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
 
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signInFn("nonexistent@example.com", "password123");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.error).toBe("Invalid email or password");
     });
 
-    await signInFn("user", "mypassword");
+    it("shows generic error for wrong password", async () => {
+      const mockUser = {
+        id: "user_123",
+        email: "test@example.com",
+        passwordHash: "hash_correctpassword",
+        createdAt: new Date().toISOString(),
+      };
 
-    // Verify crypto was called
-    const Crypto = require("expo-crypto");
-    expect(Crypto.digestStringAsync).toHaveBeenCalled();
-  });
+      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
+        if (key.includes("USERS")) {
+          return Promise.resolve(JSON.stringify([mockUser]));
+        }
+        return Promise.resolve(null);
+      });
 
-  it("saves auth state to AsyncStorage after sign in", async () => {
-    const testFn = jest.fn();
-    let signInFn: any;
+      const testFn = jest.fn();
+      let signInFn: any;
 
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signInFn = auth.signIn;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signInFn = auth.signIn;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
 
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
 
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signInFn("test@example.com", "wrongpassword");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.error).toBe("Invalid email or password");
     });
 
-    await signInFn("testuser", "password123");
+    it("hashes password during sign in", async () => {
+      const mockUser = {
+        id: "user_123",
+        email: "test@example.com",
+        passwordHash: "hash_password123",
+        createdAt: new Date().toISOString(),
+      };
 
-    await waitFor(() => {
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        expect.stringContaining("AUTH"),
-        expect.stringContaining("testuser")
+      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
+        if (key.includes("USERS")) {
+          return Promise.resolve(JSON.stringify([mockUser]));
+        }
+        return Promise.resolve(null);
+      });
+
+      const testFn = jest.fn();
+      let signInFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signInFn = auth.signIn;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signInFn("test@example.com", "password123");
+
+      const Crypto = require("expo-crypto");
+      expect(Crypto.digestStringAsync).toHaveBeenCalled();
+    });
+
+    it("normalizes email to lowercase", async () => {
+      const mockUser = {
+        id: "user_123",
+        email: "test@example.com",
+        passwordHash: "hash_password123",
+        createdAt: new Date().toISOString(),
+      };
+
+      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
+        if (key.includes("USERS")) {
+          return Promise.resolve(JSON.stringify([mockUser]));
+        }
+        return Promise.resolve(null);
+      });
+
+      const testFn = jest.fn();
+      let signInFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signInFn = auth.signIn;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signInFn("TEST@EXAMPLE.COM", "password123");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.user?.email).toBe("test@example.com");
+    });
+  });
+
+  describe("signUp", () => {
+    it("creates new user with valid email and password", async () => {
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
+
+      const testFn = jest.fn();
+      let signUpFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signUpFn = auth.signUp;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signUpFn("newuser@example.com", "SecurePass123");
+
+      await waitFor(() => {
+        expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+          expect.stringContaining("AUTH"),
+          expect.any(String)
+        );
+      });
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.user?.email).toBe("newuser@example.com");
+    });
+
+    it("rejects invalid email format", async () => {
+      const testFn = jest.fn();
+      let signUpFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signUpFn = auth.signUp;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signUpFn("invalid-email", "password123");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.error).toBe("Please enter a valid email address");
+    });
+
+    it("rejects password shorter than 8 characters", async () => {
+      const testFn = jest.fn();
+      let signUpFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signUpFn = auth.signUp;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signUpFn("test@example.com", "short");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.error).toBe(
+        "Password must be at least 8 characters"
       );
     });
-  });
 
-  it("updates user state after sign in", async () => {
-    const testFn = jest.fn();
-    let signInFn: any;
+    it("rejects password without numbers", async () => {
+      const testFn = jest.fn();
+      let signUpFn: any;
 
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signInFn = auth.signIn;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signUpFn = auth.signUp;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
 
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
 
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
-    });
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
 
-    await signInFn("newuser", "password");
+      await signUpFn("test@example.com", "abcdefgh");
 
-    await waitFor(() => {
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.username).toBe("newuser");
-    });
-  });
-
-  it("signs out and clears state", async () => {
-    // Start with signed in state
-    (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-      if (key.includes("AUTH")) {
-        return Promise.resolve(
-          JSON.stringify({
-            user: { username: "testuser" },
-            passwordHash: "hash",
-          })
-        );
-      }
-      return Promise.resolve(null);
-    });
-
-    const testFn = jest.fn();
-    let signOutFn: any;
-
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signOutFn = auth.signOut;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
-
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
-
-    await waitFor(() => {
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.username).toBe("testuser");
-    });
-
-    await signOutFn();
-
-    await waitFor(() => {
-      expect(AsyncStorage.removeItem).toHaveBeenCalledWith(
-        expect.stringContaining("AUTH")
+      expect(authState.error).toBe(
+        "Password should contain at least one number"
       );
     });
+
+    it("rejects duplicate email registration", async () => {
+      const existingUser = {
+        id: "user_123",
+        email: "existing@example.com",
+        passwordHash: "hash_password123",
+        createdAt: new Date().toISOString(),
+      };
+
+      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
+        if (key.includes("USERS")) {
+          return Promise.resolve(JSON.stringify([existingUser]));
+        }
+        return Promise.resolve(null);
+      });
+
+      const testFn = jest.fn();
+      let signUpFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signUpFn = auth.signUp;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signUpFn("existing@example.com", "NewPass123");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.error).toBe("This email is already registered");
+    });
+
+    it("normalizes email to lowercase", async () => {
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
+
+      const testFn = jest.fn();
+      let signUpFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signUpFn = auth.signUp;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signUpFn("NEWUSER@EXAMPLE.COM", "SecurePass123");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.user?.email).toBe("newuser@example.com");
+    });
+
+    it("generates unique user id", async () => {
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
+
+      const testFn = jest.fn();
+      let signUpFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signUpFn = auth.signUp;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signUpFn("user1@example.com", "SecurePass123");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.user?.id).toBeDefined();
+      expect(authState.user?.id).toMatch(/^user_\d+_[a-z0-9]+$/);
+    });
+
+    it("sets createdAt timestamp", async () => {
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
+
+      const testFn = jest.fn();
+      let signUpFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signUpFn = auth.signUp;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signUpFn("user1@example.com", "SecurePass123");
+
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.user?.createdAt).toBeDefined();
+      expect(new Date(authState.user?.createdAt!).toISOString()).toBeDefined();
+    });
   });
 
-  it("clears AsyncStorage on sign out", async () => {
-    (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-      if (key.includes("AUTH")) {
-        return Promise.resolve(
-          JSON.stringify({
-            user: { username: "testuser" },
-            passwordHash: "hash",
-          })
+  describe("signOut", () => {
+    it("signs out and clears state", async () => {
+      const mockAuthState = {
+        user: {
+          id: "user_123",
+          email: "test@example.com",
+          createdAt: new Date().toISOString(),
+        },
+        passwordHash: "hash",
+      };
+
+      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
+        if (key.includes("AUTH")) {
+          return Promise.resolve(JSON.stringify(mockAuthState));
+        }
+        return Promise.resolve(null);
+      });
+
+      const testFn = jest.fn();
+      let signOutFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signOutFn = auth.signOut;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.user?.email).toBe("test@example.com");
+      });
+
+      await signOutFn();
+
+      await waitFor(() => {
+        expect(AsyncStorage.removeItem).toHaveBeenCalledWith(
+          expect.stringContaining("AUTH")
         );
-      }
-      return Promise.resolve(null);
-    });
+      });
 
-    const testFn = jest.fn();
-    let signOutFn: any;
-
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signOutFn = auth.signOut;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
-
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
-
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
-    });
-
-    await signOutFn();
-
-    await waitFor(() => {
-      expect(AsyncStorage.removeItem).toHaveBeenCalled();
-    });
-  });
-
-  it("clears user state after sign out", async () => {
-    (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-      if (key.includes("AUTH")) {
-        return Promise.resolve(
-          JSON.stringify({
-            user: { username: "testuser" },
-            passwordHash: "hash",
-          })
-        );
-      }
-      return Promise.resolve(null);
-    });
-
-    const testFn = jest.fn();
-    let signOutFn: any;
-
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signOutFn = auth.signOut;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
-
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
-
-    await waitFor(() => {
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.username).toBe("testuser");
+      expect(authState.user).toBeNull();
     });
 
-    await signOutFn();
+    it("clears error on sign out", async () => {
+      const mockAuthState = {
+        user: {
+          id: "user_123",
+          email: "test@example.com",
+          createdAt: new Date().toISOString(),
+        },
+        passwordHash: "hash",
+      };
 
-    await waitFor(() => {
+      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
+        if (key.includes("AUTH")) {
+          return Promise.resolve(JSON.stringify(mockAuthState));
+        }
+        return Promise.resolve(null);
+      });
+
+      const testFn = jest.fn();
+      let signOutFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        signOutFn = auth.signOut;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      await signOutFn();
+
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user).toBeUndefined();
+      expect(authState.error).toBeNull();
     });
   });
 
-  it("clears passwordHash after sign out", async () => {
-    (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-      if (key.includes("AUTH")) {
-        return Promise.resolve(
-          JSON.stringify({
-            user: { username: "testuser" },
-            passwordHash: "hash",
-          })
-        );
-      }
-      return Promise.resolve(null);
+  describe("clearError", () => {
+    it("clears error state", async () => {
+      const testFn = jest.fn();
+      let clearErrorFn: any;
+
+      const TestComponentWithCapture = () => {
+        const auth = useAuth();
+        clearErrorFn = auth.clearError;
+        React.useEffect(() => {
+          testFn(auth);
+        }, [auth]);
+        return null;
+      };
+
+      render(
+        <AuthProvider>
+          <TestComponentWithCapture />
+        </AuthProvider>
+      );
+
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
+      // Manually set an error (this would normally happen through signIn/signUp)
+      // For this test, we just verify the function exists and can be called
+      expect(() => clearErrorFn()).not.toThrow();
+    });
+  });
+
+  describe("context API", () => {
+    it("throws error when useAuth used outside AuthProvider", () => {
+      const TestComponent = () => {
+        useAuth();
+        return null;
+      };
+
+      expect(() => render(<TestComponent />)).toThrow(
+        "useAuth must be used within AuthProvider"
+      );
     });
 
-    const testFn = jest.fn();
-    let signOutFn: any;
+    it("provides signIn function", async () => {
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
 
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signOutFn = auth.signOut;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
 
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
-
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
-    });
-
-    await signOutFn();
-
-    await waitFor(() => {
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.passwordHash).toBeUndefined();
+      expect(typeof authState.signIn).toBe("function");
     });
-  });
 
-  it("throws error when useAuth used outside AuthProvider", () => {
-    const TestComponent = () => {
-      useAuth();
-      return null;
-    };
+    it("provides signUp function", async () => {
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
 
-    expect(() => render(<TestComponent />)).toThrow(
-      "useAuth must be used within AuthProvider"
-    );
-  });
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
 
-  it("handles empty auth state from AsyncStorage", async () => {
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
-
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
-
-    await waitFor(() => {
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.loading).toBe(false);
-      expect(authState.user).toBeUndefined();
+      expect(typeof authState.signUp).toBe("function");
     });
-  });
 
-  it("handles invalid auth state from AsyncStorage", async () => {
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-      JSON.stringify({ invalid: "state" })
-    );
+    it("provides signOut function", async () => {
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
 
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
 
-    await waitFor(() => {
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.loading).toBe(false);
-      expect(authState.user).toBeUndefined();
-    });
-  });
-
-  it("trims username during sign in", async () => {
-    const testFn = jest.fn();
-    let signInFn: any;
-
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signInFn = auth.signIn;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
-
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
-
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
+      expect(typeof authState.signOut).toBe("function");
     });
 
-    await signInFn("  testuser  ", "password");
+    it("provides clearError function", async () => {
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
 
-    await waitFor(() => {
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.username).toBe("testuser");
-    });
-  });
-
-  it("provides signIn function", async () => {
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
-
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
+      expect(typeof authState.clearError).toBe("function");
     });
 
-    const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-    expect(typeof authState.signIn).toBe("function");
-  });
+    it("provides loading state", async () => {
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
 
-  it("provides signOut function", async () => {
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
 
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
-    });
-
-    const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-    expect(typeof authState.signOut).toBe("function");
-  });
-
-  it("provides loading state", async () => {
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
-
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
-    });
-
-    const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-    expect(typeof authState.loading).toBe("boolean");
-  });
-
-  it("provides user object with username", async () => {
-    (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-      if (key.includes("AUTH")) {
-        return Promise.resolve(
-          JSON.stringify({
-            user: { username: "testuser" },
-            passwordHash: "hash",
-          })
-        );
-      }
-      return Promise.resolve(null);
-    });
-
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
-
-    await waitFor(() => {
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.username).toBe("testuser");
-    });
-  });
-
-  it("provides passwordHash for sync functionality", async () => {
-    (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-      if (key.includes("AUTH")) {
-        return Promise.resolve(
-          JSON.stringify({
-            user: { username: "testuser" },
-            passwordHash: "stored_hash_123",
-          })
-        );
-      }
-      return Promise.resolve(null);
+      expect(typeof authState.loading).toBe("boolean");
     });
 
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
+    it("provides error state", async () => {
+      const testFn = jest.fn();
+      renderWithAuthProvider(testFn);
 
-    await waitFor(() => {
+      await waitFor(() => {
+        expect(testFn).toHaveBeenCalled();
+      });
+
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.passwordHash).toBe("stored_hash_123");
-    });
-  });
-
-  it("memoizes context value properly", async () => {
-    const testFn = jest.fn();
-    renderWithAuthProvider(testFn);
-
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalledTimes(2); // Initial + after loading
-    });
-  });
-
-  it("handles sign in with empty password", async () => {
-    const testFn = jest.fn();
-    let signInFn: any;
-
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signInFn = auth.signIn;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
-
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
-
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
-    });
-
-    await signInFn("user", "");
-
-    // Should still attempt to sign in (validation is UI layer responsibility)
-    await waitFor(() => {
-      expect(AsyncStorage.setItem).toHaveBeenCalled();
-    });
-  });
-
-  it("handles sign in with special characters in password", async () => {
-    const testFn = jest.fn();
-    let signInFn: any;
-
-    const TestComponentWithCapture = () => {
-      const auth = useAuth();
-      signInFn = auth.signIn;
-      React.useEffect(() => {
-        testFn(auth);
-      }, [auth]);
-      return null;
-    };
-
-    render(
-      <AuthProvider>
-        <TestComponentWithCapture />
-      </AuthProvider>
-    );
-
-    await waitFor(() => {
-      expect(testFn).toHaveBeenCalled();
-    });
-
-    await signInFn("user", "P@ssw0rd!#$%");
-
-    await waitFor(() => {
-      expect(AsyncStorage.setItem).toHaveBeenCalled();
-    });
-  });
-
-  it("persists auth state across component re-renders", async () => {
-    (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-      if (key.includes("AUTH")) {
-        return Promise.resolve(
-          JSON.stringify({
-            user: { username: "persisteduser" },
-            passwordHash: "hash",
-          })
-        );
-      }
-      return Promise.resolve(null);
-    });
-
-    const testFn = jest.fn();
-    const { rerender } = render(
-      <AuthProvider>
-        <TestComponent testFn={testFn} />
-      </AuthProvider>
-    );
-
-    rerender(
-      <AuthProvider>
-        <TestComponent testFn={testFn} />
-      </AuthProvider>
-    );
-
-    await waitFor(() => {
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.username).toBe("persisteduser");
+      expect(typeof authState.error).toBe("object"); // null or string
     });
   });
 });

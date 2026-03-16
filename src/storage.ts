@@ -1,11 +1,12 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
 
-import { AppState } from "./models";
+import { AppState, AuthState, User } from "./models";
 
 const STORAGE_KEY = "TRAPP_TRACKER_STATE_V1";
 const DEVICE_ID_KEY = "TRAPP_TRACKER_DEVICE_ID";
 const AUTH_KEY = "TRAPP_TRACKER_AUTH_V1";
+const USERS_KEY = "TRAPP_TRACKER_USERS_V1";
 
 export async function loadAppState(): Promise<AppState> {
   try {
@@ -49,21 +50,52 @@ export async function getDeviceId(): Promise<string> {
   }
 }
 
-export type AuthState = {
-  user?: {
-    username: string;
-  };
-  passwordHash?: string;
-};
+// User storage for managing multiple users
+export interface StoredUser extends User {
+  passwordHash: string;
+}
+
+export async function loadUsers(): Promise<StoredUser[]> {
+  try {
+    const json = await AsyncStorage.getItem(USERS_KEY);
+    if (!json) return [];
+    return JSON.parse(json) as StoredUser[];
+  } catch (error) {
+    console.warn("Failed to load users", error);
+    return [];
+  }
+}
+
+export async function saveUser(user: StoredUser): Promise<void> {
+  try {
+    const users = await loadUsers();
+    const existingIndex = users.findIndex((u) => u.email === user.email);
+    if (existingIndex >= 0) {
+      users[existingIndex] = user;
+    } else {
+      users.push(user);
+    }
+    await AsyncStorage.setItem(USERS_KEY, JSON.stringify(users));
+  } catch (error) {
+    console.warn("Failed to save user", error);
+  }
+}
+
+export async function findUserByEmail(
+  email: string,
+): Promise<StoredUser | undefined> {
+  const users = await loadUsers();
+  return users.find((u) => u.email === email);
+}
 
 export async function loadAuthState(): Promise<AuthState> {
   try {
     const json = await AsyncStorage.getItem(AUTH_KEY);
-    if (!json) return {};
+    if (!json) return { user: null };
     return JSON.parse(json) as AuthState;
   } catch (error) {
     console.warn("Failed to load auth state", error);
-    return {};
+    return { user: null };
   }
 }
 

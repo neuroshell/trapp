@@ -1,329 +1,537 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="157" failures="0" errors="0" time="1.979">
-  <testsuite name="storage" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.391" tests="34">
-    <testcase classname="storage loadAppState" name="returns empty state when no data exists" time="0.006" file="__tests__\storage.test.ts">
+<testsuites name="jest tests" tests="88" failures="27" errors="0" time="2.371">
+  <testsuite name="AuthContext" errors="0" failures="15" skipped="0" timestamp="2026-03-16T10:55:03" time="1.114" tests="37">
+    <testcase classname="AuthContext validation functions validateEmail" name="returns true for valid emails" time="0.004" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage loadAppState" name="loads saved app state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext validation functions validateEmail" name="returns false for invalid emails" time="0.001" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage loadAppState" name="returns empty state on JSON parse error" time="0.008" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext validation functions validatePassword" name="rejects passwords shorter than 8 characters" time="0.001" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage loadAppState" name="returns empty state on AsyncStorage error" time="0.004" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext validation functions validatePassword" name="rejects passwords without numbers" time="0" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage loadAppState" name="handles partial state data" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext validation functions validatePassword" name="accepts valid passwords" time="0.001" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage loadAppState" name="handles state with multiple entries" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext initial state" name="provides initial auth state with loading true" time="0.287" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage saveAppState" name="saves app state to AsyncStorage" time="0.001" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext initial state" name="provides user as null when not signed in" time="0.001" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage saveAppState" name="saves empty state" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext initial state" name="provides error as null initially" time="0.001" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage saveAppState" name="handles save errors gracefully" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext initial state" name="sets loading to false after initialization" time="0.057" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage saveAppState" name="saves state with complex entries" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext session restoration" name="loads auth state from AsyncStorage on mount" time="0.063" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage clearAppState" name="removes app state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext session restoration" name="handles empty auth state from AsyncStorage" time="0.063" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage clearAppState" name="handles clear errors gracefully" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext session restoration" name="handles invalid auth state from AsyncStorage" time="0.063" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage getDeviceId" name="returns existing device id from AsyncStorage" time="0.001" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signIn" name="signs in with valid email and password" time="0.031" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;test@example.com&quot;
+Received: undefined
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:248:37)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage getDeviceId" name="generates new device id if none exists" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signIn" name="rejects invalid email format" time="0.003" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;Please enter a valid email address&quot;
+Received: null
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:277:31)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage getDeviceId" name="returns unknown on error" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signIn" name="rejects password shorter than 8 characters" time="0.003" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;Password must be at least 8 characters&quot;
+Received: null
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:306:31)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage getDeviceId" name="generates unique ids on subsequent calls" time="0.001" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signIn" name="shows generic error for non-existent user" time="0.003" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;Invalid email or password&quot;
+Received: null
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:339:31)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage loadAuthState" name="returns empty object when no auth data exists" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signIn" name="shows generic error for wrong password" time="0.003" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;Invalid email or password&quot;
+Received: null
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:382:31)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage loadAuthState" name="loads saved auth state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signIn" name="hashes password during sign in" time="0.003" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage loadAuthState" name="returns empty object on JSON parse error" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signIn" name="normalizes email to lowercase" time="0.003" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;test@example.com&quot;
+Received: undefined
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:468:37)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage loadAuthState" name="returns empty object on AsyncStorage error" time="0.001" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signUp" name="creates new user with valid email and password" time="0.004" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;newuser@example.com&quot;
+Received: undefined
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:508:37)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage loadAuthState" name="handles partial auth state" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signUp" name="rejects invalid email format" time="0.003" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;Please enter a valid email address&quot;
+Received: null
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:537:31)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage saveAuthState" name="saves auth state to AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signUp" name="rejects password shorter than 8 characters" time="0.003" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;Password must be at least 8 characters&quot;
+Received: null
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:566:31)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage saveAuthState" name="saves empty auth state" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signUp" name="rejects password without numbers" time="0.002" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;Password should contain at least one number&quot;
+Received: null
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:597:31)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage saveAuthState" name="handles save errors gracefully" time="0.001" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signUp" name="rejects duplicate email registration" time="0.003" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;This email is already registered&quot;
+Received: null
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:642:31)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage saveAuthState" name="saves auth state with only user" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signUp" name="normalizes email to lowercase" time="0.003" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: &quot;newuser@example.com&quot;
+Received: undefined
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:673:37)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage saveAuthState" name="saves auth state with only passwordHash" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signUp" name="generates unique user id" time="0.003" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBeDefined()
+
+Received: undefined
+    at Object.toBeDefined (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:704:34)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage clearAuthState" name="removes auth state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signUp" name="sets createdAt timestamp" time="0.002" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBeDefined()
+
+Received: undefined
+    at Object.toBeDefined (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:736:41)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage clearAuthState" name="handles clear errors gracefully" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signOut" name="signs out and clears state" time="0.064" file="__tests__\AuthContext.test.tsx">
+      <failure>Error: expect(received).toBeNull()
+
+Received: {&quot;createdAt&quot;: &quot;2026-03-16T10:55:04.913Z&quot;, &quot;email&quot;: &quot;test@example.com&quot;, &quot;id&quot;: &quot;user_123&quot;}
+    at Object.toBeNull (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:791:30)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
     </testcase>
-    <testcase classname="storage storage keys" name="uses correct storage key for app state" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext signOut" name="clears error on sign out" time="0.003" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage storage keys" name="uses correct storage key for device id" time="0.001" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext clearError" name="clears error state" time="0.002" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage storage keys" name="uses correct storage key for auth state" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext context API" name="throws error when useAuth used outside AuthProvider" time="0.007" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage edge cases" name="handles very large state objects" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext context API" name="provides signIn function" time="0.001" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage edge cases" name="handles unicode characters in data" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext context API" name="provides signUp function" time="0.001" file="__tests__\AuthContext.test.tsx">
     </testcase>
-    <testcase classname="storage edge cases" name="handles empty strings in data" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="AuthContext context API" name="provides signOut function" time="0" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext context API" name="provides clearError function" time="0" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext context API" name="provides loading state" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext context API" name="provides error state" time="0" file="__tests__\AuthContext.test.tsx">
     </testcase>
   </testsuite>
-  <testsuite name="SplashScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.804" tests="13">
-    <testcase classname="SplashScreen" name="renders title" time="0.292" file="__tests__\SplashScreen.test.tsx">
+  <testsuite name="RegisterScreen" errors="0" failures="9" skipped="0" timestamp="2026-03-16T10:55:03" time="1.311" tests="29">
+    <testcase classname="RegisterScreen" name="renders registration form with all required fields" time="0.289" file="__tests__\RegisterScreen.test.tsx">
+      <failure>Error: Found multiple elements with text: /Create Account/
+    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:40:12)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
     </testcase>
-    <testcase classname="SplashScreen" name="renders loading subtitle" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="renders terms acceptance checkbox" time="0.005" file="__tests__\RegisterScreen.test.tsx">
     </testcase>
-    <testcase classname="SplashScreen" name="renders SafeAreaView wrapper" time="0.002" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="renders login link" time="0.006" file="__tests__\RegisterScreen.test.tsx">
     </testcase>
-    <testcase classname="SplashScreen" name="renders title with proper styling" time="0.002" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="calls onNavigateToLogin when login link is pressed" time="0.006" file="__tests__\RegisterScreen.test.tsx">
     </testcase>
-    <testcase classname="SplashScreen" name="renders subtitle with proper styling" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="displays email validation error for invalid email" time="0.018" file="__tests__\RegisterScreen.test.tsx">
     </testcase>
-    <testcase classname="SplashScreen" name="has no interactive elements" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="displays password length error for short password" time="0.016" file="__tests__\RegisterScreen.test.tsx">
     </testcase>
-    <testcase classname="SplashScreen" name="is a static loading screen" time="0.006" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="displays password number requirement error" time="0.015" file="__tests__\RegisterScreen.test.tsx">
     </testcase>
-    <testcase classname="SplashScreen" name="displays app branding" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="displays password mismatch error" time="0.014" file="__tests__\RegisterScreen.test.tsx">
     </testcase>
-    <testcase classname="SplashScreen" name="indicates loading state to user" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="displays terms acceptance error when not checked" time="0.016" file="__tests__\RegisterScreen.test.tsx">
     </testcase>
-    <testcase classname="SplashScreen" name="does not crash during render" time="0" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="submits form with valid data" time="0.013" file="__tests__\RegisterScreen.test.tsx">
+      <failure>Error: Found multiple elements with text: Create Account
+    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:221:28)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
     </testcase>
-    <testcase classname="SplashScreen" name="maintains consistent UI across renders" time="0.002" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="shows password strength indicator" time="0.01" file="__tests__\RegisterScreen.test.tsx">
     </testcase>
-    <testcase classname="SplashScreen" name="renders with proper structure" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="shows loading state during registration" time="0.012" file="__tests__\RegisterScreen.test.tsx">
+      <failure>Error: Found multiple elements with text: Create Account
+    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:277:28)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
     </testcase>
-    <testcase classname="SplashScreen" name="renders ActivityIndicator" time="0" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="RegisterScreen" name="has accessible error messages with alert role" time="0.012" file="__tests__\RegisterScreen.test.tsx">
+      <failure>Error: Found multiple elements with text: Create Account
+    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:302:28)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="RegisterScreen" name="clears field errors when user starts typing" time="0.013" file="__tests__\RegisterScreen.test.tsx">
+      <failure>Error: Found multiple elements with text: Create Account
+    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:330:28)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="RegisterScreen" name="has proper accessibility labels on all inputs" time="0.005" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="has proper accessibility hints on inputs" time="0.005" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="uses email-address keyboard type for email input" time="0.005" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="uses secureTextEntry for password inputs" time="0.005" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="has minimum 48px height for inputs" time="0.006" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="has checkbox with proper accessibility state" time="0.004" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="toggles checkbox when pressed" time="0.012" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="displays duplicate email error" time="0.013" file="__tests__\RegisterScreen.test.tsx">
+      <failure>Error: Found multiple elements with text: Create Account
+    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:465:28)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="RegisterScreen" name="has proper touch target for register button" time="0.005" file="__tests__\RegisterScreen.test.tsx">
+      <failure>Error: Found multiple elements with text: Create Account
+    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:478:28)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="RegisterScreen" name="auto-capitalizes none for email input" time="0.005" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="disables auto-correct for email input" time="0.004" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="renders support text" time="0.005" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="renders title" time="0.005" file="__tests__\RegisterScreen.test.tsx">
+      <failure>Error: Found multiple elements with text: /Create Account/
+    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:520:12)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="RegisterScreen" name="has terms link with proper styling" time="0.005" file="__tests__\RegisterScreen.test.tsx">
+    </testcase>
+    <testcase classname="RegisterScreen" name="validates confirm password is required" time="0.012" file="__tests__\RegisterScreen.test.tsx">
+      <failure>Error: Found multiple elements with text: Create Account
+    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:547:28)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
     </testcase>
   </testsuite>
-  <testsuite name="DashboardScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.802" tests="16">
-    <testcase classname="DashboardScreen" name="renders title" time="0.292" file="__tests__\DashboardScreen.test.tsx">
+  <testsuite name="LoginScreen" errors="0" failures="3" skipped="0" timestamp="2026-03-16T10:55:03" time="2.001" tests="22">
+    <testcase classname="LoginScreen" name="renders login form with email and password fields" time="0.289" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="renders sign in button" time="0.006" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="displays email validation error for invalid email" time="0.01" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="displays email required error when empty" time="0.005" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="displays password required error when empty" time="0.004" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="submits form with valid credentials" time="0.065" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="shows loading state during sign in" time="0.01" file="__tests__\LoginScreen.test.tsx">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: true
+Received: undefined
+    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\LoginScreen.test.tsx:165:41)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="LoginScreen" name="has accessible error messages with alert role" time="1.019" file="__tests__\LoginScreen.test.tsx">
+      <failure>Error: Found multiple elements with role: alert
+    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\__tests__\LoginScreen.test.tsx:179:18)
+    at Generator.next (&lt;anonymous&gt;)
+    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
+    at new Promise (&lt;anonymous&gt;)
+    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    </testcase>
+    <testcase classname="LoginScreen" name="clears error when user starts typing" time="0.013" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="has proper accessibility labels on inputs" time="0.004" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="has proper accessibility hints on inputs" time="0.004" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="uses email-address keyboard type for email input" time="0.003" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="uses secureTextEntry for password input" time="0.003" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="has minimum 48px height for inputs" time="0.004" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="renders register link when onNavigateToRegister is provided" time="0.009" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="calls onNavigateToRegister when register link is pressed" time="0.005" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="has accessibility role link on register button" time="0.008" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="displays generic error for invalid credentials" time="0.07" file="__tests__\LoginScreen.test.tsx">
+    </testcase>
+    <testcase classname="LoginScreen" name="has proper touch target for sign in button" time="0.009" file="__tests__\LoginScreen.test.tsx">
+      <failure>Error: expect(received).toEqual(expected) // deep equality
+
+Expected: ArrayContaining [ObjectContaining {&quot;minHeight&quot;: 48}]
+Received: [{&quot;color&quot;: &quot;#fff&quot;, &quot;fontSize&quot;: 16, &quot;fontWeight&quot;: &quot;700&quot;}, false]
+    at Object.toEqual (C:\Users\neuroshell\Documents\src\trapp\__tests__\LoginScreen.test.tsx:316:38)
+    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
+    at new Promise (&lt;anonymous&gt;)
+    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
+    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
+    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
+    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
+    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
+    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
+    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
+    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
+    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
+    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
     </testcase>
-    <testcase classname="DashboardScreen" name="renders subtitle" time="0.002" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="LoginScreen" name="auto-capitalizes none for email input" time="0.007" file="__tests__\LoginScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="renders coming soon card" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="LoginScreen" name="disables auto-correct for email input" time="0.004" file="__tests__\LoginScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="renders card text about logged workouts" time="0.001" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="renders SafeAreaView wrapper" time="0.002" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="renders title with proper styling" time="0.001" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="renders subtitle with secondary color" time="0.001" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="renders card title with bold font" time="0.001" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="renders card text with proper styling" time="0" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="is a static informational screen" time="0.002" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="has no interactive elements" time="0.004" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="renders content in correct order" time="0.001" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="displays placeholder content" time="0.001" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="renders without crashing" time="0" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="maintains consistent UI across renders" time="0.002" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-    <testcase classname="DashboardScreen" name="renders with proper structure" time="0" file="__tests__\DashboardScreen.test.tsx">
-    </testcase>
-  </testsuite>
-  <testsuite name="HomeScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.884" tests="31">
-    <testcase classname="HomeScreen" name="renders title" time="0.301" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders subtitle" time="0.004" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders Quick Actions section" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders Latest Activity section" time="0.008" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders stats card with streak" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders stats card with weekly goal" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders Run button" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders Push-up button" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders Squats button" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders Pull-up button" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="navigates to Log screen when Run is pressed" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="navigates to Log screen when Push-up is pressed" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="navigates to Log screen when Squats is pressed" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="navigates to Log screen when Pull-up is pressed" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders placeholder message for empty activity list" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders SafeAreaView wrapper" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="has proper layout structure" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders stat blocks in row layout" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders quick action buttons in rows" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders title with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders subtitle with secondary color" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders section titles with proper styling" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders placeholder card with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders stat values with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders stat labels with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="handles multiple navigation calls" time="0.004" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders consistently across multiple renders" time="0.007" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="does not crash with undefined navigation" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="has accessible stat display" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders empty state for activity list" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders with proper structure" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-  </testsuite>
-  <testsuite name="LogScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="1.34" tests="37">
-    <testcase classname="LogScreen" name="renders title" time="0.317" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders activity type buttons" time="0.01" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders date and time field" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders quantity input" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders notes input" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders save button" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders Recent entries section" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="shows empty state when no entries exist" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="allows selecting activity type" time="0.009" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="allows entering quantity" time="0.008" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="allows entering notes" time="0.008" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="saves entry with valid data" time="0.012" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="clears form after saving entry" time="0.015" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="displays saved entries in the list" time="0.058" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="formats entry date correctly" time="0.057" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="displays entry quantity" time="0.073" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="displays entry notes when present" time="0.055" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="loads entries from AsyncStorage on mount" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="saves entries to AsyncStorage when adding new entry" time="0.012" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders form card" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders quantity input with numeric keyboard" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders notes input as multiline" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="has proper label for activity type" time="0.008" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="has proper label for quantity" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="has proper label for notes" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="allows adding multiple entries" time="0.016" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="handles entries with notes" time="0.013" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="trims notes before saving" time="0.013" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders entries list with FlatList" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders SafeAreaView container" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="has proper input styling" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="has proper save button styling" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="handles decimal quantity values" time="0.01" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="handles large quantity values" time="0.013" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="preserves selected activity type" time="0.008" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders all activity type options" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="displays current date in date field" time="0.003" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-  </testsuite>
-  <testsuite name="AuthContext" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="1.548" tests="26">
-    <testcase classname="AuthContext" name="provides initial auth state with loading true" time="0.331" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="provides user as undefined when not signed in" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="provides passwordHash as undefined when not signed in" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="sets loading to false after initialization" time="0.056" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="loads auth state from AsyncStorage on mount" time="0.063" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="signs in with username and password" time="0.006" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="hashes password during sign in" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="saves auth state to AsyncStorage after sign in" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="updates user state after sign in" time="0.053" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="signs out and clears state" time="0.061" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="clears AsyncStorage on sign out" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="clears user state after sign out" time="0.109" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="clears passwordHash after sign out" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="throws error when useAuth used outside AuthProvider" time="0.015" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="handles empty auth state from AsyncStorage" time="0.054" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="handles invalid auth state from AsyncStorage" time="0.061" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="trims username during sign in" time="0.054" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="provides signIn function" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="provides signOut function" time="0" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="provides loading state" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="provides user object with username" time="0.062" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="provides passwordHash for sync functionality" time="0.064" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="memoizes context value properly" time="0.055" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="handles sign in with empty password" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="handles sign in with special characters in password" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext" name="persists auth state across component re-renders" time="0.057" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LoginScreen" name="renders support text" time="0.003" file="__tests__\LoginScreen.test.tsx">
     </testcase>
   </testsuite>
 </testsuites>

@@ -18,3 +18,15 @@ export interface ActivityEntry {
 export interface AppState {
   entries: ActivityEntry[];
 }
+
+export interface User {
+  id: string;
+  email: string;
+  displayName?: string;
+  createdAt: string;
+}
+
+export interface AuthState {
+  user: User | null;
+  passwordHash?: string;
+}
