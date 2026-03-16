@@ -273,10 +273,18 @@ describe("LogScreen Integration Tests", () => {
     fireEvent.changeText(screen.getByTestId("duration-input"), "30");
     fireEvent.press(screen.getByTestId("save-workout-button"));
 
+    // Achievement modal may appear - dismiss it if present
+    try {
+      const doneButton = await waitFor(() => screen.getByTestId("done-button"), { timeout: 1000 });
+      fireEvent.press(doneButton);
+    } catch (e) {
+      // No achievement modal, continue
+    }
+
     // Workout should appear in list
     await waitFor(() => {
       expect(screen.getByTestId("workout-item")).toBeTruthy();
-    });
+    }, { timeout: 3000 });
   });
 
   // Skipped: This test conflicts with LogScreen.test.tsx mocks

@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { AchievementCelebrationModal } from "../components/AchievementCelebrationModal";
 import { Card } from "../components/Card";
 import { DateTimeField } from "../components/DateTimeField";
 import { DeleteConfirmationDialog } from "../components/DeleteConfirmationDialog";
@@ -25,10 +26,14 @@ import {
   deleteWorkout,
   getDeviceId,
   getLastWorkoutValues,
+  getUnlockedAchievementIds,
   getWorkouts,
+  saveAchievements,
   saveWorkout,
 } from "../storage";
 import { colors, spacing, typography } from "../theme";
+import { checkAchievements, Achievement } from "../utils/achievements";
+import { calculateStreak } from "../utils/statistics";
 import {
   isOutlier,
   validateRunningForm,
@@ -93,6 +98,11 @@ export function LogScreen({ navigation }: LogScreenProps) {
   const [workoutToDelete, setWorkoutToDelete] = useState<WorkoutEntry | null>(
     null,
   );
+
+  // Achievement celebration
+  const [celebrationVisible, setCelebrationVisible] = useState(false);
+  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
+  const [currentCelebrationIndex, setCurrentCelebrationIndex] = useState(0);
 
   // Load workouts on mount and when screen gains focus
   useFocusEffect(
@@ -247,16 +257,41 @@ export function LogScreen({ navigation }: LogScreenProps) {
       };
 
       // Optimistic update
-      setWorkouts((prev) => [newWorkout, ...prev]);
+      const updatedWorkouts = [newWorkout, ...workouts];
+      setWorkouts(updatedWorkouts);
 
       // Save to storage
       await saveWorkout(newWorkout);
 
+      // Check for new achievements
+      const unlockedIds = await getUnlockedAchievementIds();
+      const streak = calculateStreak(updatedWorkouts);
+      const newlyUnlocked = checkAchievements(
+        updatedWorkouts,
+        streak,
+        unlockedIds,
+      );
+
+      if (newlyUnlocked.length > 0) {
+        // Save achievements
+        await saveAchievements(newlyUnlocked);
+        setNewAchievements(newlyUnlocked);
+        setCurrentCelebrationIndex(0);
+        setCelebrationVisible(true);
+
+        // Announce achievement
+        AccessibilityInfo.announceForAccessibility(
+          `Achievement unlocked! ${newlyUnlocked[0].title}`,
+        );
+      } else {
+        // Success feedback
+        AccessibilityInfo.announceForAccessibility(
+          "Workout saved successfully!",
+        );
+      }
+
       // Reset form
       resetForm();
-
-      // Success feedback
-      AccessibilityInfo.announceForAccessibility("Workout saved successfully!");
       setErrors({});
     } catch (error) {
       console.error("Failed to save workout", error);
@@ -530,6 +565,29 @@ export function LogScreen({ navigation }: LogScreenProps) {
           workoutDate={formatWorkoutDate(workoutToDelete.timestamp)}
           onConfirm={confirmDelete}
           onCancel={cancelDelete}
+        />
+      )}
+
+      {/* Achievement Celebration Modal */}
+      {newAchievements.length > 0 && (
+        <AchievementCelebrationModal
+          visible={celebrationVisible}
+          achievement={newAchievements[currentCelebrationIndex] || null}
+          onDismiss={() => {
+            setCelebrationVisible(false);
+            setNewAchievements([]);
+            setCurrentCelebrationIndex(0);
+          }}
+          onNext={() => {
+            if (currentCelebrationIndex < newAchievements.length - 1) {
+              setCurrentCelebrationIndex(currentCelebrationIndex + 1);
+            } else {
+              setCelebrationVisible(false);
+              setNewAchievements([]);
+              setCurrentCelebrationIndex(0);
+            }
+          }}
+          hasNext={currentCelebrationIndex < newAchievements.length - 1}
         />
       )}
     </SafeAreaView>

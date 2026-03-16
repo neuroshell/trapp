@@ -9,16 +9,32 @@ import {
   QuickLogButton,
   QUICK_LOG_BUTTONS,
 } from "../components/QuickLogButton";
+import { StreakTracker } from "../components/StreakTracker";
+import { WeeklySummaryCard } from "../components/WeeklySummaryCard";
 import { ActivityType, WorkoutEntry } from "../models";
 import { RootTabParamList } from "../navigation/types";
 import { getWorkouts } from "../storage";
 import { colors, spacing, typography } from "../theme";
+import {
+  calculateStreak,
+  calculateWeeklyStats,
+  StreakData,
+  WeeklyStats,
+} from "../utils/statistics";
 
 type Props = BottomTabScreenProps<RootTabParamList, "Home">;
 
 export function HomeScreen({ navigation }: Props) {
   const [workouts, setWorkouts] = useState<WorkoutEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [streak, setStreak] = useState<StreakData>({
+    currentStreak: 0,
+    longestStreak: 0,
+    lastWorkoutDate: null,
+    streakDates: [],
+    isActive: false,
+  });
+  const [weeklyStats, setWeeklyStats] = useState<WeeklyStats | null>(null);
 
   // Load workouts when screen gains focus
   useFocusEffect(
@@ -32,6 +48,13 @@ export function HomeScreen({ navigation }: Props) {
     try {
       const loadedWorkouts = await getWorkouts();
       setWorkouts(loadedWorkouts);
+
+      // Calculate statistics
+      const newStreak = calculateStreak(loadedWorkouts);
+      setStreak(newStreak);
+
+      const newWeeklyStats = calculateWeeklyStats(loadedWorkouts);
+      setWeeklyStats(newWeeklyStats);
     } catch (error) {
       console.warn("Failed to load workouts", error);
     } finally {
@@ -46,116 +69,22 @@ export function HomeScreen({ navigation }: Props) {
     // and pre-select it in the LogScreen
   };
 
-  // Calculate stats
-  const stats = React.useMemo(() => {
-    const now = new Date();
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - now.getDay()); // Sunday
-    startOfWeek.setHours(0, 0, 0, 0);
-
-    const thisWeekWorkouts = workouts.filter(
-      (w) => new Date(w.timestamp) >= startOfWeek,
-    );
-
-    // Calculate streak (consecutive days)
-    const uniqueDates = new Set(
-      workouts.map((w) => new Date(w.timestamp).toDateString()),
-    );
-    let streak = 0;
-    const currentDate = new Date();
-    while (uniqueDates.has(currentDate.toDateString())) {
-      streak++;
-      currentDate.setDate(currentDate.getDate() - 1);
-    }
-
-    // Get last workout
-    const sortedWorkouts = [...workouts].sort(
-      (a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-    );
-    const lastWorkout = sortedWorkouts[0];
-
-    // Calculate time since last workout
-    let lastWorkoutText = "No workouts yet";
-    if (lastWorkout) {
-      const diffMs = now.getTime() - new Date(lastWorkout.timestamp).getTime();
-      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-      const diffDays = Math.floor(diffHours / 24);
-
-      if (diffHours < 1) {
-        const diffMinutes = Math.floor(diffMs / (1000 * 60));
-        lastWorkoutText = `${diffMinutes} min ago`;
-      } else if (diffHours < 24) {
-        lastWorkoutText = `${diffHours}h ago`;
-      } else {
-        lastWorkoutText = `${diffDays}d ago`;
-      }
-    }
-
-    return {
-      totalWorkouts: workouts.length,
-      weeklyWorkouts: thisWeekWorkouts.length,
-      weeklyGoal: 5,
-      streak,
-      lastWorkoutText,
-    };
-  }, [workouts]);
-
   return (
     <SafeAreaView style={styles.page}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>FitTrack Pro</Text>
         <Text style={styles.subtitle}>
-          Quickly log activity and track progress.
+          Track your workouts and crush your goals.
         </Text>
 
-        {/* Stats Cards */}
-        <Card style={styles.statsCard}>
-          <View style={styles.statsRow}>
-            <View style={styles.statBlock}>
-              <Text style={styles.statLabel}>Streak</Text>
-              <Text style={styles.statValue} testID="streak-stat">
-                🔥 {stats.streak} {stats.streak === 1 ? "day" : "days"}
-              </Text>
-            </View>
-            <View style={styles.statBlock}>
-              <Text style={styles.statLabel}>Weekly Goal</Text>
-              <Text style={styles.statValue} testID="weekly-goal-stat">
-                {stats.weeklyWorkouts} / {stats.weeklyGoal}
-              </Text>
-            </View>
-          </View>
-          <View style={styles.progressContainer}>
-            <View style={styles.progressTrack}>
-              <View
-                style={[
-                  styles.progressFill,
-                  {
-                    width: `${Math.min(
-                      (stats.weeklyWorkouts / stats.weeklyGoal) * 100,
-                      100,
-                    )}%`,
-                  },
-                ]}
-                testID="weekly-progress"
-              />
-            </View>
-            <Text style={styles.progressText}>
-              {stats.weeklyWorkouts >= stats.weeklyGoal
-                ? "🎉 Goal achieved!"
-                : `${stats.weeklyGoal - stats.weeklyWorkouts} more to go`}
-            </Text>
-          </View>
-        </Card>
+        {/* Streak Tracker */}
+        <StreakTracker streak={streak} testID="home-streak-tracker" />
 
-        {/* Last Workout */}
-        <Card style={styles.lastWorkoutCard}>
-          <Text style={styles.lastWorkoutLabel}>Last Workout</Text>
-          <Text style={styles.lastWorkoutValue} testID="last-workout">
-            {stats.lastWorkoutText}
-          </Text>
-        </Card>
+        {/* Weekly Summary */}
+        {weeklyStats && (
+          <WeeklySummaryCard stats={weeklyStats} testID="home-weekly-summary" />
+        )}
 
         {/* Quick Actions */}
         <Text style={styles.sectionTitle}>Quick Actions</Text>
@@ -265,63 +194,6 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginTop: 6,
     marginBottom: spacing.lg,
-  },
-  statsCard: {
-    marginBottom: spacing.md,
-  },
-  statsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: spacing.md,
-  },
-  statBlock: {
-    flex: 1,
-  },
-  statLabel: {
-    color: colors.textSecondary,
-    fontSize: typography.small,
-    marginBottom: 4,
-  },
-  statValue: {
-    color: colors.text,
-    fontSize: typography.sectionTitle,
-    fontWeight: "700",
-  },
-  progressContainer: {
-    marginTop: spacing.sm,
-  },
-  progressTrack: {
-    height: 8,
-    backgroundColor: colors.background,
-    borderRadius: 4,
-    overflow: "hidden",
-  },
-  progressFill: {
-    height: "100%",
-    backgroundColor: colors.primary,
-    borderRadius: 4,
-  },
-  progressText: {
-    fontSize: typography.small,
-    color: colors.textSecondary,
-    marginTop: spacing.xs,
-    textAlign: "center",
-  },
-  lastWorkoutCard: {
-    marginBottom: spacing.lg,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  lastWorkoutLabel: {
-    fontSize: typography.small,
-    color: colors.textSecondary,
-    fontWeight: "600",
-  },
-  lastWorkoutValue: {
-    fontSize: typography.body,
-    color: colors.text,
-    fontWeight: "600",
   },
   sectionTitle: {
     fontSize: typography.sectionTitle,

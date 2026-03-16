@@ -30,7 +30,7 @@ describe("HomeScreen", () => {
   it("renders subtitle", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
     await waitForAsync();
-    expect(getByText("Quickly log activity and track progress.")).toBeTruthy();
+    expect(getByText("Track your workouts and crush your goals.")).toBeTruthy();
   });
 
   it("renders Quick Actions section", async () => {
@@ -46,15 +46,15 @@ describe("HomeScreen", () => {
   });
 
   it("renders stats card with streak", async () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
+    const { getByTestId } = render(<HomeScreen navigation={mockNavigation as any} />);
     await waitForAsync();
-    expect(getByText("Streak")).toBeTruthy();
+    expect(getByTestId("home-streak-tracker")).toBeTruthy();
   });
 
-  it("renders stats card with weekly goal", async () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
+  it("renders stats card with weekly summary", async () => {
+    const { getByTestId } = render(<HomeScreen navigation={mockNavigation as any} />);
     await waitForAsync();
-    expect(getByText("Weekly Goal")).toBeTruthy();
+    expect(getByTestId("home-weekly-summary")).toBeTruthy();
   });
 
   it("renders Run button", async () => {

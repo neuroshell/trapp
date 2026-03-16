@@ -8,12 +8,15 @@ import {
   User,
   WorkoutEntry,
 } from "./models";
+import { Achievement, PersonalRecord } from "./utils/achievements";
 
 const STORAGE_KEY = "TRAPP_TRACKER_STATE_V1";
 const DEVICE_ID_KEY = "TRAPP_TRACKER_DEVICE_ID";
 const AUTH_KEY = "TRAPP_TRACKER_AUTH_V1";
 const USERS_KEY = "TRAPP_TRACKER_USERS_V1";
 const WORKOUTS_KEY = "TRAPP_TRACKER_WORKOUTS_V1";
+const ACHIEVEMENTS_KEY = "TRAPP_TRACKER_ACHIEVEMENTS_V1";
+const PERSONAL_RECORDS_KEY = "TRAPP_TRACKER_PR_V1";
 
 export async function loadAppState(): Promise<AppState> {
   try {
@@ -282,5 +285,157 @@ export async function getWorkoutsForHistory(): Promise<WorkoutEntry[]> {
   } catch (error) {
     console.warn("Failed to get workouts for history", error);
     return [];
+  }
+}
+
+// ==================== ACHIEVEMENT STORAGE ====================
+
+/**
+ * Load user's unlocked achievements
+ */
+export async function loadAchievements(): Promise<Achievement[]> {
+  try {
+    const json = await AsyncStorage.getItem(ACHIEVEMENTS_KEY);
+    if (!json) return [];
+    return JSON.parse(json) as Achievement[];
+  } catch (error) {
+    console.warn("Failed to load achievements", error);
+    return [];
+  }
+}
+
+/**
+ * Save a newly unlocked achievement
+ */
+export async function saveAchievement(achievement: Achievement): Promise<void> {
+  try {
+    const achievements = await loadAchievements();
+    // Check if already exists
+    const existingIndex = achievements.findIndex(
+      (a) => a.id === achievement.id,
+    );
+    if (existingIndex >= 0) {
+      // Update existing
+      achievements[existingIndex] = achievement;
+    } else {
+      // Add new
+      achievements.push(achievement);
+    }
+    await AsyncStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));
+  } catch (error) {
+    console.warn("Failed to save achievement", error);
+  }
+}
+
+/**
+ * Save multiple achievements at once
+ */
+export async function saveAchievements(
+  achievements: Achievement[],
+): Promise<void> {
+  try {
+    const existing = await loadAchievements();
+    const updated = [...existing];
+
+    achievements.forEach((newAchievement) => {
+      const existingIndex = updated.findIndex(
+        (a) => a.id === newAchievement.id,
+      );
+      if (existingIndex >= 0) {
+        updated[existingIndex] = newAchievement;
+      } else {
+        updated.push(newAchievement);
+      }
+    });
+
+    await AsyncStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(updated));
+  } catch (error) {
+    console.warn("Failed to save achievements", error);
+  }
+}
+
+/**
+ * Get unlocked achievement IDs
+ */
+export async function getUnlockedAchievementIds(): Promise<string[]> {
+  try {
+    const achievements = await loadAchievements();
+    return achievements.map((a) => a.id);
+  } catch (error) {
+    console.warn("Failed to get unlocked achievement ids", error);
+    return [];
+  }
+}
+
+/**
+ * Clear all achievements (for testing/debugging)
+ */
+export async function clearAchievements(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(ACHIEVEMENTS_KEY);
+  } catch (error) {
+    console.warn("Failed to clear achievements", error);
+  }
+}
+
+// ==================== PERSONAL RECORDS STORAGE ====================
+
+/**
+ * Load user's personal records
+ */
+export async function loadPersonalRecords(): Promise<PersonalRecord[]> {
+  try {
+    const json = await AsyncStorage.getItem(PERSONAL_RECORDS_KEY);
+    if (!json) return [];
+    return JSON.parse(json) as PersonalRecord[];
+  } catch (error) {
+    console.warn("Failed to load personal records", error);
+    return [];
+  }
+}
+
+/**
+ * Save personal records
+ */
+export async function savePersonalRecords(
+  records: PersonalRecord[],
+): Promise<void> {
+  try {
+    await AsyncStorage.setItem(PERSONAL_RECORDS_KEY, JSON.stringify(records));
+  } catch (error) {
+    console.warn("Failed to save personal records", error);
+  }
+}
+
+/**
+ * Update a single personal record
+ */
+export async function updatePersonalRecord(
+  record: PersonalRecord,
+): Promise<void> {
+  try {
+    const records = await loadPersonalRecords();
+    const existingIndex = records.findIndex((r) => r.type === record.type);
+
+    if (existingIndex >= 0) {
+      records[existingIndex] = record;
+    } else {
+      records.push(record);
+    }
+
+    await AsyncStorage.setItem(PERSONAL_RECORDS_KEY, JSON.stringify(records));
+  } catch (error) {
+    console.warn("Failed to update personal record", error);
+  }
+}
+
+/**
+ * Clear personal records (for testing/debugging)
+ */
+export async function clearPersonalRecords(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(PERSONAL_RECORDS_KEY);
+  } catch (error) {
+    console.warn("Failed to clear personal records", error);
   }
 }
