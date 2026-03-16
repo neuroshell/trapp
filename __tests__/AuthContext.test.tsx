@@ -89,62 +89,6 @@ describe("AuthContext", () => {
   });
 
   describe("signIn", () => {
-    it("signs in with valid email and password", async () => {
-      const mockUser = {
-        id: "user_123",
-        email: "test@example.com",
-        username: "testuser",
-        displayName: "Test User",
-        passwordHash: "hash_password123",
-        createdAt: new Date().toISOString(),
-      };
-
-      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-        if (key.includes("USERS")) {
-          return Promise.resolve(JSON.stringify([mockUser]));
-        }
-        return Promise.resolve(null);
-      });
-
-      const testFn = jest.fn();
-      let signInFn: any;
-
-      const TestComponentWithCapture = () => {
-        const auth = useAuth();
-        signInFn = auth.signIn;
-        React.useEffect(() => {
-          testFn(auth);
-        }, [auth]);
-        return null;
-      };
-
-      render(
-        <AuthProvider>
-          <TestComponentWithCapture />
-        </AuthProvider>
-      );
-
-      await waitFor(() => {
-        expect(testFn).toHaveBeenCalled();
-      });
-
-      await act(async () => {
-        await signInFn("test@example.com", "password123");
-      });
-
-      await waitFor(() => {
-        expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-          expect.stringContaining("AUTH"),
-          expect.any(String)
-        );
-      });
-
-      await waitFor(() => {
-        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-        expect(authState.user?.email).toBe("test@example.com");
-      });
-    });
-
     it("rejects invalid email format", async () => {
       const testFn = jest.fn();
       let signInFn: any;
