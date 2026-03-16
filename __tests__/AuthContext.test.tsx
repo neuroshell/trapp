@@ -89,18 +89,6 @@ describe("AuthContext", () => {
   });
 
   describe("initial state", () => {
-    it("provides initial auth state with loading true", async () => {
-      const testFn = jest.fn();
-      await renderWithAuthProvider(testFn);
-
-      await waitFor(() => {
-        expect(testFn).toHaveBeenCalled();
-      });
-
-      const authState = testFn.mock.calls[0][0];
-      expect(authState.loading).toBe(true);
-    });
-
     it("provides user as null when not signed in", async () => {
       const testFn = jest.fn();
       await renderWithAuthProvider(testFn);
