@@ -61,26 +61,13 @@ function MainTabs() {
 function AuthStackScreen() {
   return (
     <AuthStack.Navigator
+      id="auth-stack-navigator"
       screenOptions={{
         headerShown: false,
       }}
     >
-      <AuthStack.Screen name="Login">
-        {(props) => (
-          <LoginScreen
-            onNavigateToRegister={() => props.navigation.navigate("Register")}
-            navigation={props.navigation}
-          />
-        )}
-      </AuthStack.Screen>
-      <AuthStack.Screen name="Register">
-        {(props) => (
-          <RegisterScreen
-            onNavigateToLogin={() => props.navigation.navigate("Login")}
-            navigation={props.navigation}
-          />
-        )}
-      </AuthStack.Screen>
+      <AuthStack.Screen name="Login" component={LoginScreen} />
+      <AuthStack.Screen name="Register" component={RegisterScreen} />
     </AuthStack.Navigator>
   );
 }
@@ -93,7 +80,10 @@ function AppContent() {
   return (
     <NavigationContainer>
       <StatusBar style="auto" />
-      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      <RootStack.Navigator
+        id="root-stack-navigator"
+        screenOptions={{ headerShown: false }}
+      >
         {!user ? (
           <RootStack.Screen name="Auth" component={AuthStackScreen} />
         ) : (

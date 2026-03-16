@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useMemo, useState } from "react";
 import {
@@ -19,12 +20,13 @@ import { PrimaryButton } from "../components/PrimaryButton";
 import { AuthStackParamList } from "../navigation/types";
 import { colors, spacing, typography } from "../theme";
 
-type LoginScreenProps = {
-  onNavigateToRegister?: () => void;
-  navigation?: NativeStackNavigationProp<AuthStackParamList, "Login">;
-};
+type LoginScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  "Login"
+>;
 
-export function LoginScreen({ onNavigateToRegister }: LoginScreenProps) {
+export function LoginScreen() {
+  const navigation = useNavigation<LoginScreenNavigationProp>();
   const { signIn, error: authError } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -188,22 +190,18 @@ export function LoginScreen({ onNavigateToRegister }: LoginScreenProps) {
               </PrimaryButton>
 
               {/* Register Link */}
-              {onNavigateToRegister && (
-                <View style={styles.registerContainer}>
-                  <Text style={styles.registerText}>
-                    Don't have an account?{" "}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={onNavigateToRegister}
-                    accessibilityRole="link"
-                    accessibilityLabel="Go to registration screen"
-                    accessibilityHint="Navigates to the account creation screen"
-                    hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
-                  >
-                    <Text style={styles.registerLink}>Create Account</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
+              <View style={styles.registerContainer}>
+                <Text style={styles.registerText}>Don't have an account? </Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Register")}
+                  accessibilityRole="link"
+                  accessibilityLabel="Go to registration screen"
+                  accessibilityHint="Navigates to the account creation screen"
+                  hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+                >
+                  <Text style={styles.registerLink}>Create Account</Text>
+                </TouchableOpacity>
+              </View>
             </Card>
           </View>
         </ScrollView>

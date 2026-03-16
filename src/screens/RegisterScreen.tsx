@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useMemo, useState } from "react";
 import {
@@ -19,12 +20,13 @@ import { PrimaryButton } from "../components/PrimaryButton";
 import { AuthStackParamList } from "../navigation/types";
 import { colors, spacing, typography } from "../theme";
 
-type RegisterScreenProps = {
-  onNavigateToLogin: () => void;
-  navigation?: NativeStackNavigationProp<AuthStackParamList, "Register">;
-};
+type RegisterScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  "Register"
+>;
 
-export function RegisterScreen({ onNavigateToLogin }: RegisterScreenProps) {
+export function RegisterScreen() {
+  const navigation = useNavigation<RegisterScreenNavigationProp>();
   const { signUp, error: authError } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -337,7 +339,7 @@ export function RegisterScreen({ onNavigateToLogin }: RegisterScreenProps) {
               <View style={styles.loginContainer}>
                 <Text style={styles.loginText}>Already have an account? </Text>
                 <TouchableOpacity
-                  onPress={onNavigateToLogin}
+                  onPress={() => navigation.navigate("Login")}
                   accessibilityRole="link"
                   accessibilityLabel="Go to login screen"
                   accessibilityHint="Navigates to the login screen"
