@@ -237,9 +237,15 @@ async function createServer(opts = {}) {
 }
 
 // Start server if run directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Check if this file is being run directly (not imported)
+const isMainModule = process.argv[1] && (
+  process.argv[1].endsWith('index.js') || 
+  process.argv[1].endsWith('index.mjs')
+);
+
+if (isMainModule) {
   createServer().catch((err) => {
-    console.error(err);
+    console.error('Failed to start server:', err);
     process.exit(1);
   });
 }
