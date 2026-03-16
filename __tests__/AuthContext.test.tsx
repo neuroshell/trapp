@@ -1,4 +1,6 @@
-import React, { useContext } from "react";
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
+import React from "react";
 import { act, render, waitFor } from "@testing-library/react-native";
 import {
   AuthProvider,

@@ -1,6 +1,7 @@
-import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import { act } from "react-test-renderer";
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
+import { render, fireEvent, act } from "@testing-library/react-native";
+
 import { HomeScreen } from "../src/screens/HomeScreen";
 
 // Helper to wait for async operations

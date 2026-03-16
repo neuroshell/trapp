@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
-import { act } from "react-test-renderer";
-import React from "react";
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
+import { fireEvent, render, screen, act } from "@testing-library/react-native";
 
 import { LogScreen } from "../src/screens/LogScreen";
 

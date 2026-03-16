@@ -1,6 +1,6 @@
-import { render, screen, waitFor } from "@testing-library/react-native";
-import { act } from "react-test-renderer";
-import React from "react";
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
+import { render, screen, act } from "@testing-library/react-native";
 
 import { LogRunningForm } from "../src/components/LogRunningForm";
 import { LogStrengthForm } from "../src/components/LogStrengthForm";

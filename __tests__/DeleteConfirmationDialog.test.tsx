@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from "@testing-library/react-native";
-import React from "react";
 
 import { DeleteConfirmationDialog } from "../src/components/DeleteConfirmationDialog";
 

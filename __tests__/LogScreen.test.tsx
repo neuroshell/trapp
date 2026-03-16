@@ -1,8 +1,8 @@
-import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import { act } from "react-test-renderer";
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
+import { render, fireEvent, act } from "@testing-library/react-native";
+
 import { LogScreen } from "../src/screens/LogScreen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Mock the date picker modal
 jest.mock("react-native-modal-datetime-picker", () => {

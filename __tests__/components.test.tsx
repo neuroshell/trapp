@@ -1,5 +1,4 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react-native";
-import React from "react";
 
 import { LogRunningForm } from "../src/components/LogRunningForm";
 import { LogStrengthForm } from "../src/components/LogStrengthForm";
