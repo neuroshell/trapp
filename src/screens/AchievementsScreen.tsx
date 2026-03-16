@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { ActivityEntry } from "../models";
 import { loadAppState } from "../storage";
