@@ -69,6 +69,7 @@ function AuthStackScreen() {
         {(props) => (
           <LoginScreen
             onNavigateToRegister={() => props.navigation.navigate("Register")}
+            navigation={props.navigation}
           />
         )}
       </AuthStack.Screen>
@@ -76,6 +77,7 @@ function AuthStackScreen() {
         {(props) => (
           <RegisterScreen
             onNavigateToLogin={() => props.navigation.navigate("Login")}
+            navigation={props.navigation}
           />
         )}
       </AuthStack.Screen>
