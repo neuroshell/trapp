@@ -5,7 +5,6 @@ import { act, render, waitFor } from "@testing-library/react-native";
 import {
   AuthProvider,
   useAuth,
-  AuthContext,
   validateEmail,
   validatePassword,
 } from "../src/auth/AuthContext";
