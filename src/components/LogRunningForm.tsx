@@ -55,6 +55,7 @@ export function LogRunningForm({
           keyboardType="decimal-pad"
           accessibilityLabel="Distance"
           accessibilityHint="Enter your running distance in kilometers"
+          accessibilityInvalid={!!errors.distance}
           testID="distance-input"
         />
         {errors.distance ? (
@@ -79,6 +80,7 @@ export function LogRunningForm({
           keyboardType="number-pad"
           accessibilityLabel="Duration"
           accessibilityHint="Enter your running duration in minutes"
+          accessibilityInvalid={!!errors.duration}
           testID="duration-input"
         />
         {errors.duration ? (

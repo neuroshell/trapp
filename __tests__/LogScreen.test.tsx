@@ -73,7 +73,7 @@ describe("LogScreen", () => {
   it("renders save button", async () => {
     const { getByTestId } = render(<LogScreen />);
     await waitForAsync();
-    expect(getByTestId("save-button")).toBeTruthy();
+    expect(getByTestId("save-workout-button")).toBeTruthy();
   });
 
   it("shows empty state when no workouts exist", async () => {

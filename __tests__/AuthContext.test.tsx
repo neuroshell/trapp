@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { render, waitFor } from "@testing-library/react-native";
+import { act, render, waitFor } from "@testing-library/react-native";
 import {
   AuthProvider,
   useAuth,
@@ -90,7 +90,7 @@ describe("AuthContext", () => {
   describe("initial state", () => {
     it("provides initial auth state with loading true", async () => {
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         expect(testFn).toHaveBeenCalled();
@@ -102,7 +102,7 @@ describe("AuthContext", () => {
 
     it("provides user as null when not signed in", async () => {
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         expect(testFn).toHaveBeenCalled();
@@ -114,7 +114,7 @@ describe("AuthContext", () => {
 
     it("provides error as null initially", async () => {
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         expect(testFn).toHaveBeenCalled();
@@ -126,7 +126,7 @@ describe("AuthContext", () => {
 
     it("sets loading to false after initialization", async () => {
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -154,7 +154,7 @@ describe("AuthContext", () => {
       });
 
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         expect(AsyncStorage.getItem).toHaveBeenCalledWith(
@@ -172,7 +172,7 @@ describe("AuthContext", () => {
       (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
 
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -187,7 +187,7 @@ describe("AuthContext", () => {
       );
 
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -237,7 +237,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signInFn("test@example.com", "password123");
+      await act(async () => {
+        await signInFn("test@example.com", "password123");
+      });
 
       await waitFor(() => {
         expect(AsyncStorage.setItem).toHaveBeenCalledWith(
@@ -275,7 +277,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signInFn("invalid-email", "password123");
+      await act(async () => {
+        await signInFn("invalid-email", "password123");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -306,7 +310,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signInFn("test@example.com", "short");
+      await act(async () => {
+        await signInFn("test@example.com", "short");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -341,7 +347,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signInFn("nonexistent@example.com", "password123");
+      await act(async () => {
+        await signInFn("nonexistent@example.com", "password123");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -389,7 +397,9 @@ describe("AuthContext", () => {
       });
 
       // Password must pass validation (min 8 chars + at least one number)
-      await signInFn("test@example.com", "wrongpass1");
+      await act(async () => {
+        await signInFn("test@example.com", "wrongpass1");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -436,7 +446,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signInFn("test@example.com", "password123");
+      await act(async () => {
+        await signInFn("test@example.com", "password123");
+      });
 
       const Crypto = require("expo-crypto");
       expect(Crypto.digestStringAsync).toHaveBeenCalled();
@@ -481,7 +493,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signInFn("TEST@EXAMPLE.COM", "password123");
+      await act(async () => {
+        await signInFn("TEST@EXAMPLE.COM", "password123");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -516,7 +530,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signUpFn("newuser@example.com", "SecurePass123");
+      await act(async () => {
+        await signUpFn("newuser@example.com", "SecurePass123");
+      });
 
       await waitFor(() => {
         expect(AsyncStorage.setItem).toHaveBeenCalledWith(
@@ -554,7 +570,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signUpFn("invalid-email", "password123");
+      await act(async () => {
+        await signUpFn("invalid-email", "password123");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -585,7 +603,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signUpFn("test@example.com", "short");
+      await act(async () => {
+        await signUpFn("test@example.com", "short");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -618,7 +638,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signUpFn("test@example.com", "abcdefgh");
+      await act(async () => {
+        await signUpFn("test@example.com", "abcdefgh");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -667,7 +689,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signUpFn("existing@example.com", "NewPass123");
+      await act(async () => {
+        await signUpFn("existing@example.com", "NewPass123");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -700,7 +724,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signUpFn("NEWUSER@EXAMPLE.COM", "SecurePass123");
+      await act(async () => {
+        await signUpFn("NEWUSER@EXAMPLE.COM", "SecurePass123");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -733,7 +759,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signUpFn("user1@example.com", "SecurePass123");
+      await act(async () => {
+        await signUpFn("user1@example.com", "SecurePass123");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -767,7 +795,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signUpFn("user1@example.com", "SecurePass123");
+      await act(async () => {
+        await signUpFn("user1@example.com", "SecurePass123");
+      });
 
       await waitFor(() => {
         const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
@@ -818,7 +848,9 @@ describe("AuthContext", () => {
         expect(authState.user?.email).toBe("test@example.com");
       });
 
-      await signOutFn();
+      await act(async () => {
+        await signOutFn();
+      });
 
       await waitFor(() => {
         expect(AsyncStorage.removeItem).toHaveBeenCalledWith(
@@ -871,7 +903,9 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signOutFn();
+      await act(async () => {
+        await signOutFn();
+      });
 
       const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
       expect(authState.error).toBeNull();
@@ -904,7 +938,11 @@ describe("AuthContext", () => {
 
       // Manually set an error (this would normally happen through signIn/signUp)
       // For this test, we just verify the function exists and can be called
-      expect(() => clearErrorFn()).not.toThrow();
+      expect(() =>
+        act(() => {
+          clearErrorFn();
+        })
+      ).not.toThrow();
     });
   });
 
@@ -922,7 +960,7 @@ describe("AuthContext", () => {
 
     it("provides signIn function", async () => {
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         expect(testFn).toHaveBeenCalled();
@@ -934,7 +972,7 @@ describe("AuthContext", () => {
 
     it("provides signUp function", async () => {
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         expect(testFn).toHaveBeenCalled();
@@ -946,7 +984,7 @@ describe("AuthContext", () => {
 
     it("provides signOut function", async () => {
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         expect(testFn).toHaveBeenCalled();
@@ -958,7 +996,7 @@ describe("AuthContext", () => {
 
     it("provides clearError function", async () => {
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         expect(testFn).toHaveBeenCalled();
@@ -970,7 +1008,7 @@ describe("AuthContext", () => {
 
     it("provides loading state", async () => {
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         expect(testFn).toHaveBeenCalled();
@@ -982,7 +1020,7 @@ describe("AuthContext", () => {
 
     it("provides error state", async () => {
       const testFn = jest.fn();
-      renderWithAuthProvider(testFn);
+      await renderWithAuthProvider(testFn);
 
       await waitFor(() => {
         expect(testFn).toHaveBeenCalled();

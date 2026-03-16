@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
+    minHeight: 48,
   },
   buttonPressed: {
     opacity: 0.85,

@@ -52,6 +52,7 @@ export function LogStrengthForm({
           keyboardType="number-pad"
           accessibilityLabel="Repetitions"
           accessibilityHint={`Enter number of ${exerciseLabel.toLowerCase()} repetitions`}
+          accessibilityInvalid={!!errors.reps}
           testID="reps-input"
         />
         {errors.reps ? (
@@ -76,6 +77,7 @@ export function LogStrengthForm({
           keyboardType="number-pad"
           accessibilityLabel="Sets"
           accessibilityHint={`Enter number of ${exerciseLabel.toLowerCase()} sets`}
+          accessibilityInvalid={!!errors.sets}
           testID="sets-input"
         />
         {errors.sets ? (
@@ -100,6 +102,7 @@ export function LogStrengthForm({
           keyboardType="decimal-pad"
           accessibilityLabel="Weight"
           accessibilityHint="Enter weight in kilograms (optional)"
+          accessibilityInvalid={!!errors.weight}
           testID="weight-input"
         />
         {errors.weight ? (

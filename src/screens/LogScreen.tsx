@@ -5,12 +5,12 @@ import {
   AccessibilityInfo,
   Alert,
   FlatList,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card } from "../components/Card";
 import { DateTimeField } from "../components/DateTimeField";
@@ -478,7 +478,7 @@ export function LogScreen() {
               style={styles.saveButton}
               accessibilityLabel="Save workout"
               accessibilityHint="Save your workout to history"
-              testID="save-button"
+              testID="save-workout-button"
             >
               {saving ? "Saving..." : "Save Workout"}
             </PrimaryButton>

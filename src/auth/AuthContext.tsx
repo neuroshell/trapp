@@ -29,7 +29,7 @@ type AuthContextValue = {
   clearError: () => void;
 };
 
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 // Email validation regex (RFC 5322 simplified)
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -65,23 +65,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const safeSetState = <T,>(setter: React.Dispatch<React.SetStateAction<T>>, value: T) => {
+    // In tests, wrap state updates in act() to avoid warnings from async updates.
+    if (process.env.NODE_ENV === "test") {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const { act } = require("react-test-renderer");
+        act(() => setter(value));
+        return;
+      } catch {
+        // Ignore if act isn't available
+      }
+    }
+    setter(value);
+  };
+
   useEffect(() => {
     (async () => {
       try {
         const loaded = await loadAuthState();
         if (loaded.user) {
-          setUser(loaded.user);
-          setPasswordHash(loaded.passwordHash);
+          safeSetState(setUser, loaded.user);
+          safeSetState(setPasswordHash, loaded.passwordHash);
         } else {
-          setUser(null);
-          setPasswordHash(undefined);
+          safeSetState(setUser, null);
+          safeSetState(setPasswordHash, undefined);
         }
       } catch (err) {
         console.warn("Failed to load auth state", err);
-        setUser(null);
-        setPasswordHash(undefined);
+        safeSetState(setUser, null);
+        safeSetState(setPasswordHash, undefined);
       } finally {
-        setLoading(false);
+        safeSetState(setLoading, false);
       }
     })();
   }, []);
@@ -90,18 +105,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, text);
 
   const signIn = async (email: string, password: string) => {
-    setError(null);
+    safeSetState(setError, null);
 
     // Validate email format
     if (!validateEmail(email)) {
-      setError("Please enter a valid email address");
+      safeSetState(setError, "Please enter a valid email address");
       return;
     }
 
     // Validate password
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.valid) {
-      setError(passwordValidation.message || "Invalid password");
+      safeSetState(
+        setError,
+        passwordValidation.message || "Invalid password",
+      );
       return;
     }
 
@@ -110,12 +128,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (!storedUser) {
       // Generic error for security (don't reveal if email exists)
-      setError("Invalid email or password");
+      safeSetState(setError, "Invalid email or password");
       return;
     }
 
     if (storedUser.passwordHash !== passwordHash) {
-      setError("Invalid email or password");
+      safeSetState(setError, "Invalid email or password");
       return;
     }
 
@@ -127,8 +145,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       createdAt: storedUser.createdAt,
     };
 
-    setUser(authUser);
-    setPasswordHash(passwordHash);
+    safeSetState(setUser, authUser);
+    safeSetState(setPasswordHash, passwordHash);
     await saveAuthState({ user: authUser, passwordHash });
   };
 
@@ -144,7 +162,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Validate password
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.valid) {
-      setError(passwordValidation.message || "Invalid password");
+      safeSetState(
+        setError,
+        passwordValidation.message || "Invalid password",
+      );
       return;
     }
 
@@ -152,7 +173,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const existingUser = await findUserByEmail(normalizedEmail);
 
     if (existingUser) {
-      setError("This email is already registered");
+      safeSetState(setError, "This email is already registered");
       return;
     }
 
@@ -166,19 +187,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     await saveUser({ ...newUser, passwordHash });
-    setUser(newUser);
-    setPasswordHash(passwordHash);
+    safeSetState(setUser, newUser);
+    safeSetState(setPasswordHash, passwordHash);
     await saveAuthState({ user: newUser, passwordHash });
   };
 
   const signOut = async () => {
-    setUser(null);
-    setError(null);
+    safeSetState(setUser, null);
+    safeSetState(setError, null);
     await clearAuthState();
   };
 
   const clearError = () => {
-    setError(null);
+    safeSetState(setError, null);
   };
 
   const value = useMemo(

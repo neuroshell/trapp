@@ -1,5 +1,7 @@
 import "@testing-library/jest-native/extend-expect";
 
+global.IS_REACT_ACT_ENVIRONMENT = true;
+
 // Mock navigation hooks for testing
 jest.mock("@react-navigation/native", () => {
   const actualNav = jest.requireActual("@react-navigation/native");

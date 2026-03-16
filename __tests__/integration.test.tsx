@@ -78,10 +78,10 @@ describe("LogScreen Integration Tests", () => {
   it("should validate running form and show errors for invalid data", async () => {
     render(<LogScreen />);
 
-    await waitFor(() => screen.getByTestId("save-button"));
+    await waitFor(() => screen.getByTestId("save-workout-button"));
 
     // Try to save with invalid data
-    const saveButton = screen.getByTestId("save-button");
+    const saveButton = screen.getByTestId("save-workout-button");
     fireEvent.press(saveButton);
 
     // Should show validation errors
@@ -100,7 +100,7 @@ describe("LogScreen Integration Tests", () => {
     fireEvent.changeText(screen.getByTestId("duration-input"), "30");
 
     // Save
-    const saveButton = screen.getByTestId("save-button");
+    const saveButton = screen.getByTestId("save-workout-button");
     fireEvent.press(saveButton);
 
     // Verify save was called
@@ -129,7 +129,7 @@ describe("LogScreen Integration Tests", () => {
     fireEvent.changeText(screen.getByTestId("sets-input"), "3");
 
     // Save
-    const saveButton = screen.getByTestId("save-button");
+    const saveButton = screen.getByTestId("save-workout-button");
     fireEvent.press(saveButton);
 
     // Verify save was called
@@ -273,7 +273,7 @@ describe("LogScreen Integration Tests", () => {
     // Fill and save
     fireEvent.changeText(screen.getByTestId("distance-input"), "5.0");
     fireEvent.changeText(screen.getByTestId("duration-input"), "30");
-    fireEvent.press(screen.getByTestId("save-button"));
+    fireEvent.press(screen.getByTestId("save-workout-button"));
 
     // Workout should appear in list
     await waitFor(() => {

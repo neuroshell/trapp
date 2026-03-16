@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAuth } from "../auth/AuthContext";
 import { Card } from "../components/Card";
@@ -181,6 +181,7 @@ export function LoginScreen() {
                 onPress={handleSignIn}
                 disabled={isSubmitting}
                 style={styles.button}
+                testID="signin-button"
               >
                 {isSubmitting ? (
                   <ActivityIndicator color="#FFFFFF" />

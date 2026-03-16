@@ -5,7 +5,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAuth } from "../auth/AuthContext";
 import { Card } from "../components/Card";
@@ -25,7 +25,11 @@ type RegisterScreenNavigationProp = NativeStackNavigationProp<
   "Register"
 >;
 
-export function RegisterScreen() {
+type RegisterScreenProps = {
+  onNavigateToLogin?: () => void;
+};
+
+export function RegisterScreen({ onNavigateToLogin }: RegisterScreenProps) {
   const navigation = useNavigation<RegisterScreenNavigationProp>();
   const { signUp, error: authError } = useAuth();
   const [email, setEmail] = useState("");
@@ -136,7 +140,9 @@ export function RegisterScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.wrapper}>
-            <Text style={styles.title}>Create Account</Text>
+            <Text style={styles.title} testID="register-title">
+              Create Account
+            </Text>
             <Text style={styles.subtitle}>{supportText}</Text>
 
             <Card style={styles.card}>
@@ -327,6 +333,7 @@ export function RegisterScreen() {
                 onPress={handleRegister}
                 disabled={isSubmitting}
                 style={styles.button}
+                testID="register-button"
               >
                 {isSubmitting ? (
                   <ActivityIndicator color="#FFFFFF" />
@@ -339,7 +346,13 @@ export function RegisterScreen() {
               <View style={styles.loginContainer}>
                 <Text style={styles.loginText}>Already have an account? </Text>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("Login")}
+                  onPress={() => {
+                    if (onNavigateToLogin) {
+                      onNavigateToLogin();
+                      return;
+                    }
+                    navigation.navigate("Login");
+                  }}
                   accessibilityRole="link"
                   accessibilityLabel="Go to login screen"
                   accessibilityHint="Navigates to the login screen"
