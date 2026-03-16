@@ -1,3 +1,4 @@
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -15,13 +16,15 @@ import {
 import { useAuth } from "../auth/AuthContext";
 import { Card } from "../components/Card";
 import { PrimaryButton } from "../components/PrimaryButton";
+import { AuthStackParamList } from "../navigation/types";
 import { colors, spacing, typography } from "../theme";
 
-export function RegisterScreen({
-  onNavigateToLogin,
-}: {
+type RegisterScreenProps = {
   onNavigateToLogin: () => void;
-}) {
+  navigation?: NativeStackNavigationProp<AuthStackParamList, "Register">;
+};
+
+export function RegisterScreen({ onNavigateToLogin }: RegisterScreenProps) {
   const { signUp, error: authError } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -103,18 +106,18 @@ export function RegisterScreen({
   ): {
     label: string;
     color: string;
-    width: string;
+    width: number;
   } => {
     if (pwd.length === 0) {
-      return { label: "", color: colors.border, width: "0%" };
+      return { label: "", color: colors.border, width: 0 };
     }
     if (pwd.length < 6) {
-      return { label: "Weak", color: colors.error, width: "33%" };
+      return { label: "Weak", color: colors.error, width: 33 };
     }
     if (pwd.length < 8 || !/\d/.test(pwd)) {
-      return { label: "Fair", color: colors.accent, width: "66%" };
+      return { label: "Fair", color: colors.accent, width: 66 };
     }
-    return { label: "Strong", color: colors.success, width: "100%" };
+    return { label: "Strong", color: colors.success, width: 100 };
   };
 
   const passwordStrength = getPasswordStrength(password);
@@ -156,7 +159,6 @@ export function RegisterScreen({
                   autoCorrect={false}
                   accessibilityLabel="Email address input"
                   accessibilityHint="Enter your email address"
-                  accessibilityInvalid={!!fieldErrors.email}
                 />
                 {fieldErrors.email && (
                   <Text
@@ -191,7 +193,6 @@ export function RegisterScreen({
                   secureTextEntry
                   accessibilityLabel="Password input"
                   accessibilityHint="Enter your password, minimum 8 characters"
-                  accessibilityInvalid={!!fieldErrors.password}
                 />
                 {password.length > 0 && (
                   <View style={styles.strengthContainer}>
@@ -200,7 +201,7 @@ export function RegisterScreen({
                         style={[
                           styles.strengthFill,
                           {
-                            width: passwordStrength.width,
+                            width: `${passwordStrength.width}%`,
                             backgroundColor: passwordStrength.color,
                           },
                         ]}
@@ -250,7 +251,6 @@ export function RegisterScreen({
                   secureTextEntry
                   accessibilityLabel="Confirm password input"
                   accessibilityHint="Re-enter your password to confirm"
-                  accessibilityInvalid={!!fieldErrors.confirmPassword}
                 />
                 {fieldErrors.confirmPassword && (
                   <Text
@@ -312,7 +312,9 @@ export function RegisterScreen({
                 <Text
                   style={styles.errorText}
                   accessibilityRole="alert"
-                  accessibilityLabel={fieldErrors.general || authError}
+                  accessibilityLabel={
+                    fieldErrors.general || authError || undefined
+                  }
                 >
                   {fieldErrors.general || authError}
                 </Text>

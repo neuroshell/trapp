@@ -20,6 +20,7 @@ export type AuthUser = User;
 
 type AuthContextValue = {
   user: AuthUser | null;
+  passwordHash?: string;
   loading: boolean;
   error: string | null;
   signIn: (email: string, password: string) => Promise<void>;
@@ -58,6 +59,9 @@ export function validatePassword(password: string): {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [passwordHash, setPasswordHash] = useState<string | undefined>(
+    undefined,
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -67,12 +71,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const loaded = await loadAuthState();
         if (loaded.user) {
           setUser(loaded.user);
+          setPasswordHash(loaded.passwordHash);
         } else {
           setUser(null);
+          setPasswordHash(undefined);
         }
       } catch (err) {
         console.warn("Failed to load auth state", err);
         setUser(null);
+        setPasswordHash(undefined);
       } finally {
         setLoading(false);
       }
@@ -115,11 +122,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const authUser: AuthUser = {
       id: storedUser.id,
       email: storedUser.email,
+      username: storedUser.username,
       displayName: storedUser.displayName,
       createdAt: storedUser.createdAt,
     };
 
     setUser(authUser);
+    setPasswordHash(passwordHash);
     await saveAuthState({ user: authUser, passwordHash });
   };
 
@@ -151,12 +160,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const newUser: AuthUser = {
       id: `user_${Date.now()}_${Math.random().toString(16).slice(2)}`,
       email: normalizedEmail,
+      username: normalizedEmail,
       displayName: undefined,
       createdAt: new Date().toISOString(),
     };
 
     await saveUser({ ...newUser, passwordHash });
     setUser(newUser);
+    setPasswordHash(passwordHash);
     await saveAuthState({ user: newUser, passwordHash });
   };
 
@@ -173,6 +184,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = useMemo(
     () => ({
       user,
+      passwordHash,
       loading,
       error,
       signIn,
@@ -180,7 +192,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       signOut,
       clearError,
     }),
-    [user, loading, error],
+    [user, passwordHash, loading, error],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

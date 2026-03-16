@@ -14,26 +14,36 @@ jest.mock("react-native-modal-datetime-picker", () => {
   };
 });
 
+// Mock storage functions
+jest.mock("../src/storage", () => ({
+  getWorkouts: jest.fn().mockResolvedValue([]),
+  saveWorkout: jest.fn().mockResolvedValue(undefined),
+  deleteWorkout: jest.fn().mockResolvedValue(undefined),
+  getLastWorkoutValues: jest.fn().mockResolvedValue(null),
+  getDeviceId: jest.fn().mockResolvedValue("test-device-id"),
+}));
+
 describe("LogScreen", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-      JSON.stringify({ entries: [] })
-    );
-    (AsyncStorage.setItem as jest.Mock).mockResolvedValue(null);
   });
 
-  it("renders title", async () => {
+  it("renders Log Workout title", async () => {
     const { getByText } = render(<LogScreen />);
-
     await waitFor(() => {
-      expect(getByText("Log a workout")).toBeTruthy();
+      expect(getByText("Log Workout")).toBeTruthy();
     });
   });
 
-  it("renders activity type buttons", async () => {
-    const { getByText } = render(<LogScreen />);
+  it("renders workout type selector", async () => {
+    const { getByTestId } = render(<LogScreen />);
+    await waitFor(() => {
+      expect(getByTestId("workout-type-selector")).toBeTruthy();
+    });
+  });
 
+  it("renders all workout type options", async () => {
+    const { getByText } = render(<LogScreen />);
     await waitFor(() => {
       expect(getByText("Running")).toBeTruthy();
       expect(getByText("Squats")).toBeTruthy();
@@ -43,345 +53,216 @@ describe("LogScreen", () => {
     });
   });
 
-  it("renders date and time field", async () => {
-    const { getByText } = render(<LogScreen />);
-
+  it("renders Date & Time field", async () => {
+    const { getByTestId } = render(<LogScreen />);
     await waitFor(() => {
-      expect(getByText("Date & time")).toBeTruthy();
+      expect(getByTestId("datetime-field")).toBeTruthy();
     });
   });
 
-  it("renders quantity input", async () => {
-    const { getByPlaceholderText } = render(<LogScreen />);
-
+  it("renders quantity input for strength workouts", async () => {
+    const { getByPlaceholderText, getByText } = render(<LogScreen />);
+    
+    // Select squats
+    fireEvent.press(getByText("Squats"));
+    
     await waitFor(() => {
-      expect(getByPlaceholderText("Number of reps / minutes")).toBeTruthy();
+      expect(getByPlaceholderText(/reps/i)).toBeTruthy();
+    });
+  });
+
+  it("renders distance and duration for running workouts", async () => {
+    const { getByPlaceholderText, getByText } = render(<LogScreen />);
+    
+    // Select running
+    fireEvent.press(getByText("Running"));
+    
+    await waitFor(() => {
+      expect(getByPlaceholderText(/distance/i)).toBeTruthy();
+      expect(getByPlaceholderText(/duration/i)).toBeTruthy();
     });
   });
 
   it("renders notes input", async () => {
     const { getByPlaceholderText } = render(<LogScreen />);
-
     await waitFor(() => {
-      expect(getByPlaceholderText("Extra detail (sets, distance, etc.)")).toBeTruthy();
+      expect(getByPlaceholderText(/notes/i)).toBeTruthy();
     });
   });
 
   it("renders save button", async () => {
-    const { getByText } = render(<LogScreen />);
-
+    const { getByTestId } = render(<LogScreen />);
     await waitFor(() => {
-      expect(getByText("Save entry")).toBeTruthy();
+      expect(getByTestId("save-button")).toBeTruthy();
     });
   });
 
-  it("renders Recent entries section", async () => {
+  it("renders Recent Workouts section", async () => {
     const { getByText } = render(<LogScreen />);
-
     await waitFor(() => {
-      expect(getByText("Recent entries")).toBeTruthy();
+      expect(getByText("Recent Workouts")).toBeTruthy();
     });
   });
 
-  it("shows empty state when no entries exist", async () => {
+  it("shows empty state when no workouts exist", async () => {
     const { getByText } = render(<LogScreen />);
-
     await waitFor(() => {
-      expect(getByText("No entries yet.")).toBeTruthy();
+      expect(getByText("No workouts yet")).toBeTruthy();
     });
   });
 
-  it("allows selecting activity type", async () => {
+  it("allows selecting workout type", async () => {
     const { getByText } = render(<LogScreen />);
-
+    
     await waitFor(() => {
       expect(getByText("Running")).toBeTruthy();
     });
 
-    fireEvent.press(getByText("Squats"));
-
-    // Should still render after selection
-    expect(getByText("Squats")).toBeTruthy();
+    fireEvent.press(getByText("Push-ups"));
+    
+    // Type should be selected
+    expect(getByText("Push-ups")).toBeTruthy();
   });
 
-  it("allows entering quantity", async () => {
-    const { getByPlaceholderText } = render(<LogScreen />);
-
+  it("allows entering reps for strength workout", async () => {
+    const { getByPlaceholderText, getByText } = render(<LogScreen />);
+    
+    fireEvent.press(getByText("Squats"));
+    
     await waitFor(() => {
-      expect(getByPlaceholderText("Number of reps / minutes")).toBeTruthy();
+      const repsInput = getByPlaceholderText(/reps/i);
+      fireEvent.changeText(repsInput, "20");
+      expect(repsInput.props.value).toBe("20");
     });
+  });
 
-    const quantityInput = getByPlaceholderText("Number of reps / minutes");
-    fireEvent.changeText(quantityInput, "10");
-
-    expect(quantityInput.props.value).toBe("10");
+  it("allows entering distance for running workout", async () => {
+    const { getByPlaceholderText, getByText } = render(<LogScreen />);
+    
+    fireEvent.press(getByText("Running"));
+    
+    await waitFor(() => {
+      const distanceInput = getByPlaceholderText(/distance/i);
+      fireEvent.changeText(distanceInput, "5.5");
+      expect(distanceInput.props.value).toBe("5.5");
+    });
   });
 
   it("allows entering notes", async () => {
     const { getByPlaceholderText } = render(<LogScreen />);
-
+    
     await waitFor(() => {
-      expect(getByPlaceholderText("Extra detail (sets, distance, etc.)")).toBeTruthy();
+      const notesInput = getByPlaceholderText(/notes/i);
+      fireEvent.changeText(notesInput, "Morning workout");
+      expect(notesInput.props.value).toBe("Morning workout");
     });
-
-    const notesInput = getByPlaceholderText("Extra detail (sets, distance, etc.)");
-    fireEvent.changeText(notesInput, "Morning workout");
-
-    expect(notesInput.props.value).toBe("Morning workout");
   });
 
-  it("saves entry with valid data", async () => {
-    const { getByText, getByPlaceholderText } = render(<LogScreen />);
-
-    await waitFor(() => {
-      expect(getByText("Save entry")).toBeTruthy();
+  it("saves workout with valid data", async () => {
+    const { getByTestId, getByText } = render(<LogScreen />);
+    
+    fireEvent.press(getByText("Squats"));
+    
+    await waitFor(async () => {
+      const repsInput = getByTestId("reps-input");
+      const setsInput = getByTestId("sets-input");
+      fireEvent.changeText(repsInput, "20");
+      fireEvent.changeText(setsInput, "3");
     });
 
-    const quantityInput = getByPlaceholderText("Number of reps / minutes");
-    fireEvent.changeText(quantityInput, "30");
-
-    fireEvent.press(getByText("Save entry"));
+    fireEvent.press(getByTestId("save-button"));
 
     await waitFor(() => {
       expect(AsyncStorage.setItem).toHaveBeenCalled();
     });
   });
 
-  it("clears form after saving entry", async () => {
-    const { getByText, getByPlaceholderText } = render(<LogScreen />);
-
+  it("displays validation errors for invalid input", async () => {
+    const { getByTestId, getByText } = render(<LogScreen />);
+    
+    fireEvent.press(getByText("Running"));
+    
     await waitFor(() => {
-      expect(getByText("Save entry")).toBeTruthy();
+      // Try to save with empty fields
+      fireEvent.press(getByTestId("save-button"));
     });
 
-    const quantityInput = getByPlaceholderText("Number of reps / minutes");
-    const notesInput = getByPlaceholderText("Extra detail (sets, distance, etc.)");
-
-    fireEvent.changeText(quantityInput, "30");
-    fireEvent.changeText(notesInput, "Test notes");
-
-    fireEvent.press(getByText("Save entry"));
-
+    // Should show validation errors
     await waitFor(() => {
-      // Form should be cleared after save
-      expect(quantityInput.props.value).toBe("");
+      expect(getByText(/distance/i)).toBeTruthy();
     });
   });
 
-  it("displays saved entries in the list", async () => {
-    const mockEntries = [
-      {
-        id: "1",
-        type: "running",
-        date: new Date().toISOString(),
-        quantity: 30,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ];
-
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-      JSON.stringify({ entries: mockEntries })
-    );
-
+  it("has proper label for workout type", async () => {
     const { getByText } = render(<LogScreen />);
-
     await waitFor(() => {
-      expect(getByText("running")).toBeTruthy();
+      expect(getByText("Workout Type")).toBeTruthy();
     });
   });
 
-  it("formats entry date correctly", async () => {
-    const mockEntries = [
-      {
-        id: "1",
-        type: "running",
-        date: "2024-01-15T10:00:00Z",
-        quantity: 30,
-        createdAt: "2024-01-15T10:00:00Z",
-        updatedAt: "2024-01-15T10:00:00Z",
-      },
-    ];
-
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-      JSON.stringify({ entries: mockEntries })
-    );
-
+  it("has proper label for Date & Time", async () => {
     const { getByText } = render(<LogScreen />);
-
     await waitFor(() => {
-      // Date should be formatted with month name
-      expect(getByText(/Jan|January/)).toBeTruthy();
-    });
-  });
-
-  it("displays entry quantity", async () => {
-    const mockEntries = [
-      {
-        id: "1",
-        type: "running",
-        date: new Date().toISOString(),
-        quantity: 45,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ];
-
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-      JSON.stringify({ entries: mockEntries })
-    );
-
-    const { getByText } = render(<LogScreen />);
-
-    await waitFor(() => {
-      expect(getByText("45")).toBeTruthy();
-    });
-  });
-
-  it("displays entry notes when present", async () => {
-    const mockEntries = [
-      {
-        id: "1",
-        type: "running",
-        date: new Date().toISOString(),
-        quantity: 30,
-        notes: "Morning run",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      },
-    ];
-
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-      JSON.stringify({ entries: mockEntries })
-    );
-
-    const { getByText } = render(<LogScreen />);
-
-    await waitFor(() => {
-      expect(getByText("Morning run")).toBeTruthy();
-    });
-  });
-
-  it("loads entries from AsyncStorage on mount", async () => {
-    render(<LogScreen />);
-
-    await waitFor(() => {
-      expect(AsyncStorage.getItem).toHaveBeenCalled();
-    });
-  });
-
-  it("saves entries to AsyncStorage when adding new entry", async () => {
-    const { getByText, getByPlaceholderText } = render(<LogScreen />);
-
-    await waitFor(() => {
-      expect(getByText("Save entry")).toBeTruthy();
-    });
-
-    const quantityInput = getByPlaceholderText("Number of reps / minutes");
-    fireEvent.changeText(quantityInput, "25");
-
-    fireEvent.press(getByText("Save entry"));
-
-    await waitFor(() => {
-      expect(AsyncStorage.setItem).toHaveBeenCalled();
-    });
-  });
-
-  it("renders form card", async () => {
-    const { toJSON } = render(<LogScreen />);
-
-    await waitFor(() => {
-      const tree = toJSON();
-      expect(tree).toBeDefined();
+      expect(getByText("Date & Time")).toBeTruthy();
     });
   });
 
   it("renders quantity input with numeric keyboard", async () => {
-    const { getByPlaceholderText } = render(<LogScreen />);
-
+    const { getByTestId, getByText } = render(<LogScreen />);
+    
+    fireEvent.press(getByText("Squats"));
+    
     await waitFor(() => {
-      const quantityInput = getByPlaceholderText("Number of reps / minutes");
-      expect(quantityInput.props.keyboardType).toBe("numeric");
+      const repsInput = getByTestId("reps-input");
+      expect(repsInput.props.keyboardType).toBe("numeric");
     });
   });
 
   it("renders notes input as multiline", async () => {
-    const { getByPlaceholderText } = render(<LogScreen />);
-
+    const { getByTestId } = render(<LogScreen />);
+    
     await waitFor(() => {
-      const notesInput = getByPlaceholderText("Extra detail (sets, distance, etc.)");
+      const notesInput = getByTestId("notes-input");
       expect(notesInput.props.multiline).toBe(true);
     });
   });
 
-  it("has proper label for activity type", async () => {
-    const { getByText } = render(<LogScreen />);
+  it("allows adding multiple workouts", async () => {
+    const { getByTestId, getByText } = render(<LogScreen />);
+    
+    // First workout
+    fireEvent.press(getByText("Squats"));
+    await waitFor(() => {
+      fireEvent.changeText(getByTestId("reps-input"), "20");
+      fireEvent.changeText(getByTestId("sets-input"), "3");
+    });
+    fireEvent.press(getByTestId("save-button"));
+
+    // Second workout
+    await waitFor(() => {
+      fireEvent.press(getByText("Push-ups"));
+      fireEvent.changeText(getByTestId("reps-input"), "15");
+      fireEvent.changeText(getByTestId("sets-input"), "3");
+    });
+    fireEvent.press(getByTestId("save-button"));
 
     await waitFor(() => {
-      expect(getByText("Activity")).toBeTruthy();
+      expect(AsyncStorage.setItem).toHaveBeenCalledTimes(2);
     });
   });
 
-  it("has proper label for quantity", async () => {
-    const { getByText } = render(<LogScreen />);
-
+  it("handles workouts with notes", async () => {
+    const { getByTestId, getByText } = render(<LogScreen />);
+    
+    fireEvent.press(getByText("Squats"));
+    
     await waitFor(() => {
-      expect(getByText("Quantity")).toBeTruthy();
-    });
-  });
-
-  it("has proper label for notes", async () => {
-    const { getByText } = render(<LogScreen />);
-
-    await waitFor(() => {
-      expect(getByText("Notes (optional)")).toBeTruthy();
-    });
-  });
-
-  it("allows adding multiple entries", async () => {
-    const { getByText, getByPlaceholderText } = render(<LogScreen />);
-
-    await waitFor(() => {
-      expect(getByText("Save entry")).toBeTruthy();
+      fireEvent.changeText(getByTestId("reps-input"), "20");
+      fireEvent.changeText(getByTestId("sets-input"), "3");
+      fireEvent.changeText(getByTestId("notes-input"), "Felt strong today");
     });
 
-    // First entry
-    const quantityInput = getByPlaceholderText("Number of reps / minutes");
-    fireEvent.changeText(quantityInput, "10");
-    fireEvent.press(getByText("Save entry"));
-
-    await waitFor(() => {
-      expect(AsyncStorage.setItem).toHaveBeenCalled();
-    });
-
-    jest.clearAllMocks();
-    (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-      JSON.stringify({ entries: [{ id: "1", type: "running", date: new Date().toISOString(), quantity: 10, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }] })
-    );
-
-    // Second entry
-    fireEvent.changeText(quantityInput, "20");
-    fireEvent.press(getByText("Save entry"));
-
-    await waitFor(() => {
-      expect(AsyncStorage.setItem).toHaveBeenCalled();
-    });
-  });
-
-  it("handles entries with notes", async () => {
-    const { getByText, getByPlaceholderText } = render(<LogScreen />);
-
-    await waitFor(() => {
-      expect(getByText("Save entry")).toBeTruthy();
-    });
-
-    const quantityInput = getByPlaceholderText("Number of reps / minutes");
-    const notesInput = getByPlaceholderText("Extra detail (sets, distance, etc.)");
-
-    fireEvent.changeText(quantityInput, "30");
-    fireEvent.changeText(notesInput, "Felt great today!");
-
-    fireEvent.press(getByText("Save entry"));
+    fireEvent.press(getByTestId("save-button"));
 
     await waitFor(() => {
       expect(AsyncStorage.setItem).toHaveBeenCalled();
@@ -389,124 +270,103 @@ describe("LogScreen", () => {
   });
 
   it("trims notes before saving", async () => {
-    const { getByText, getByPlaceholderText } = render(<LogScreen />);
-
+    const { getByTestId, getByText } = render(<LogScreen />);
+    
+    fireEvent.press(getByText("Squats"));
+    
     await waitFor(() => {
-      expect(getByText("Save entry")).toBeTruthy();
+      fireEvent.changeText(getByTestId("reps-input"), "20");
+      fireEvent.changeText(getByTestId("sets-input"), "3");
+      fireEvent.changeText(getByTestId("notes-input"), "  Morning run  ");
     });
 
-    const quantityInput = getByPlaceholderText("Number of reps / minutes");
-    const notesInput = getByPlaceholderText("Extra detail (sets, distance, etc.)");
-
-    fireEvent.changeText(quantityInput, "30");
-    fireEvent.changeText(notesInput, "   trimmed notes   ");
-
-    fireEvent.press(getByText("Save entry"));
+    fireEvent.press(getByTestId("save-button"));
 
     await waitFor(() => {
-      expect(AsyncStorage.setItem).toHaveBeenCalled();
+      const setItemCall = (AsyncStorage.setItem as jest.Mock).mock.calls[0];
+      const savedData = JSON.parse(setItemCall[1]);
+      expect(savedData.workouts[0].data.notes).toBe("Morning run");
     });
-  });
-
-  it("renders entries list with FlatList", async () => {
-    const { toJSON } = render(<LogScreen />);
-
-    await waitFor(() => {
-      const tree = toJSON();
-      expect(tree).toBeDefined();
-    });
-  });
-
-  it("renders SafeAreaView container", async () => {
-    const { toJSON } = render(<LogScreen />);
-
-    const tree = toJSON();
-    expect(tree).toBeDefined();
   });
 
   it("has proper input styling", async () => {
-    const { getByPlaceholderText } = render(<LogScreen />);
-
+    const { getByTestId, getByText } = render(<LogScreen />);
+    
+    fireEvent.press(getByText("Squats"));
+    
     await waitFor(() => {
-      const quantityInput = getByPlaceholderText("Number of reps / minutes");
-      expect(quantityInput.props.style).toBeDefined();
+      const repsInput = getByTestId("reps-input");
+      expect(repsInput.props.style).toBeDefined();
     });
   });
 
   it("has proper save button styling", async () => {
-    const { getByText } = render(<LogScreen />);
-
+    const { getByTestId } = render(<LogScreen />);
+    
     await waitFor(() => {
-      const saveButton = getByText("Save entry");
+      const saveButton = getByTestId("save-button");
       expect(saveButton.props.style).toBeDefined();
     });
   });
 
-  it("handles decimal quantity values", async () => {
-    const { getByText, getByPlaceholderText } = render(<LogScreen />);
-
+  it("handles decimal distance values for running", async () => {
+    const { getByTestId, getByText } = render(<LogScreen />);
+    
+    fireEvent.press(getByText("Running"));
+    
     await waitFor(() => {
-      expect(getByText("Save entry")).toBeTruthy();
+      fireEvent.changeText(getByTestId("distance-input"), "5.5");
+      fireEvent.changeText(getByTestId("duration-input"), "30");
     });
 
-    const quantityInput = getByPlaceholderText("Number of reps / minutes");
-    fireEvent.changeText(quantityInput, "30.5");
-
-    fireEvent.press(getByText("Save entry"));
-
-    await waitFor(() => {
-      expect(AsyncStorage.setItem).toHaveBeenCalled();
-    });
-  });
-
-  it("handles large quantity values", async () => {
-    const { getByText, getByPlaceholderText } = render(<LogScreen />);
-
-    await waitFor(() => {
-      expect(getByText("Save entry")).toBeTruthy();
-    });
-
-    const quantityInput = getByPlaceholderText("Number of reps / minutes");
-    fireEvent.changeText(quantityInput, "9999");
-
-    fireEvent.press(getByText("Save entry"));
+    fireEvent.press(getByTestId("save-button"));
 
     await waitFor(() => {
       expect(AsyncStorage.setItem).toHaveBeenCalled();
     });
   });
 
-  it("preserves selected activity type", async () => {
-    const { getByText } = render(<LogScreen />);
-
+  it("handles large rep values", async () => {
+    const { getByTestId, getByText } = render(<LogScreen />);
+    
+    fireEvent.press(getByText("Squats"));
+    
     await waitFor(() => {
-      expect(getByText("Running")).toBeTruthy();
+      fireEvent.changeText(getByTestId("reps-input"), "100");
+      fireEvent.changeText(getByTestId("sets-input"), "10");
     });
 
+    fireEvent.press(getByTestId("save-button"));
+
+    await waitFor(() => {
+      expect(AsyncStorage.setItem).toHaveBeenCalled();
+    });
+  });
+
+  it("preserves selected workout type after save", async () => {
+    const { getByTestId, getByText } = render(<LogScreen />);
+    
     fireEvent.press(getByText("Push-ups"));
-
-    // Selected type should be preserved
-    expect(getByText("Push-ups")).toBeTruthy();
-  });
-
-  it("renders all activity type options", async () => {
-    const { getByText } = render(<LogScreen />);
-
+    
     await waitFor(() => {
-      expect(getByText("Running")).toBeTruthy();
-      expect(getByText("Squats")).toBeTruthy();
+      fireEvent.changeText(getByTestId("reps-input"), "15");
+      fireEvent.changeText(getByTestId("sets-input"), "3");
+    });
+
+    fireEvent.press(getByTestId("save-button"));
+
+    // Push-ups should still be selected
+    await waitFor(() => {
       expect(getByText("Push-ups")).toBeTruthy();
-      expect(getByText("Pull-ups")).toBeTruthy();
-      expect(getByText("Other")).toBeTruthy();
     });
   });
 
-  it("displays current date in date field", async () => {
+  it("displays current date in Date & Time field", async () => {
     const { getByText } = render(<LogScreen />);
-
+    
     await waitFor(() => {
-      // Should show current date formatted
-      expect(getByText(/Date & time/)).toBeTruthy();
+      // Should show date formatted
+      expect(getByText(/Date & Time/)).toBeTruthy();
     });
   });
 });

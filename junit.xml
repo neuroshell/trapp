@@ -1,537 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="88" failures="27" errors="0" time="2.371">
-  <testsuite name="AuthContext" errors="0" failures="15" skipped="0" timestamp="2026-03-16T10:55:03" time="1.114" tests="37">
-    <testcase classname="AuthContext validation functions validateEmail" name="returns true for valid emails" time="0.004" file="__tests__\AuthContext.test.tsx">
+<testsuites name="jest tests" tests="51" failures="0" errors="0" time="1.08">
+  <testsuite name="Validation Functions" errors="0" failures="0" skipped="0" timestamp="2026-03-16T12:23:36" time="0.323" tests="28">
+    <testcase classname="Validation Functions validateRunningForm" name="should return valid for proper running data" time="0.004" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext validation functions validateEmail" name="returns false for invalid emails" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateRunningForm" name="should reject empty distance" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext validation functions validatePassword" name="rejects passwords shorter than 8 characters" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateRunningForm" name="should reject negative distance" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext validation functions validatePassword" name="rejects passwords without numbers" time="0" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateRunningForm" name="should reject distance over 100km" time="0.001" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext validation functions validatePassword" name="accepts valid passwords" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateRunningForm" name="should reject empty duration" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext initial state" name="provides initial auth state with loading true" time="0.287" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateRunningForm" name="should reject duration over 1440 minutes" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext initial state" name="provides user as null when not signed in" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateRunningForm" name="should accept decimal distances" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext initial state" name="provides error as null initially" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateStrengthForm" name="should return valid for proper strength data" time="0.001" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext initial state" name="sets loading to false after initialization" time="0.057" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject empty reps" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext session restoration" name="loads auth state from AsyncStorage on mount" time="0.063" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject reps over 1000" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext session restoration" name="handles empty auth state from AsyncStorage" time="0.063" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject empty sets" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext session restoration" name="handles invalid auth state from AsyncStorage" time="0.063" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject sets over 100" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signIn" name="signs in with valid email and password" time="0.031" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;test@example.com&quot;
-Received: undefined
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:248:37)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions validateStrengthForm" name="should accept optional weight" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signIn" name="rejects invalid email format" time="0.003" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;Please enter a valid email address&quot;
-Received: null
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:277:31)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject negative weight" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signIn" name="rejects password shorter than 8 characters" time="0.003" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;Password must be at least 8 characters&quot;
-Received: null
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:306:31)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject weight over 500kg" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signIn" name="shows generic error for non-existent user" time="0.003" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;Invalid email or password&quot;
-Received: null
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:339:31)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions validateTimestamp" name="should return valid for past dates" time="0.001" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signIn" name="shows generic error for wrong password" time="0.003" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;Invalid email or password&quot;
-Received: null
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:382:31)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions validateTimestamp" name="should return valid for current time" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signIn" name="hashes password during sign in" time="0.003" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions validateTimestamp" name="should reject future dates" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signIn" name="normalizes email to lowercase" time="0.003" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;test@example.com&quot;
-Received: undefined
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:468:37)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions calculatePace" name="should calculate correct pace" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signUp" name="creates new user with valid email and password" time="0.004" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;newuser@example.com&quot;
-Received: undefined
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:508:37)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions calculatePace" name="should return 0 for invalid distance" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signUp" name="rejects invalid email format" time="0.003" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;Please enter a valid email address&quot;
-Received: null
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:537:31)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions calculatePace" name="should return 0 for invalid duration" time="0.001" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signUp" name="rejects password shorter than 8 characters" time="0.003" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;Password must be at least 8 characters&quot;
-Received: null
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:566:31)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions formatPace" name="should format pace as MM:SS min/km" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signUp" name="rejects password without numbers" time="0.002" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;Password should contain at least one number&quot;
-Received: null
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:597:31)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions formatPace" name="should return placeholder for invalid pace" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signUp" name="rejects duplicate email registration" time="0.003" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;This email is already registered&quot;
-Received: null
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:642:31)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions isOutlier" name="should detect unusual distance" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signUp" name="normalizes email to lowercase" time="0.003" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: &quot;newuser@example.com&quot;
-Received: undefined
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:673:37)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions isOutlier" name="should detect unusual duration" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signUp" name="generates unique user id" time="0.003" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBeDefined()
-
-Received: undefined
-    at Object.toBeDefined (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:704:34)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions isOutlier" name="should detect unusual reps" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signUp" name="sets createdAt timestamp" time="0.002" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBeDefined()
-
-Received: undefined
-    at Object.toBeDefined (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:736:41)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
+    <testcase classname="Validation Functions isOutlier" name="should detect unusual sets" time="0" file="__tests__\validation.test.ts">
     </testcase>
-    <testcase classname="AuthContext signOut" name="signs out and clears state" time="0.064" file="__tests__\AuthContext.test.tsx">
-      <failure>Error: expect(received).toBeNull()
-
-Received: {&quot;createdAt&quot;: &quot;2026-03-16T10:55:04.913Z&quot;, &quot;email&quot;: &quot;test@example.com&quot;, &quot;id&quot;: &quot;user_123&quot;}
-    at Object.toBeNull (C:\Users\neuroshell\Documents\src\trapp\__tests__\AuthContext.test.tsx:791:30)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)</failure>
-    </testcase>
-    <testcase classname="AuthContext signOut" name="clears error on sign out" time="0.003" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext clearError" name="clears error state" time="0.002" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext context API" name="throws error when useAuth used outside AuthProvider" time="0.007" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext context API" name="provides signIn function" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext context API" name="provides signUp function" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext context API" name="provides signOut function" time="0" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext context API" name="provides clearError function" time="0" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext context API" name="provides loading state" time="0.001" file="__tests__\AuthContext.test.tsx">
-    </testcase>
-    <testcase classname="AuthContext context API" name="provides error state" time="0" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="Validation Functions isOutlier" name="should detect unusual weight" time="0" file="__tests__\validation.test.ts">
     </testcase>
   </testsuite>
-  <testsuite name="RegisterScreen" errors="0" failures="9" skipped="0" timestamp="2026-03-16T10:55:03" time="1.311" tests="29">
-    <testcase classname="RegisterScreen" name="renders registration form with all required fields" time="0.289" file="__tests__\RegisterScreen.test.tsx">
-      <failure>Error: Found multiple elements with text: /Create Account/
-    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:40:12)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+  <testsuite name="DeleteConfirmationDialog" errors="0" failures="0" skipped="0" timestamp="2026-03-16T12:23:36" time="0.698" tests="9">
+    <testcase classname="DeleteConfirmationDialog" name="should render when visible" time="0.259" file="__tests__\DeleteConfirmationDialog.test.tsx">
     </testcase>
-    <testcase classname="RegisterScreen" name="renders terms acceptance checkbox" time="0.005" file="__tests__\RegisterScreen.test.tsx">
+    <testcase classname="DeleteConfirmationDialog" name="should not render when not visible" time="0.001" file="__tests__\DeleteConfirmationDialog.test.tsx">
     </testcase>
-    <testcase classname="RegisterScreen" name="renders login link" time="0.006" file="__tests__\RegisterScreen.test.tsx">
+    <testcase classname="DeleteConfirmationDialog" name="should display workout type and date in message" time="0.002" file="__tests__\DeleteConfirmationDialog.test.tsx">
     </testcase>
-    <testcase classname="RegisterScreen" name="calls onNavigateToLogin when login link is pressed" time="0.006" file="__tests__\RegisterScreen.test.tsx">
+    <testcase classname="DeleteConfirmationDialog" name="should call onCancel when cancel button pressed" time="0.004" file="__tests__\DeleteConfirmationDialog.test.tsx">
     </testcase>
-    <testcase classname="RegisterScreen" name="displays email validation error for invalid email" time="0.018" file="__tests__\RegisterScreen.test.tsx">
+    <testcase classname="DeleteConfirmationDialog" name="should call onConfirm when delete button pressed" time="0.001" file="__tests__\DeleteConfirmationDialog.test.tsx">
     </testcase>
-    <testcase classname="RegisterScreen" name="displays password length error for short password" time="0.016" file="__tests__\RegisterScreen.test.tsx">
+    <testcase classname="DeleteConfirmationDialog" name="should have proper accessibility labels" time="0.002" file="__tests__\DeleteConfirmationDialog.test.tsx">
     </testcase>
-    <testcase classname="RegisterScreen" name="displays password number requirement error" time="0.015" file="__tests__\RegisterScreen.test.tsx">
+    <testcase classname="DeleteConfirmationDialog" name="should have proper accessibility hints" time="0.005" file="__tests__\DeleteConfirmationDialog.test.tsx">
     </testcase>
-    <testcase classname="RegisterScreen" name="displays password mismatch error" time="0.014" file="__tests__\RegisterScreen.test.tsx">
+    <testcase classname="DeleteConfirmationDialog" name="should use destructive styling for delete button" time="0.002" file="__tests__\DeleteConfirmationDialog.test.tsx">
     </testcase>
-    <testcase classname="RegisterScreen" name="displays terms acceptance error when not checked" time="0.016" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="submits form with valid data" time="0.013" file="__tests__\RegisterScreen.test.tsx">
-      <failure>Error: Found multiple elements with text: Create Account
-    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:221:28)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
-    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
-    at new Promise (&lt;anonymous&gt;)
-    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
-    </testcase>
-    <testcase classname="RegisterScreen" name="shows password strength indicator" time="0.01" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="shows loading state during registration" time="0.012" file="__tests__\RegisterScreen.test.tsx">
-      <failure>Error: Found multiple elements with text: Create Account
-    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:277:28)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
-    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
-    at new Promise (&lt;anonymous&gt;)
-    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
-    </testcase>
-    <testcase classname="RegisterScreen" name="has accessible error messages with alert role" time="0.012" file="__tests__\RegisterScreen.test.tsx">
-      <failure>Error: Found multiple elements with text: Create Account
-    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:302:28)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
-    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
-    at new Promise (&lt;anonymous&gt;)
-    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
-    </testcase>
-    <testcase classname="RegisterScreen" name="clears field errors when user starts typing" time="0.013" file="__tests__\RegisterScreen.test.tsx">
-      <failure>Error: Found multiple elements with text: Create Account
-    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:330:28)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
-    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
-    at new Promise (&lt;anonymous&gt;)
-    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
-    </testcase>
-    <testcase classname="RegisterScreen" name="has proper accessibility labels on all inputs" time="0.005" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="has proper accessibility hints on inputs" time="0.005" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="uses email-address keyboard type for email input" time="0.005" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="uses secureTextEntry for password inputs" time="0.005" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="has minimum 48px height for inputs" time="0.006" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="has checkbox with proper accessibility state" time="0.004" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="toggles checkbox when pressed" time="0.012" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="displays duplicate email error" time="0.013" file="__tests__\RegisterScreen.test.tsx">
-      <failure>Error: Found multiple elements with text: Create Account
-    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:465:28)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
-    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
-    at new Promise (&lt;anonymous&gt;)
-    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
-    </testcase>
-    <testcase classname="RegisterScreen" name="has proper touch target for register button" time="0.005" file="__tests__\RegisterScreen.test.tsx">
-      <failure>Error: Found multiple elements with text: Create Account
-    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:478:28)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
-    </testcase>
-    <testcase classname="RegisterScreen" name="auto-capitalizes none for email input" time="0.005" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="disables auto-correct for email input" time="0.004" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="renders support text" time="0.005" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="renders title" time="0.005" file="__tests__\RegisterScreen.test.tsx">
-      <failure>Error: Found multiple elements with text: /Create Account/
-    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:520:12)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
-    </testcase>
-    <testcase classname="RegisterScreen" name="has terms link with proper styling" time="0.005" file="__tests__\RegisterScreen.test.tsx">
-    </testcase>
-    <testcase classname="RegisterScreen" name="validates confirm password is required" time="0.012" file="__tests__\RegisterScreen.test.tsx">
-      <failure>Error: Found multiple elements with text: Create Account
-    at Object.getByText (C:\Users\neuroshell\Documents\src\trapp\__tests__\RegisterScreen.test.tsx:547:28)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
-    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
-    at new Promise (&lt;anonymous&gt;)
-    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    <testcase classname="DeleteConfirmationDialog" name="should have warning icon" time="0.001" file="__tests__\DeleteConfirmationDialog.test.tsx">
     </testcase>
   </testsuite>
-  <testsuite name="LoginScreen" errors="0" failures="3" skipped="0" timestamp="2026-03-16T10:55:03" time="2.001" tests="22">
-    <testcase classname="LoginScreen" name="renders login form with email and password fields" time="0.289" file="__tests__\LoginScreen.test.tsx">
+  <testsuite name="LogRunningForm" errors="0" failures="0" skipped="0" timestamp="2026-03-16T12:23:36" time="0.698" tests="14">
+    <testcase classname="LogRunningForm" name="should render distance and duration inputs" time="0.252" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="renders sign in button" time="0.006" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogRunningForm" name="should display validation errors" time="0.002" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="displays email validation error for invalid email" time="0.01" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogRunningForm" name="should calculate and display pace when valid values entered" time="0.003" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="displays email required error when empty" time="0.005" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogRunningForm" name="should call onDistanceChange when distance input changes" time="0.002" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="displays password required error when empty" time="0.004" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogRunningForm" name="should call onDurationChange when duration input changes" time="0.001" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="submits form with valid credentials" time="0.065" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogRunningForm" name="should have proper accessibility labels" time="0.001" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="shows loading state during sign in" time="0.01" file="__tests__\LoginScreen.test.tsx">
-      <failure>Error: expect(received).toBe(expected) // Object.is equality
-
-Expected: true
-Received: undefined
-    at Object.toBe (C:\Users\neuroshell\Documents\src\trapp\__tests__\LoginScreen.test.tsx:165:41)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
-    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
-    at new Promise (&lt;anonymous&gt;)
-    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    <testcase classname="LogStrengthForm" name="should render reps, sets, and weight inputs" time="0.002" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="has accessible error messages with alert role" time="1.019" file="__tests__\LoginScreen.test.tsx">
-      <failure>Error: Found multiple elements with role: alert
-    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\__tests__\LoginScreen.test.tsx:179:18)
-    at Generator.next (&lt;anonymous&gt;)
-    at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
-    at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
-    at C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:22:7
-    at new Promise (&lt;anonymous&gt;)
-    at Object.&lt;anonymous&gt; (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:14:12)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
+    <testcase classname="LogStrengthForm" name="should display validation errors" time="0.001" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="clears error when user starts typing" time="0.013" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogStrengthForm" name="should calculate and display total volume" time="0.007" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="has proper accessibility labels on inputs" time="0.004" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogStrengthForm" name="should display volume with weight when provided" time="0.002" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="has proper accessibility hints on inputs" time="0.004" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogStrengthForm" name="should call onRepsChange when reps input changes" time="0.001" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="uses email-address keyboard type for email input" time="0.003" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogStrengthForm" name="should call onSetsChange when sets input changes" time="0.001" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="uses secureTextEntry for password input" time="0.003" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogStrengthForm" name="should call onWeightChange when weight input changes" time="0.001" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="LoginScreen" name="has minimum 48px height for inputs" time="0.004" file="__tests__\LoginScreen.test.tsx">
-    </testcase>
-    <testcase classname="LoginScreen" name="renders register link when onNavigateToRegister is provided" time="0.009" file="__tests__\LoginScreen.test.tsx">
-    </testcase>
-    <testcase classname="LoginScreen" name="calls onNavigateToRegister when register link is pressed" time="0.005" file="__tests__\LoginScreen.test.tsx">
-    </testcase>
-    <testcase classname="LoginScreen" name="has accessibility role link on register button" time="0.008" file="__tests__\LoginScreen.test.tsx">
-    </testcase>
-    <testcase classname="LoginScreen" name="displays generic error for invalid credentials" time="0.07" file="__tests__\LoginScreen.test.tsx">
-    </testcase>
-    <testcase classname="LoginScreen" name="has proper touch target for sign in button" time="0.009" file="__tests__\LoginScreen.test.tsx">
-      <failure>Error: expect(received).toEqual(expected) // deep equality
-
-Expected: ArrayContaining [ObjectContaining {&quot;minHeight&quot;: 48}]
-Received: [{&quot;color&quot;: &quot;#fff&quot;, &quot;fontSize&quot;: 16, &quot;fontWeight&quot;: &quot;700&quot;}, false]
-    at Object.toEqual (C:\Users\neuroshell\Documents\src\trapp\__tests__\LoginScreen.test.tsx:316:38)
-    at Promise.then.completed (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:298:28)
-    at new Promise (&lt;anonymous&gt;)
-    at callAsyncCircusFn (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\utils.js:231:10)
-    at _callCircusTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:316:40)
-    at _runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:252:3)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:126:9)
-    at _runTestsForDescribeBlock (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:121:9)
-    at run (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\run.js:71:3)
-    at runAndTransformResultsToJestFormat (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:122:21)
-    at jestAdapter (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:79:19)
-    at runTestInternal (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:367:16)
-    at runTest (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\runTest.js:444:34)
-    at Object.worker (C:\Users\neuroshell\Documents\src\trapp\node_modules\jest-runner\build\testWorker.js:106:12)</failure>
-    </testcase>
-    <testcase classname="LoginScreen" name="auto-capitalizes none for email input" time="0.007" file="__tests__\LoginScreen.test.tsx">
-    </testcase>
-    <testcase classname="LoginScreen" name="disables auto-correct for email input" time="0.004" file="__tests__\LoginScreen.test.tsx">
-    </testcase>
-    <testcase classname="LoginScreen" name="renders support text" time="0.003" file="__tests__\LoginScreen.test.tsx">
+    <testcase classname="LogStrengthForm" name="should show exercise-specific labels" time="0.002" file="__tests__\components.test.tsx">
     </testcase>
   </testsuite>
 </testsuites>

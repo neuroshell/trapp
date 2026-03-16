@@ -1,3 +1,4 @@
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -15,13 +16,15 @@ import {
 import { useAuth } from "../auth/AuthContext";
 import { Card } from "../components/Card";
 import { PrimaryButton } from "../components/PrimaryButton";
+import { AuthStackParamList } from "../navigation/types";
 import { colors, spacing, typography } from "../theme";
 
-export function LoginScreen({
-  onNavigateToRegister,
-}: {
+type LoginScreenProps = {
   onNavigateToRegister?: () => void;
-}) {
+  navigation?: NativeStackNavigationProp<AuthStackParamList, "Login">;
+};
+
+export function LoginScreen({ onNavigateToRegister }: LoginScreenProps) {
   const { signIn, error: authError } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -112,7 +115,6 @@ export function LoginScreen({
                   autoCorrect={false}
                   accessibilityLabel="Email address input"
                   accessibilityHint="Enter your email address"
-                  accessibilityInvalid={!!fieldErrors.email}
                 />
                 {fieldErrors.email && (
                   <Text
@@ -147,7 +149,6 @@ export function LoginScreen({
                   secureTextEntry
                   accessibilityLabel="Password input"
                   accessibilityHint="Enter your password"
-                  accessibilityInvalid={!!fieldErrors.password}
                 />
                 {fieldErrors.password && (
                   <Text
@@ -165,7 +166,9 @@ export function LoginScreen({
                 <Text
                   style={styles.errorText}
                   accessibilityRole="alert"
-                  accessibilityLabel={fieldErrors.general || authError}
+                  accessibilityLabel={
+                    fieldErrors.general || authError || undefined
+                  }
                 >
                   {fieldErrors.general || authError}
                 </Text>
