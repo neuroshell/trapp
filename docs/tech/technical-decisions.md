@@ -120,7 +120,7 @@ Trapp Tracker needs to support both iOS and Android platforms to reach the targe
 
 - [Expo Documentation](https://docs.expo.dev/)
 - [React Native Documentation](https://reactnative.dev/)
-- [Product Vision](./product-vision.md) - Cross-platform requirement
+- [Product Vision](../reqs/product-vision.md) - Cross-platform requirement
 
 ---
 
@@ -485,8 +485,8 @@ Phase 4+: Consider microservices if team scales
 
 - [Express.js Documentation](https://expressjs.com/)
 - [lowdb Documentation](https://github.com/typicode/lowdb)
-- [User Story US-6.2](./user-stories.md#us-62-cloud-sync-optional-backend)
-- [Roadmap Phase 3](./roadmap.md)
+- [User Story US-6.2](./reqs/user-stories.md#us-62-cloud-sync-optional-backend)
+- [Roadmap Phase 3](./reqs/roadmap.md)
 
 ---
 
@@ -666,10 +666,10 @@ The following ADRs should be created as the project evolves:
 
 ## References
 
-- [Product Vision](./product-vision.md)
-- [Architecture](./architecture.md)
-- [ASR](./asr.md)
-- [Roadmap](./roadmap.md)
+- [Product Vision](./reqs/product-vision.md)
+- [Architecture](./tech/architecture.md)
+- [ASR](./tech/asr.md)
+- [Roadmap](./reqs/roadmap.md)
 
 ---
 

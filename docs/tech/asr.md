@@ -14,10 +14,10 @@ This document identifies the Architecture Significant Requirements (ASRs) that d
 
 | Product Document                      | ASR Coverage                          |
 | ------------------------------------- | ------------------------------------- |
-| [Product Vision](./product-vision.md) | Success metrics → Performance ASRs    |
-| [User Stories](./user-stories.md)     | Acceptance criteria → Functional ASRs |
-| [Features.md](./features.md)          | Edge cases → Reliability ASRs         |
-| [Roadmap.md](./roadmap.md)            | Phase goals → Evolution ASRs          |
+| [Product Vision](../reqs/product-vision.md) | Success metrics → Performance ASRs    |
+| [User Stories](../reqs/user-stories.md)     | Acceptance criteria → Functional ASRs |
+| [Features.md](../reqs/features.md)          | Edge cases → Reliability ASRs         |
+| [Roadmap.md](../reqs/roadmap.md)            | Phase goals → Evolution ASRs          |
 
 ---
 
@@ -597,11 +597,11 @@ Availability
 
 ## 9. References
 
-- [Product Vision](./product-vision.md) - Success metrics and goals
-- [User Stories](./user-stories.md) - Acceptance criteria
-- [Feature Specifications](./features.md) - Edge cases and validation
-- [Architecture](./architecture.md) - System design
-- [Technical Decisions](./technical-decisions.md) - ADRs
+- [Product Vision](../reqs/product-vision.md) - Success metrics and goals
+- [User Stories](../reqs/user-stories.md) - Acceptance criteria
+- [Feature Specifications](../reqs/features.md) - Edge cases and validation
+- [Architecture](../tech/architecture.md) - System design
+- [Technical Decisions](../tech/technical-decisions.md) - ADRs
 
 ---
 
