@@ -29,7 +29,9 @@ type AuthContextValue = {
   clearError: () => void;
 };
 
-export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+export const AuthContext = createContext<AuthContextValue | undefined>(
+  undefined,
+);
 
 // Email validation regex (RFC 5322 simplified)
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -65,7 +67,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const safeSetState = <T,>(setter: React.Dispatch<React.SetStateAction<T>>, value: T) => {
+  const safeSetState = <T,>(
+    setter: React.Dispatch<React.SetStateAction<T>>,
+    value: T,
+  ) => {
     // In tests, wrap state updates in act() to avoid warnings from async updates.
     if (process.env.NODE_ENV === "test") {
       try {
@@ -116,10 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Validate password
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.valid) {
-      safeSetState(
-        setError,
-        passwordValidation.message || "Invalid password",
-      );
+      safeSetState(setError, passwordValidation.message || "Invalid password");
       return;
     }
 
@@ -162,10 +164,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Validate password
     const passwordValidation = validatePassword(password);
     if (!passwordValidation.valid) {
-      safeSetState(
-        setError,
-        passwordValidation.message || "Invalid password",
-      );
+      safeSetState(setError, passwordValidation.message || "Invalid password");
       return;
     }
 

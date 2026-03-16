@@ -1,9 +1,7 @@
-import express from "express";
 import cors from "cors";
+import express from "express";
 import { Low } from "lowdb";
 import { JSONFile } from "lowdb/node";
-import { nanoid } from "nanoid";
-
 // ─────────────────────────────────────────────────────────────────────────────
 // SECURITY: Forbidden property names that could cause prototype pollution
 // Whitelist approach with comprehensive blocklist
@@ -162,12 +160,18 @@ async function createServer(opts = {}) {
       // SECURITY: Validate deviceId with strict whitelist regex
       const safeDeviceId = sanitizeKey(deviceId);
       if (!safeDeviceId) {
-        return res
-          .status(400)
-          .json({ error: "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed." });
+        return res.status(400).json({
+          error:
+            "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.",
+        });
       }
 
-      if (!username || !passwordHash || typeof payload !== "object" || payload === null) {
+      if (
+        !username ||
+        !passwordHash ||
+        typeof payload !== "object" ||
+        payload === null
+      ) {
         return res.status(400).json({
           error: "username, passwordHash, deviceId and payload are required",
         });
@@ -215,14 +219,16 @@ async function createServer(opts = {}) {
       // SECURITY: Validate deviceId with strict whitelist regex
       const safeDeviceId = sanitizeKey(deviceId);
       if (!safeDeviceId) {
-        return res
-          .status(400)
-          .json({ error: "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed." });
+        return res.status(400).json({
+          error:
+            "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed.",
+        });
       }
 
       if (!username || !passwordHash) {
         return res.status(400).json({
-          error: "username, passwordHash and deviceId query parameters are required",
+          error:
+            "username, passwordHash and deviceId query parameters are required",
         });
       }
 
@@ -233,7 +239,9 @@ async function createServer(opts = {}) {
 
       // SECURITY: safeDeviceId validated, Map prevents prototype pollution
       if (!user.devices.has(safeDeviceId)) {
-        return res.status(403).json({ error: "Device not registered for this user" });
+        return res
+          .status(403)
+          .json({ error: "Device not registered for this user" });
       }
 
       const device = db.data.devices.get(safeDeviceId);
@@ -258,7 +266,9 @@ async function createServer(opts = {}) {
 // Start server if run directly
 // Check if this file is being run directly (not imported)
 const isMainModule =
-  process.argv[1] && (process.argv[1].endsWith("index.js") || process.argv[1].endsWith("index.mjs"));
+  process.argv[1] &&
+  (process.argv[1].endsWith("index.js") ||
+    process.argv[1].endsWith("index.mjs"));
 
 if (isMainModule) {
   createServer().catch((err) => {
