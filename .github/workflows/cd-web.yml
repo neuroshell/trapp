@@ -9,7 +9,7 @@ on:
   push:
     branches:
       - main
-  
+
   # Preview deployments for PRs
   pull_request:
     branches:
@@ -20,18 +20,18 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deployment Environment'
+        description: "Deployment Environment"
         required: true
         type: choice
         options:
           - production
           - staging
           - preview
-        default: 'preview'
+        default: "preview"
 
 env:
-  NODE_VERSION: '18'
-  CACHE_VERSION: 'v1'
+  NODE_VERSION: "20"
+  CACHE_VERSION: "v1"
 
 # Cancel in-progress runs for the same PR
 concurrency:
@@ -60,7 +60,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -85,7 +85,7 @@ jobs:
       - name: Build Expo Web App
         id: build
         run: |
-          npx expo export:web
+          npx expo export -p web
           BUILD_HASH=$(git rev-parse --short HEAD)
           echo "hash=${BUILD_HASH}" >> $GITHUB_OUTPUT
         env:
@@ -93,25 +93,25 @@ jobs:
 
       - name: Create 404.html for SPA routing
         run: |
-          cp web-build/index.html web-build/404.html
+          cp dist/index.html dist/404.html
 
       - name: Create asset manifest for caching
         run: |
-          echo "Build completed at: $(date -u)" > web-build/BUILD_INFO.txt
-          echo "Commit: ${{ github.sha }}" >> web-build/BUILD_INFO.txt
-          echo "Version: ${{ steps.version.outputs.version }}" >> web-build/BUILD_INFO.txt
+          echo "Build completed at: $(date -u)" > dist/BUILD_INFO.txt
+          echo "Commit: ${{ github.sha }}" >> dist/BUILD_INFO.txt
+          echo "Version: ${{ steps.version.outputs.version }}" >> dist/BUILD_INFO.txt
 
       - name: Upload web build artifact
         uses: actions/upload-artifact@v4
         with:
           name: web-build
-          path: web-build/
+          path: dist/
           retention-days: 14
 
       - name: Upload build for preview
         uses: actions/upload-pages-artifact@v3
         with:
-          path: web-build/
+          path: dist/
 
   # ===========================================
   # DEPLOY TO GITHUB PAGES (MAIN)
@@ -205,33 +205,33 @@ jobs:
             const buildVersion = '${{ needs.build-web.outputs.version }}';
             const previewUrl = '${{ steps.netlify-preview.outputs.url }}';
             const pagesUrl = 'https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/';
-            
+
             let commentBody = `## 🌐 Web Preview Deployment\n\n`;
             commentBody += `| Property | Value |\n`;
             commentBody += `|----------|-------|\n`;
             commentBody += `| **Commit** | \`${commitSha.substring(0, 7)}\` |\n`;
             commentBody += `| **Version** | ${buildVersion} |\n`;
             commentBody += `| **PR** | #${prNumber} |\n`;
-            
+
             if (previewUrl) {
               commentBody += `| **Preview URL** | [${previewUrl}](${previewUrl}) |\n`;
             } else {
               commentBody += `| **GitHub Pages** | Will be available at merge |\n`;
             }
-            
+
             commentBody += `\n---\n*Automated deployment preview from GitHub Actions*`;
-            
+
             // Find existing comment to update
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber
             });
-            
+
             const existingComment = comments.find(c => 
               c.user.type === 'Bot' && c.body.includes('Web Preview Deployment')
             );
-            
+
             if (existingComment) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
@@ -256,9 +256,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: build-web
-    if: |
-      github.ref == 'refs/heads/main' && 
-      (secrets.VERCEL_TOKEN != '' || secrets.NETLIFY_AUTH_TOKEN != '')
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Download web build
@@ -267,24 +265,42 @@ jobs:
           name: web-build
           path: ./web-build
 
+      - name: Check for Vercel credentials
+        id: vercel-check
+        run: |
+          if [ -n "${{ secrets.VERCEL_TOKEN }}" ]; then
+            echo "has-token=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-token=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Deploy to Vercel
-        if: ${{ secrets.VERCEL_TOKEN != '' }}
+        if: steps.vercel-check.outputs.has-token == 'true'
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./web-build
-          vercel-args: '--prod'
+          vercel-args: "--prod"
+
+      - name: Check for Netlify credentials
+        id: netlify-check
+        run: |
+          if [ -n "${{ secrets.NETLIFY_AUTH_TOKEN }}" ]; then
+            echo "has-token=true" >> $GITHUB_OUTPUT
+          else
+            echo "has-token=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Deploy to Netlify
-        if: ${{ secrets.NETLIFY_AUTH_TOKEN != '' }}
+        if: steps.netlify-check.outputs.has-token == 'true'
         uses: nwtgck/actions-netlify@v3
         with:
           publish_dir: ./web-build
           production_branch: main
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          deploy_message: 'Deploy web app ${{ needs.build-web.outputs.version }}'
+          deploy_message: "Deploy web app ${{ needs.build-web.outputs.version }}"
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}

@@ -28,13 +28,13 @@ Trapp Tracker uses GitHub Actions for all CI/CD operations. The pipelines are de
 
 ### Technology Stack
 
-| Component | Version |
-|-----------|---------|
-| Node.js | 18+ |
-| npm | Latest |
-| Expo SDK | 55.0.6 |
-| React Native | 0.81.5 |
-| TypeScript | ~5.9.2 |
+| Component    | Version |
+| ------------ | ------- |
+| Node.js      | 18+     |
+| npm          | Latest  |
+| Expo SDK     | 55.0.6  |
+| React Native | 0.81.5  |
+| TypeScript   | ~5.9.2  |
 
 ---
 
@@ -43,6 +43,7 @@ Trapp Tracker uses GitHub Actions for all CI/CD operations. The pipelines are de
 ### 1. CI Pipeline (`ci.yml`)
 
 **Triggers:**
+
 - Push to `main` or `develop` branches
 - Pull requests to `main` or `develop` branches
 
@@ -58,6 +59,7 @@ Trapp Tracker uses GitHub Actions for all CI/CD operations. The pipelines are de
 | `status-check` | Final status aggregation |
 
 **Artifacts:**
+
 - `lint-results` - Linting output
 - `test-results-app` - App test results + coverage
 - `test-results-backend` - Backend test results
@@ -68,6 +70,7 @@ Trapp Tracker uses GitHub Actions for all CI/CD operations. The pipelines are de
 ### 2. Mobile CD Pipeline (`cd-mobile.yml`)
 
 **Triggers:**
+
 - Git tags matching `v*` pattern (e.g., `v1.2.3`)
 - Manual dispatch via GitHub Actions UI
 
@@ -82,6 +85,7 @@ Trapp Tracker uses GitHub Actions for all CI/CD operations. The pipelines are de
 | `notify` | Slack notification + GitHub Release |
 
 **Manual Dispatch Options:**
+
 - Build Type: `production` or `preview`
 - Platform: `both`, `ios`, or `android`
 - Profile: `production` or `development`
@@ -92,6 +96,7 @@ Trapp Tracker uses GitHub Actions for all CI/CD operations. The pipelines are de
 ### 3. Web CD Pipeline (`cd-web.yml`)
 
 **Triggers:**
+
 - Push to `main` branch (production deploy)
 - Pull requests (preview deploy)
 - Manual dispatch
@@ -106,6 +111,7 @@ Trapp Tracker uses GitHub Actions for all CI/CD operations. The pipelines are de
 | `health-check` | Verify deployment |
 
 **SPA Routing:**
+
 - Automatically creates `404.html` fallback for client-side routing
 - GitHub Pages configuration included
 
@@ -114,6 +120,7 @@ Trapp Tracker uses GitHub Actions for all CI/CD operations. The pipelines are de
 ### 4. Security Scan Pipeline (`security-scan.yml`)
 
 **Triggers:**
+
 - Pull requests to `main`/`develop`
 - Push to `main`
 - Weekly schedule (Mondays at 2 AM UTC)
@@ -136,28 +143,28 @@ Configure these secrets in **GitHub Repository Settings → Secrets and variable
 
 ### Essential Secrets (Required)
 
-| Secret Name | Description | How to Obtain |
-|-------------|-------------|---------------|
-| `EXPO_TOKEN` | Expo EAS authentication token | Run `npx eas login` then `npx eas credentials:me` |
-| `APPLE_ID` | Apple ID for App Store Connect | Your Apple developer account email |
-| `APPLE_PASSWORD` | App-specific password | Generate at appleid.apple.com |
-| `APPLE_TEAM_ID` | Apple Developer Team ID | Found in Apple Developer Portal |
-| `APPLE_APP_SPECIFIC_PASSWORD` | App-specific password for CI | Generate at appleid.apple.com |
-| `GOOGLE_SERVICE_ACCOUNT_KEY_JSON` | Google Play Service Account | Create in Google Cloud Console |
-| `EAS_PROJECT_ID` | Expo project ID | From `eas.json` or Expo dashboard |
+| Secret Name                       | Description                    | How to Obtain                                     |
+| --------------------------------- | ------------------------------ | ------------------------------------------------- |
+| `EXPO_TOKEN`                      | Expo EAS authentication token  | Run `npx eas login` then `npx eas credentials:me` |
+| `APPLE_ID`                        | Apple ID for App Store Connect | Your Apple developer account email                |
+| `APPLE_PASSWORD`                  | App-specific password          | Generate at appleid.apple.com                     |
+| `APPLE_TEAM_ID`                   | Apple Developer Team ID        | Found in Apple Developer Portal                   |
+| `APPLE_APP_SPECIFIC_PASSWORD`     | App-specific password for CI   | Generate at appleid.apple.com                     |
+| `GOOGLE_SERVICE_ACCOUNT_KEY_JSON` | Google Play Service Account    | Create in Google Cloud Console                    |
+| `EAS_PROJECT_ID`                  | Expo project ID                | From `eas.json` or Expo dashboard                 |
 
 ### Optional Secrets
 
-| Secret Name | Description | Used By |
-|-------------|-------------|---------|
-| `SLACK_WEBHOOK_URL` | Slack webhook for notifications | Mobile CD, Security Scan |
-| `NETLIFY_AUTH_TOKEN` | Netlify deployment token | Web CD (alternative hosting) |
-| `NETLIFY_SITE_ID` | Netlify site ID | Web CD (alternative hosting) |
-| `VERCEL_TOKEN` | Vercel deployment token | Web CD (alternative hosting) |
-| `VERCEL_ORG_ID` | Vercel organization ID | Web CD (alternative hosting) |
-| `VERCEL_PROJECT_ID` | Vercel project ID | Web CD (alternative hosting) |
-| `CODECOV_TOKEN` | Codecov upload token | CI Pipeline (coverage) |
-| `GITLEAKS_LICENSE` | Gitleaks license key | Security Scan |
+| Secret Name          | Description                     | Used By                      |
+| -------------------- | ------------------------------- | ---------------------------- |
+| `SLACK_WEBHOOK_URL`  | Slack webhook for notifications | Mobile CD, Security Scan     |
+| `NETLIFY_AUTH_TOKEN` | Netlify deployment token        | Web CD (alternative hosting) |
+| `NETLIFY_SITE_ID`    | Netlify site ID                 | Web CD (alternative hosting) |
+| `VERCEL_TOKEN`       | Vercel deployment token         | Web CD (alternative hosting) |
+| `VERCEL_ORG_ID`      | Vercel organization ID          | Web CD (alternative hosting) |
+| `VERCEL_PROJECT_ID`  | Vercel project ID               | Web CD (alternative hosting) |
+| `CODECOV_TOKEN`      | Codecov upload token            | CI Pipeline (coverage)       |
+| `GITLEAKS_LICENSE`   | Gitleaks license key            | Security Scan                |
 
 ### How to Set Up Secrets
 
@@ -204,6 +211,7 @@ npx tsc --noEmit
 ### Using Helper Scripts
 
 **Windows (PowerShell):**
+
 ```powershell
 # Setup environment
 .\scripts\ci-helpers.ps1 setup
@@ -225,6 +233,7 @@ npx tsc --noEmit
 ```
 
 **Linux/Mac (Bash):**
+
 ```bash
 # Setup environment
 ./scripts/ci-helpers.sh setup
@@ -248,6 +257,7 @@ npx tsc --noEmit
 ### Creating a Release
 
 1. **Update version:**
+
    ```bash
    ./scripts/ci-helpers.sh version-bump 1.2.3
    git add package.json app.json backend/package.json
@@ -255,6 +265,7 @@ npx tsc --noEmit
    ```
 
 2. **Generate changelog:**
+
    ```bash
    ./scripts/ci-helpers.sh changelog
    git add CHANGELOG.md
@@ -262,6 +273,7 @@ npx tsc --noEmit
    ```
 
 3. **Push and tag:**
+
    ```bash
    git push origin main
    git tag v1.2.3
@@ -312,6 +324,7 @@ Add these badges to your `README.md`:
 **Error:** `npm ERR! Could not resolve dependency`
 
 **Solution:**
+
 ```bash
 # Delete lock file and regenerate
 rm package-lock.json
@@ -325,6 +338,7 @@ git commit -m "chore: regenerate lock file"
 **Error:** `Credentials not configured`
 
 **Solution:**
+
 ```bash
 # Configure EAS credentials
 npx eas build:configure
@@ -336,6 +350,7 @@ npx eas credentials:configure
 **Error:** `Permission denied for GitHub Pages`
 
 **Solution:**
+
 - Go to Repository Settings → Pages
 - Ensure "GitHub Actions" is selected as source
 - Check branch protection rules
@@ -343,6 +358,7 @@ npx eas credentials:configure
 #### 4. Security Scan Shows Vulnerabilities
 
 **Action:**
+
 ```bash
 # Check vulnerabilities
 npm audit
@@ -359,6 +375,7 @@ npm audit --audit-level=high
 **Symptom:** Tests pass locally but fail in CI
 
 **Solution:**
+
 - Add `CACHE_VERSION: 'v2'` to workflow env (increment version)
 - This forces cache invalidation
 
@@ -388,11 +405,13 @@ Branch name pattern: main
 Create GitHub Environments for deployment gates:
 
 **Production Environment:**
+
 - Name: `production`
 - Required reviewers: 1-2 team members
 - Deployment branches: `main` only
 
 **Staging Environment:**
+
 - Name: `staging`
 - No required reviewers
 - Deployment branches: `main`, `develop`
@@ -400,6 +419,7 @@ Create GitHub Environments for deployment gates:
 ### 3. Monitoring Setup
 
 **Recommended integrations:**
+
 - **Codecov** - Coverage reporting
 - **Sentry** - Error tracking
 - **Slack** - Build notifications
@@ -423,10 +443,12 @@ Create GitHub Environments for deployment gates:
 ### 6. Rollback Strategy
 
 **Mobile:**
+
 - Use EAS Update for over-the-air fixes
 - Submit hotfix build with incremented patch version
 
 **Web:**
+
 - Re-deploy previous commit via GitHub Actions
 - GitHub Pages maintains history in `gh-pages` branch
 
@@ -461,18 +483,18 @@ trapp/
 
 ## Quick Reference
 
-| Task | Command/Action |
-|------|----------------|
-| Run all tests | `npm test` |
-| Run lint | `npm run lint` |
-| Build web | `npx expo export:web` |
-| Trigger mobile build | Create tag `v1.2.3` |
+| Task                 | Command/Action                              |
+| -------------------- | ------------------------------------------- |
+| Run all tests        | `npm test`                                  |
+| Run lint             | `npm run lint`                              |
+| Build web            | `npx expo export:web`                       |
+| Trigger mobile build | Create tag `v1.2.3`                         |
 | Trigger manual build | GitHub Actions → CD - Mobile → Run workflow |
-| View build status | GitHub Actions tab |
-| Download artifacts | Workflow run → Artifacts section |
-| Check security | Security tab → Code scanning |
+| View build status    | GitHub Actions tab                          |
+| Download artifacts   | Workflow run → Artifacts section            |
+| Check security       | Security tab → Code scanning                |
 
 ---
 
-*Last updated: March 2026*
-*Document version: 1.0.0*
+_Last updated: March 2026_
+_Document version: 1.0.0_

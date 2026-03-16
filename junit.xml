@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="157" failures="0" errors="0" time="1.979">
+  <testsuite name="storage" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.391" tests="34">
+    <testcase classname="storage loadAppState" name="returns empty state when no data exists" time="0.006" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage loadAppState" name="loads saved app state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage loadAppState" name="returns empty state on JSON parse error" time="0.008" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage loadAppState" name="returns empty state on AsyncStorage error" time="0.004" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage loadAppState" name="handles partial state data" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage loadAppState" name="handles state with multiple entries" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage saveAppState" name="saves app state to AsyncStorage" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage saveAppState" name="saves empty state" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage saveAppState" name="handles save errors gracefully" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage saveAppState" name="saves state with complex entries" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage clearAppState" name="removes app state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage clearAppState" name="handles clear errors gracefully" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage getDeviceId" name="returns existing device id from AsyncStorage" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage getDeviceId" name="generates new device id if none exists" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage getDeviceId" name="returns unknown on error" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage getDeviceId" name="generates unique ids on subsequent calls" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage loadAuthState" name="returns empty object when no auth data exists" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage loadAuthState" name="loads saved auth state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage loadAuthState" name="returns empty object on JSON parse error" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage loadAuthState" name="returns empty object on AsyncStorage error" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage loadAuthState" name="handles partial auth state" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage saveAuthState" name="saves auth state to AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage saveAuthState" name="saves empty auth state" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage saveAuthState" name="handles save errors gracefully" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage saveAuthState" name="saves auth state with only user" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage saveAuthState" name="saves auth state with only passwordHash" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage clearAuthState" name="removes auth state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage clearAuthState" name="handles clear errors gracefully" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage storage keys" name="uses correct storage key for app state" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage storage keys" name="uses correct storage key for device id" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage storage keys" name="uses correct storage key for auth state" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage edge cases" name="handles very large state objects" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage edge cases" name="handles unicode characters in data" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="storage edge cases" name="handles empty strings in data" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+  </testsuite>
+  <testsuite name="SplashScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.804" tests="13">
+    <testcase classname="SplashScreen" name="renders title" time="0.292" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="renders loading subtitle" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="renders SafeAreaView wrapper" time="0.002" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="renders title with proper styling" time="0.002" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="renders subtitle with proper styling" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="has no interactive elements" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="is a static loading screen" time="0.006" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="displays app branding" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="indicates loading state to user" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="does not crash during render" time="0" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="maintains consistent UI across renders" time="0.002" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="renders with proper structure" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+    <testcase classname="SplashScreen" name="renders ActivityIndicator" time="0" file="__tests__\SplashScreen.test.tsx">
+    </testcase>
+  </testsuite>
+  <testsuite name="DashboardScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.802" tests="16">
+    <testcase classname="DashboardScreen" name="renders title" time="0.292" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders subtitle" time="0.002" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders coming soon card" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders card text about logged workouts" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders SafeAreaView wrapper" time="0.002" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders title with proper styling" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders subtitle with secondary color" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders card title with bold font" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders card text with proper styling" time="0" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="is a static informational screen" time="0.002" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="has no interactive elements" time="0.004" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders content in correct order" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="displays placeholder content" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders without crashing" time="0" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="maintains consistent UI across renders" time="0.002" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+    <testcase classname="DashboardScreen" name="renders with proper structure" time="0" file="__tests__\DashboardScreen.test.tsx">
+    </testcase>
+  </testsuite>
+  <testsuite name="HomeScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.884" tests="31">
+    <testcase classname="HomeScreen" name="renders title" time="0.301" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders subtitle" time="0.004" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders Quick Actions section" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders Latest Activity section" time="0.008" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders stats card with streak" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders stats card with weekly goal" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders Run button" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders Push-up button" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders Squats button" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders Pull-up button" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="navigates to Log screen when Run is pressed" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="navigates to Log screen when Push-up is pressed" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="navigates to Log screen when Squats is pressed" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="navigates to Log screen when Pull-up is pressed" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders placeholder message for empty activity list" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders SafeAreaView wrapper" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="has proper layout structure" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders stat blocks in row layout" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders quick action buttons in rows" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders title with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders subtitle with secondary color" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders section titles with proper styling" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders placeholder card with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders stat values with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders stat labels with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="handles multiple navigation calls" time="0.004" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders consistently across multiple renders" time="0.007" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="does not crash with undefined navigation" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="has accessible stat display" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders empty state for activity list" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+    <testcase classname="HomeScreen" name="renders with proper structure" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    </testcase>
+  </testsuite>
+  <testsuite name="LogScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="1.34" tests="37">
+    <testcase classname="LogScreen" name="renders title" time="0.317" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders activity type buttons" time="0.01" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders date and time field" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders quantity input" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders notes input" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders save button" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders Recent entries section" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="shows empty state when no entries exist" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="allows selecting activity type" time="0.009" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="allows entering quantity" time="0.008" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="allows entering notes" time="0.008" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="saves entry with valid data" time="0.012" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="clears form after saving entry" time="0.015" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="displays saved entries in the list" time="0.058" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="formats entry date correctly" time="0.057" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="displays entry quantity" time="0.073" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="displays entry notes when present" time="0.055" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="loads entries from AsyncStorage on mount" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="saves entries to AsyncStorage when adding new entry" time="0.012" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders form card" time="0.005" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders quantity input with numeric keyboard" time="0.005" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders notes input as multiline" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="has proper label for activity type" time="0.008" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="has proper label for quantity" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="has proper label for notes" time="0.005" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="allows adding multiple entries" time="0.016" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="handles entries with notes" time="0.013" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="trims notes before saving" time="0.013" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders entries list with FlatList" time="0.005" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders SafeAreaView container" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="has proper input styling" time="0.005" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="has proper save button styling" time="0.005" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="handles decimal quantity values" time="0.01" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="handles large quantity values" time="0.013" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="preserves selected activity type" time="0.008" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders all activity type options" time="0.006" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="displays current date in date field" time="0.003" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+  </testsuite>
+  <testsuite name="AuthContext" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="1.548" tests="26">
+    <testcase classname="AuthContext" name="provides initial auth state with loading true" time="0.331" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="provides user as undefined when not signed in" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="provides passwordHash as undefined when not signed in" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="sets loading to false after initialization" time="0.056" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="loads auth state from AsyncStorage on mount" time="0.063" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="signs in with username and password" time="0.006" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="hashes password during sign in" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="saves auth state to AsyncStorage after sign in" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="updates user state after sign in" time="0.053" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="signs out and clears state" time="0.061" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="clears AsyncStorage on sign out" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="clears user state after sign out" time="0.109" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="clears passwordHash after sign out" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="throws error when useAuth used outside AuthProvider" time="0.015" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="handles empty auth state from AsyncStorage" time="0.054" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="handles invalid auth state from AsyncStorage" time="0.061" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="trims username during sign in" time="0.054" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="provides signIn function" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="provides signOut function" time="0" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="provides loading state" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="provides user object with username" time="0.062" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="provides passwordHash for sync functionality" time="0.064" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="memoizes context value properly" time="0.055" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="handles sign in with empty password" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="handles sign in with special characters in password" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext" name="persists auth state across component re-renders" time="0.057" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+  </testsuite>
+</testsuites>

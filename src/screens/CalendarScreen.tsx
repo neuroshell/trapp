@@ -8,9 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { colors, spacing, typography } from "../theme";
-import { loadAppState } from "../storage";
+
 import { ActivityEntry } from "../models";
+import { loadAppState } from "../storage";
+import { colors, spacing, typography } from "../theme";
 
 const WEEK_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -18,8 +19,8 @@ function getMonthMatrix(date: Date) {
   const start = new Date(date.getFullYear(), date.getMonth(), 1);
   const end = new Date(date.getFullYear(), date.getMonth() + 1, 0);
 
-  const matrix: Array<Array<number | null>> = [];
-  let week: Array<number | null> = [];
+  const matrix: (number | null)[][] = [];
+  let week: (number | null)[] = [];
 
   // Fill leading blanks
   for (let i = 0; i < start.getDay(); i++) {
@@ -70,14 +71,21 @@ export function CalendarScreen() {
     return set;
   }, [entries, month]);
 
-  const monthLabel = month.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+  const monthLabel = month.toLocaleDateString(undefined, {
+    month: "long",
+    year: "numeric",
+  });
 
   const prevMonth = () => {
-    setMonth((current) => new Date(current.getFullYear(), current.getMonth() - 1, 1));
+    setMonth(
+      (current) => new Date(current.getFullYear(), current.getMonth() - 1, 1),
+    );
   };
 
   const nextMonth = () => {
-    setMonth((current) => new Date(current.getFullYear(), current.getMonth() + 1, 1));
+    setMonth(
+      (current) => new Date(current.getFullYear(), current.getMonth() + 1, 1),
+    );
   };
 
   const onDayPress = (day: number) => {
@@ -93,7 +101,10 @@ export function CalendarScreen() {
     if (selected.length === 0) return;
 
     const body = selected
-      .map((entry) => `${entry.type} — ${entry.quantity}${entry.notes ? ` (${entry.notes})` : ""}`)
+      .map(
+        (entry) =>
+          `${entry.type} — ${entry.quantity}${entry.notes ? ` (${entry.notes})` : ""}`,
+      )
       .join("\n");
 
     Alert.alert(`${monthLabel} ${day}`, body);

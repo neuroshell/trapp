@@ -10,6 +10,7 @@ npm run agents:setup
 ```
 
 This will:
+
 - Create your `.env` file with GitHub credentials
 - Verify dependencies are installed
 - Check workflow configuration
@@ -29,6 +30,7 @@ npm run agents:process
 ```
 
 Watch as agents process your issue through:
+
 - ✅ Specification (product-planner)
 - ⏳ **Approval Required** - Add `spec-approved` label to continue
 - ✅ Architecture (software-architect)
@@ -43,13 +45,13 @@ Watch as agents process your issue through:
 
 ## Commands Cheat Sheet
 
-| Command | Description |
-|---------|-------------|
-| `npm run agents:setup` | Interactive setup wizard |
-| `npm run agents:process` | Process all ready items |
-| `npm run agents:issue -- --issue=123` | Process specific issue #123 |
-| `npm run agents:watch` | Continuous processing (watch mode) |
-| `npm run agents:process -- --dry-run` | Simulate without making changes |
+| Command                               | Description                        |
+| ------------------------------------- | ---------------------------------- |
+| `npm run agents:setup`                | Interactive setup wizard           |
+| `npm run agents:process`              | Process all ready items            |
+| `npm run agents:issue -- --issue=123` | Process specific issue #123        |
+| `npm run agents:watch`                | Continuous processing (watch mode) |
+| `npm run agents:process -- --dry-run` | Simulate without making changes    |
 
 ## Approval Workflow
 
@@ -69,6 +71,7 @@ When pipeline pauses for approval:
 ## Automation (Optional)
 
 The pipeline runs automatically via GitHub Actions:
+
 - **Every hour** on schedule
 - **When you label** an issue with `backlog-item`
 - **Manual trigger** via Actions tab
@@ -78,12 +81,15 @@ No need to run CLI commands after setup!
 ## Troubleshooting
 
 **"No items ready for processing"**
+
 - Make sure your issue has the `backlog-item` label
 
 **"Approval timeout"**
+
 - Add the approval label manually in GitHub
 
 **"GitHub API error"**
+
 - Check your token has `repo` and `workflow` scopes
 - Verify token in `.env` file
 

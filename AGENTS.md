@@ -71,6 +71,7 @@ Add the `backlog-item` label to any GitHub Issue you want processed:
 ### 5. Run the Pipeline
 
 **Manual (CLI):**
+
 ```bash
 # Process all ready items
 npm run agents:process
@@ -86,20 +87,21 @@ npm run agents:process -- --dry-run
 ```
 
 **Automated (GitHub Actions):**
+
 - Pipeline runs every hour automatically
 - Triggered when `backlog-item` label is added
 - Manual trigger via Actions tab → "Agentic SDLC Pipeline" → "Run workflow"
 
 ## SDLC Phases
 
-| Phase | Agent | Description | Approval Required |
-|-------|-------|-------------|-------------------|
-| **Specification** | `product-planner` | Define user stories, requirements, success metrics | ✅ Yes |
-| **Architecture** | `software-architect` | Design technical architecture, data models, ADRs | ✅ Yes |
-| **Design** | `ux-ui-designer` | Create UI/UX designs, wireframes, user flows | ✅ Yes |
-| **Development** | `expo-react-native-developer` | Implement the feature code | ❌ No |
-| **Testing** | `integration-tester` | Run integration tests, validate functionality | ❌ No |
-| **Code Review** | `code-reviewer` | Review code quality, security, maintainability | ✅ Yes |
+| Phase             | Agent                         | Description                                        | Approval Required |
+| ----------------- | ----------------------------- | -------------------------------------------------- | ----------------- |
+| **Specification** | `product-planner`             | Define user stories, requirements, success metrics | ✅ Yes            |
+| **Architecture**  | `software-architect`          | Design technical architecture, data models, ADRs   | ✅ Yes            |
+| **Design**        | `ux-ui-designer`              | Create UI/UX designs, wireframes, user flows       | ✅ Yes            |
+| **Development**   | `expo-react-native-developer` | Implement the feature code                         | ❌ No             |
+| **Testing**       | `integration-tester`          | Run integration tests, validate functionality      | ❌ No             |
+| **Code Review**   | `code-reviewer`               | Review code quality, security, maintainability     | ✅ Yes            |
 
 ## Approval Gates
 
@@ -112,12 +114,12 @@ At approval phases, the pipeline:
 
 ### Approval Labels
 
-| Phase | Approval Label |
-|-------|---------------|
-| Specification | `spec-approved` |
-| Architecture | `architecture-approved` |
-| Design | `design-approved` |
-| Code Review | `review-approved` |
+| Phase         | Approval Label          |
+| ------------- | ----------------------- |
+| Specification | `spec-approved`         |
+| Architecture  | `architecture-approved` |
+| Design        | `design-approved`       |
+| Code Review   | `review-approved`       |
 
 ### How to Approve
 
@@ -160,24 +162,28 @@ scripts/agents/
 ### Key Components
 
 **BacklogManager**: Handles GitHub API interactions
+
 - Fetch issues with `backlog-item` label
 - Update status labels
 - Post comments with agent results
 - Check for approval labels
 
 **ContextBuilder**: Builds detailed prompts for agents
+
 - Includes project documentation (QWEN.md)
 - Adds relevant source files
 - Provides phase-specific instructions
 - Maintains continuity with previous results
 
 **ApprovalGate**: Manages human review checkpoints
+
 - Polls for approval labels
 - Posts pending/approved notifications
 - Supports timeout configuration
 - Non-blocking in watch mode
 
 **PipelineOrchestrator**: Main execution engine
+
 - Chains agents in correct order
 - Handles approval gates
 - Manages errors and retries
@@ -231,14 +237,14 @@ npm run agents:watch
 
 ### Environment Variables
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `GITHUB_TOKEN` | ✅ | GitHub Personal Access Token |
-| `GITHUB_REPO_OWNER` | ✅ | Repository owner (e.g., `facebook`) |
-| `GITHUB_REPO_NAME` | ✅ | Repository name (e.g., `react`) |
-| `AGENT_TIMEOUT` | ❌ | Timeout per agent in ms (default: 300000) |
-| `APPROVAL_TIMEOUT` | ❌ | Approval wait time in ms (default: 86400000) |
-| `POLL_INTERVAL` | ❌ | GitHub polling interval in ms (default: 300000) |
+| Variable            | Required | Description                                     |
+| ------------------- | -------- | ----------------------------------------------- |
+| `GITHUB_TOKEN`      | ✅       | GitHub Personal Access Token                    |
+| `GITHUB_REPO_OWNER` | ✅       | Repository owner (e.g., `facebook`)             |
+| `GITHUB_REPO_NAME`  | ✅       | Repository name (e.g., `react`)                 |
+| `AGENT_TIMEOUT`     | ❌       | Timeout per agent in ms (default: 300000)       |
+| `APPROVAL_TIMEOUT`  | ❌       | Approval wait time in ms (default: 86400000)    |
+| `POLL_INTERVAL`     | ❌       | GitHub polling interval in ms (default: 300000) |
 
 ### Customizing Phases
 
@@ -247,13 +253,13 @@ Edit `scripts/agents/types.ts` to modify the `SDLC_PHASES` array:
 ```typescript
 export const SDLC_PHASES: SDLCPhase[] = [
   {
-    id: 'spec',
-    name: 'Specification',
-    agent: 'product-planner',
-    statusLabel: 'spec-writing',
+    id: "spec",
+    name: "Specification",
+    agent: "product-planner",
+    statusLabel: "spec-writing",
     requiresApproval: true,
-    approvalLabel: 'spec-approved',
-    description: 'Define feature scope',
+    approvalLabel: "spec-approved",
+    description: "Define feature scope",
   },
   // Add/remove/modify phases here
 ];
@@ -264,6 +270,7 @@ export const SDLC_PHASES: SDLCPhase[] = [
 ### Pipeline Not Running
 
 **Check:**
+
 1. GitHub token is valid and has correct scopes
 2. Issue has `backlog-item` label
 3. Workflow is enabled in repository settings
@@ -272,6 +279,7 @@ export const SDLC_PHASES: SDLCPhase[] = [
 ### Approval Not Detected
 
 **Check:**
+
 1. Approval label is spelled correctly (case-sensitive)
 2. Pipeline has run since label was added
 3. Check issue comments for approval status
@@ -279,6 +287,7 @@ export const SDLC_PHASES: SDLCPhase[] = [
 ### Agent Timeout
 
 **Solutions:**
+
 1. Increase `AGENT_TIMEOUT` environment variable
 2. Check if agent is stuck on large context
 3. Review agent output for errors
@@ -286,6 +295,7 @@ export const SDLC_PHASES: SDLCPhase[] = [
 ### GitHub API Rate Limits
 
 **Solutions:**
+
 1. Use a Personal Access Token (higher limits)
 2. Increase `POLL_INTERVAL` to reduce API calls
 3. For large repos, consider GitHub App authentication

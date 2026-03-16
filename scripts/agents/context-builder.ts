@@ -1,13 +1,13 @@
 /**
  * Context Builder
- * 
+ *
  * Builds detailed prompts for agents with project context,
  * ensuring agents have full information for autonomous work
  */
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import { BacklogItem, AgentType, SDLCPhase, PipelineContext } from './types';
+import * as fs from "fs/promises";
+import * as path from "path";
+import { BacklogItem, AgentType, SDLCPhase, PipelineContext } from "./types";
 
 /**
  * Configuration for context building
@@ -33,21 +33,21 @@ const DEFAULT_CONFIG: ContextBuilderConfig = {
   maxFileSize: 100 * 1024, // 100KB
   maxContextSize: 500 * 1024, // 500KB
   alwaysInclude: [
-    'package.json',
-    'README.md',
-    'QWEN.md',
-    'tsconfig.json',
-    'app.json',
+    "package.json",
+    "README.md",
+    "QWEN.md",
+    "tsconfig.json",
+    "app.json",
   ],
   excludePatterns: [
-    'node_modules',
-    '.git',
-    '.expo',
-    '__tests__',
-    '*.test.ts',
-    '*.test.tsx',
-    'build',
-    'dist',
+    "node_modules",
+    ".git",
+    ".expo",
+    "__tests__",
+    "*.test.ts",
+    "*.test.tsx",
+    "build",
+    "dist",
   ],
 };
 
@@ -68,7 +68,7 @@ export class ContextBuilder {
     agentType: AgentType,
     backlogItem: BacklogItem,
     phase: SDLCPhase,
-    previousResults: Array<{ phase: string; output: string }> = []
+    previousResults: Array<{ phase: string; output: string }> = [],
   ): Promise<string> {
     const sections: string[] = [];
 
@@ -92,36 +92,37 @@ export class ContextBuilder {
     // 6. Output expectations
     sections.push(this.buildOutputExpectations(phase, agentType));
 
-    return sections.join('\n\n---\n\n');
+    return sections.join("\n\n---\n\n");
   }
 
   /**
    * Build project overview section
    */
   private async buildProjectOverview(): Promise<string> {
-    let overview = '# Project Context\n\n';
-    overview += '## Project Structure\n';
-    overview += 'This is a React Native + Expo fitness tracking application called "Trapp Tracker" (FitTrack Pro).\n\n';
+    let overview = "# Project Context\n\n";
+    overview += "## Project Structure\n";
+    overview +=
+      'This is a React Native + Expo fitness tracking application called "Trapp Tracker" (FitTrack Pro).\n\n';
 
     // Read QWEN.md if available
     try {
-      const qwenPath = path.join(this.config.projectRoot, 'QWEN.md');
-      const qwenContent = await fs.readFile(qwenPath, 'utf-8');
-      overview += '## Project Documentation\n';
+      const qwenPath = path.join(this.config.projectRoot, "QWEN.md");
+      const qwenContent = await fs.readFile(qwenPath, "utf-8");
+      overview += "## Project Documentation\n";
       overview += qwenContent.substring(0, 2000); // Limit size
-      overview += '\n...(truncated)...\n';
+      overview += "\n...(truncated)...\n";
     } catch {
-      overview += 'See QWEN.md for detailed project documentation.\n';
+      overview += "See QWEN.md for detailed project documentation.\n";
     }
 
     // Tech stack summary
-    overview += '\n## Tech Stack\n';
-    overview += '- **Frontend**: React Native 0.81.5, Expo SDK 55.0.6\n';
-    overview += '- **Language**: TypeScript 5.9.2\n';
-    overview += '- **Navigation**: React Navigation 6.x\n';
-    overview += '- **Storage**: AsyncStorage\n';
-    overview += '- **Backend**: Express.js with lowdb (optional)\n';
-    overview += '- **Testing**: Jest + React Native Testing Library\n';
+    overview += "\n## Tech Stack\n";
+    overview += "- **Frontend**: React Native 0.81.5, Expo SDK 55.0.6\n";
+    overview += "- **Language**: TypeScript 5.9.2\n";
+    overview += "- **Navigation**: React Navigation 6.x\n";
+    overview += "- **Storage**: AsyncStorage\n";
+    overview += "- **Backend**: Express.js with lowdb (optional)\n";
+    overview += "- **Testing**: Jest + React Native Testing Library\n";
 
     return overview;
   }
@@ -132,7 +133,7 @@ export class ContextBuilder {
   private buildIssueDetails(item: BacklogItem): string {
     const { issue, status, completedPhases, pendingPhases } = item;
 
-    let details = '# Issue Details\n\n';
+    let details = "# Issue Details\n\n";
     details += `**Title**: ${issue.title}\n`;
     details += `**Issue #**: ${issue.number}\n`;
     details += `**URL**: ${issue.html_url}\n`;
@@ -142,12 +143,12 @@ export class ContextBuilder {
       details += `**Description**:\n${issue.body}\n\n`;
     }
 
-    details += `**Labels**: ${issue.labels.map(l => 
-      typeof l === 'string' ? l : l.name
-    ).join(', ')}\n\n`;
+    details += `**Labels**: ${issue.labels
+      .map((l) => (typeof l === "string" ? l : l.name))
+      .join(", ")}\n\n`;
 
-    details += `**Completed Phases**: ${completedPhases.join(', ') || 'None'}\n`;
-    details += `**Pending Phases**: ${pendingPhases.join(', ')}\n`;
+    details += `**Completed Phases**: ${completedPhases.join(", ") || "None"}\n`;
+    details += `**Pending Phases**: ${pendingPhases.join(", ")}\n`;
 
     return details;
   }
@@ -155,9 +156,12 @@ export class ContextBuilder {
   /**
    * Build phase-specific instructions
    */
-  private buildPhaseInstructions(phase: SDLCPhase, agentType: AgentType): string {
+  private buildPhaseInstructions(
+    phase: SDLCPhase,
+    agentType: AgentType,
+  ): string {
     const instructions: Record<string, string> = {
-      'product-planner': `
+      "product-planner": `
 # Specification Phase Instructions
 
 Your task is to create a comprehensive product specification for this feature.
@@ -175,7 +179,7 @@ Your task is to create a comprehensive product specification for this feature.
 - Consider both happy path and error cases
 - Reference existing app patterns from QWEN.md
 `,
-      'software-architect': `
+      "software-architect": `
 # Architecture Phase Instructions
 
 Your task is to design the technical architecture for this feature.
@@ -194,7 +198,7 @@ Your task is to design the technical architecture for this feature.
 - Reference existing patterns in src/ directory
 - Consider offline-first architecture
 `,
-      'ux-ui-designer': `
+      "ux-ui-designer": `
 # Design Phase Instructions
 
 Your task is to create UI/UX designs for this feature.
@@ -216,7 +220,7 @@ Your task is to create UI/UX designs for this feature.
 - Use ASCII wireframes if helpful
 - Specify colors, spacing, typography from theme.ts
 `,
-      'expo-react-native-developer': `
+      "expo-react-native-developer": `
 # Development Phase Instructions
 
 Your task is to implement the feature code based on previous phases.
@@ -239,7 +243,7 @@ Your task is to implement the feature code based on previous phases.
 - Include file path at top of each code block
 - Explain any non-obvious implementation choices
 `,
-      'integration-tester': `
+      "integration-tester": `
 # Testing Phase Instructions
 
 Your task is to validate the implementation works correctly.
@@ -257,7 +261,7 @@ Your task is to validate the implementation works correctly.
 - Report any bugs or issues found
 - Suggest improvements
 `,
-      'code-reviewer': `
+      "code-reviewer": `
 # Code Review Phase Instructions
 
 Your task is to review the code for quality, security, and maintainability.
@@ -277,19 +281,24 @@ Your task is to review the code for quality, security, and maintainability.
 `,
     };
 
-    return instructions[agentType] || `# ${phase.name} Phase\n\nExecute the ${phase.description} for this issue.`;
+    return (
+      instructions[agentType] ||
+      `# ${phase.name} Phase\n\nExecute the ${phase.description} for this issue.`
+    );
   }
 
   /**
    * Build previous results section
    */
-  private buildPreviousResults(results: Array<{ phase: string; output: string }>): string {
-    let section = '# Previous Phase Results\n\n';
+  private buildPreviousResults(
+    results: Array<{ phase: string; output: string }>,
+  ): string {
+    let section = "# Previous Phase Results\n\n";
 
     for (const result of results) {
       section += `## ${result.phase} Phase Output\n\n`;
       section += result.output.substring(0, 1500); // Limit size
-      section += '\n...(truncated)...\n\n';
+      section += "\n...(truncated)...\n\n";
     }
 
     return section;
@@ -300,15 +309,15 @@ Your task is to review the code for quality, security, and maintainability.
    */
   private async buildRelevantFiles(
     agentType: AgentType,
-    phase: SDLCPhase
+    phase: SDLCPhase,
   ): Promise<string> {
-    let section = '# Relevant Project Files\n\n';
+    let section = "# Relevant Project Files\n\n";
 
     // Always include key config files
     for (const file of this.config.alwaysInclude) {
       const filePath = path.join(this.config.projectRoot, file);
       try {
-        const content = await fs.readFile(filePath, 'utf-8');
+        const content = await fs.readFile(filePath, "utf-8");
         if (content.length < this.config.maxFileSize) {
           section += `## ${file}\n\`\`\`\n${content}\n\`\`\`\n\n`;
         } else {
@@ -324,7 +333,7 @@ Your task is to review the code for quality, security, and maintainability.
     for (const filePattern of phaseFiles) {
       try {
         const fullPath = path.join(this.config.projectRoot, filePattern);
-        const content = await fs.readFile(fullPath, 'utf-8');
+        const content = await fs.readFile(fullPath, "utf-8");
         if (content.length < this.config.maxFileSize) {
           section += `## ${filePattern}\n\`\`\`\n${content}\n\`\`\`\n\n`;
         }
@@ -339,18 +348,21 @@ Your task is to review the code for quality, security, and maintainability.
   /**
    * Get files relevant to specific phase
    */
-  private getPhaseSpecificFiles(agentType: AgentType, phase: SDLCPhase): string[] {
+  private getPhaseSpecificFiles(
+    agentType: AgentType,
+    phase: SDLCPhase,
+  ): string[] {
     const files: Record<AgentType, string[]> = {
-      'product-planner': ['src/screens/', 'src/models.ts'],
-      'software-architect': ['src/models.ts', 'src/storage.ts', 'src/auth/'],
-      'ux-ui-designer': ['src/theme.ts', 'src/components/', 'src/screens/'],
-      'expo-react-native-developer': ['src/', 'App.tsx', 'app.json'],
-      'express-backend-engineer': ['backend/'],
-      'api-tester': ['backend/', 'src/storage.ts'],
-      'ui-tester': ['src/screens/', 'src/components/', '__tests__/'],
-      'integration-tester': ['src/', 'backend/', '__tests__/'],
-      'code-reviewer': ['src/', 'backend/', 'package.json', 'tsconfig.json'],
-      'devops-ci-engineer': ['.github/', 'package.json', 'app.json'],
+      "product-planner": ["src/screens/", "src/models.ts"],
+      "software-architect": ["src/models.ts", "src/storage.ts", "src/auth/"],
+      "ux-ui-designer": ["src/theme.ts", "src/components/", "src/screens/"],
+      "expo-react-native-developer": ["src/", "App.tsx", "app.json"],
+      "express-backend-engineer": ["backend/"],
+      "api-tester": ["backend/", "src/storage.ts"],
+      "ui-tester": ["src/screens/", "src/components/", "__tests__/"],
+      "integration-tester": ["src/", "backend/", "__tests__/"],
+      "code-reviewer": ["src/", "backend/", "package.json", "tsconfig.json"],
+      "devops-ci-engineer": [".github/", "package.json", "app.json"],
     };
 
     return files[agentType] || [];
@@ -359,7 +371,10 @@ Your task is to review the code for quality, security, and maintainability.
   /**
    * Build output expectations
    */
-  private buildOutputExpectations(phase: SDLCPhase, agentType: AgentType): string {
+  private buildOutputExpectations(
+    phase: SDLCPhase,
+    agentType: AgentType,
+  ): string {
     return `# Output Expectations
 
 ## For This Phase (${phase.name}):
@@ -383,20 +398,20 @@ Your task is to review the code for quality, security, and maintainability.
     backlogItem: BacklogItem,
     phase: SDLCPhase,
     customSections: Array<{ title: string; content: string }> = [],
-    previousResults: Array<{ phase: string; output: string }> = []
+    previousResults: Array<{ phase: string; output: string }> = [],
   ): Promise<string> {
     const baseContext = await this.buildContext(
       agentType,
       backlogItem,
       phase,
-      previousResults
+      previousResults,
     );
 
     if (customSections.length > 0) {
       const customSection = [
-        '\n\n---\n\n# Custom Context\n',
-        ...customSections.map(s => `## ${s.title}\n\n${s.content}`),
-      ].join('\n');
+        "\n\n---\n\n# Custom Context\n",
+        ...customSections.map((s) => `## ${s.title}\n\n${s.content}`),
+      ].join("\n");
 
       return baseContext + customSection;
     }

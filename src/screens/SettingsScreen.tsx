@@ -1,9 +1,23 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Alert, SafeAreaView, ScrollView, Share, StyleSheet, Text, View } from "react-native";
-import { colors, spacing, typography } from "../theme";
-import { AppState } from "../models";
-import { getDeviceId, loadAppState, saveAppState, useAppStorage } from "../storage";
+import {
+  Alert,
+  SafeAreaView,
+  ScrollView,
+  Share,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
 import { useAuth } from "../auth/AuthContext";
+import { AppState } from "../models";
+import {
+  getDeviceId,
+  loadAppState,
+  saveAppState,
+  useAppStorage,
+} from "../storage";
+import { colors, spacing, typography } from "../theme";
 
 const DEFAULT_SYNC_URL = "http://localhost:4000";
 
@@ -44,7 +58,7 @@ export function SettingsScreen() {
         title: "FitTrack export",
         message: JSON.stringify(state, null, 2),
       });
-    } catch (error) {
+    } catch {
       Alert.alert("Export failed", "Unable to share data.");
     }
   }, [state]);
@@ -61,7 +75,12 @@ export function SettingsScreen() {
       const res = await fetch(`${DEFAULT_SYNC_URL}/sync`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: user.username, passwordHash, deviceId, payload: state }),
+        body: JSON.stringify({
+          username: user.username,
+          passwordHash,
+          deviceId,
+          payload: state,
+        }),
       });
       const json = await res.json();
       if (!res.ok) {
@@ -77,7 +96,10 @@ export function SettingsScreen() {
 
   const handleFetch = useCallback(async () => {
     if (!user?.username || !passwordHash) {
-      Alert.alert("Sign in required", "Please sign in before fetching remote data.");
+      Alert.alert(
+        "Sign in required",
+        "Please sign in before fetching remote data.",
+      );
       return;
     }
 
@@ -116,7 +138,9 @@ export function SettingsScreen() {
           <Text style={styles.cardTitle}>Account</Text>
           {user ? (
             <>
-              <Text style={styles.cardSubtitle}>Signed in as {user.username}</Text>
+              <Text style={styles.cardSubtitle}>
+                Signed in as {user.username}
+              </Text>
               <Text style={styles.link} onPress={signOut}>
                 Sign out
               </Text>
@@ -128,7 +152,9 @@ export function SettingsScreen() {
 
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Data</Text>
-          <Text style={styles.cardSubtitle}>Reset all logged activities and start fresh.</Text>
+          <Text style={styles.cardSubtitle}>
+            Reset all logged activities and start fresh.
+          </Text>
           <Text style={styles.link} onPress={handleReset}>
             Reset data
           </Text>
@@ -141,12 +167,21 @@ export function SettingsScreen() {
           <Text style={styles.link} onPress={handleFetch}>
             Download remote data
           </Text>
-          {syncStatus ? <Text style={styles.syncStatus}>{syncStatus}</Text> : null}
+          {syncStatus ? (
+            <Text style={styles.syncStatus}>{syncStatus}</Text>
+          ) : null}
         </View>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>About</Text>
-          <Text style={styles.cardSubtitle}>A simple workout logger built with Expo + React Native.</Text>
-          <Text style={styles.link} onPress={() => Alert.alert("Version", "1.0.0")}>Version 1.0.0</Text>
+          <Text style={styles.cardSubtitle}>
+            A simple workout logger built with Expo + React Native.
+          </Text>
+          <Text
+            style={styles.link}
+            onPress={() => Alert.alert("Version", "1.0.0")}
+          >
+            Version 1.0.0
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>

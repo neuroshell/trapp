@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+
 import { colors, shadows } from "../theme";
 
 type Props = {

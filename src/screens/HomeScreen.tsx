@@ -1,9 +1,17 @@
-import React from "react";
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { RootTabParamList } from "../navigation/types";
+import React from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
 import { Card } from "../components/Card";
 import { IconButton } from "../components/IconButton";
+import { RootTabParamList } from "../navigation/types";
 import { colors, spacing, typography } from "../theme";
 
 type Props = BottomTabScreenProps<RootTabParamList, "Home">;
@@ -14,7 +22,9 @@ export function HomeScreen({ navigation }: Props) {
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>FitTrack Pro</Text>
-        <Text style={styles.subtitle}>Quickly log activity and track progress.</Text>
+        <Text style={styles.subtitle}>
+          Quickly log activity and track progress.
+        </Text>
 
         <Card style={styles.statsCard}>
           <View style={styles.statsRow}>
@@ -58,7 +68,8 @@ export function HomeScreen({ navigation }: Props) {
         <Text style={styles.sectionTitle}>Latest Activity</Text>
         <Card style={styles.placeholderCard}>
           <Text style={styles.placeholderText}>
-            Your latest workouts will appear here once you start logging activities.
+            Your latest workouts will appear here once you start logging
+            activities.
           </Text>
         </Card>
       </ScrollView>

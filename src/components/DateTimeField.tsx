@@ -1,8 +1,9 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import { colors, spacing, typography } from "../theme";
 
 type Props = {
@@ -17,7 +18,10 @@ function formatDateTime(value: Date) {
     month: "short",
     day: "numeric",
   });
-  const time = value.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+  const time = value.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
   return `${date} · ${time}`;
 }
 
@@ -41,7 +45,11 @@ export function DateTimeField({ label, value, onChange }: Props) {
       {label ? <Text style={styles.label}>{label}</Text> : null}
       <Pressable style={styles.button} onPress={() => setShow(true)}>
         <Text style={styles.value}>{formatDateTime(value)}</Text>
-        <MaterialCommunityIcons name="calendar" size={18} color={colors.primary} />
+        <MaterialCommunityIcons
+          name="calendar"
+          size={18}
+          color={colors.primary}
+        />
       </Pressable>
 
       {Platform.OS === "web" ? (
@@ -60,7 +68,6 @@ export function DateTimeField({ label, value, onChange }: Props) {
           date={value}
           onConfirm={handleConfirm}
           onCancel={() => setShow(false)}
-          headerTextIOS="Select date & time"
           confirmTextIOS="Confirm"
           cancelTextIOS="Cancel"
         />

@@ -8,45 +8,45 @@ on:
   # Trigger on version tags
   push:
     tags:
-      - 'v*'
-  
+      - "v*"
+
   # Manual trigger with options
   workflow_dispatch:
     inputs:
       build_type:
-        description: 'Build Type'
+        description: "Build Type"
         required: true
         type: choice
         options:
           - production
           - preview
-        default: 'preview'
+        default: "preview"
       platform:
-        description: 'Platform'
+        description: "Platform"
         required: true
         type: choice
         options:
           - both
           - ios
           - android
-        default: 'both'
+        default: "both"
       profile:
-        description: 'EAS Build Profile'
+        description: "EAS Build Profile"
         required: true
         type: choice
         options:
           - production
           - development
-        default: 'production'
+        default: "production"
       submit_to_store:
-        description: 'Submit to App Store'
+        description: "Submit to App Store"
         required: false
         type: boolean
         default: false
 
 env:
-  NODE_VERSION: '18'
-  EAS_VERSION: 'latest'
+  NODE_VERSION: "18"
+  EAS_VERSION: "latest"
 
 jobs:
   # ===========================================
@@ -89,11 +89,13 @@ jobs:
           echo "EAS configuration found"
 
       - name: Notify build starting
-        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         run: |
           curl -X POST -H 'Content-type: application/json' \
             --data "{\"text\":\"🚀 Trapp Tracker mobile build starting for version ${{ steps.version.outputs.version }}\"}" \
             ${{ secrets.SLACK_WEBHOOK_URL }} || echo "Slack notification skipped"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
   # ===========================================
   # IOS BUILD
@@ -118,7 +120,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -192,7 +194,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -312,21 +314,23 @@ jobs:
           fi
 
       - name: Send Slack notification
-        if: ${{ secrets.SLACK_WEBHOOK_URL != '' }}
+        if: ${{ env.SLACK_WEBHOOK_URL != '' }}
         run: |
           STATUS="${{ steps.status.outputs.status }}"
           EMOJI="${{ steps.status.outputs.emoji }}"
           VERSION="${{ needs.validate.outputs.version }}"
-          
+
           if [ "$STATUS" == "success" ]; then
             MESSAGE="${EMOJI} Trapp Tracker mobile build *SUCCESS* for version ${VERSION}"
           else
             MESSAGE="${EMOJI} Trapp Tracker mobile build *FAILED* for version ${VERSION}"
           fi
-          
+
           curl -X POST -H 'Content-type: application/json' \
             --data "{\"text\":\"${MESSAGE}\", \"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"${MESSAGE}\"}}]}" \
             ${{ secrets.SLACK_WEBHOOK_URL }} || echo "Slack notification skipped"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Create GitHub Release (on tag)
         if: startsWith(github.ref, 'refs/tags/') && steps.status.outputs.status == 'success'
@@ -335,15 +339,15 @@ jobs:
           name: Release ${{ github.ref_name }}
           body: |
             ## Trapp Tracker ${{ github.ref_name }}
-            
+
             ### What's New
             - iOS and Android builds generated via EAS Build
             - Build artifacts available in GitHub Actions
-            
+
             ### Installation
             - iOS: Available via TestFlight
             - Android: Available via Google Play Internal Testing
-            
+
             ---
             *Automated release from CI/CD pipeline*
           draft: false
@@ -363,5 +367,5 @@ jobs:
             const version = '${{ needs.validate.outputs.version }}';
             const status = '${{ steps.status.outputs.status }}';
             const emoji = '${{ steps.status.outputs.emoji }}';
-            
+
             console.log(`Build ${status} for version ${version} ${emoji}`);

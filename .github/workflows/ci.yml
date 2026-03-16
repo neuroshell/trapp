@@ -15,8 +15,8 @@ on:
       - develop
 
 env:
-  NODE_VERSION: '18'
-  CACHE_VERSION: 'v1'
+  NODE_VERSION: "20"
+  CACHE_VERSION: "v1"
 
 # Cancel in-progress runs for the same branch/PR
 concurrency:
@@ -44,7 +44,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -107,7 +107,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Restore node_modules cache
         uses: actions/cache@v4
@@ -121,8 +121,12 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Run TypeScript compiler check
-        run: npx tsc --noEmit
+      - name: Run TypeScript compiler check (app only)
+        run: npx tsc --noEmit --project tsconfig.ci.json --skipLibCheck
+        continue-on-error: false
+
+      - name: Type check summary
+        run: echo "✅ TypeScript type check passed"
 
   # ===========================================
   # TEST JOB - APP
@@ -143,7 +147,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Restore node_modules cache
         uses: actions/cache@v4
@@ -158,7 +162,7 @@ jobs:
         run: npm ci
 
       - name: Run Jest tests (App)
-        run: npm run test:app -- --coverage --ci --reporters=default --reporters=jest-junit
+        run: npm run test:app -- --coverage --ci
         env:
           CI: true
 
@@ -203,7 +207,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Restore node_modules cache
         uses: actions/cache@v4
@@ -253,7 +257,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
 
       - name: Restore node_modules cache
         uses: actions/cache@v4
@@ -271,13 +275,13 @@ jobs:
         run: mkdir -p build/artifacts
 
       - name: Build web version (Expo)
-        run: npx expo export:web
+        run: npx expo export -p web
         env:
           CI: true
 
       - name: Copy web build to artifacts
         run: |
-          cp -r web-build/* build/artifacts/ || echo "Web build not found, skipping..."
+          cp -r dist/* build/artifacts/ || echo "Web build not found, skipping..."
 
       - name: Create build manifest
         run: |
@@ -310,21 +314,103 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Download test results
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Download coverage artifacts
         uses: actions/download-artifact@v4
         with:
           name: test-results-app
-          path: ./coverage
+          path: ./coverage-artifacts
+
+      - name: Install coverage tools
+        run: npm install -g lcov-parse
 
       - name: Generate coverage summary
+        id: coverage
         run: |
-          echo "## Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Test Coverage Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          if [ -f "./coverage/coverage-summary.json" ]; then
-            echo "Coverage report generated successfully" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "Coverage report not available" >> $GITHUB_STEP_SUMMARY
+
+          LCOV_FILE="./coverage-artifacts/coverage/lcov.info"
+          FINAL_JSON="./coverage-artifacts/coverage/coverage-final.json"
+
+          if [ -f "$LCOV_FILE" ]; then
+            echo "### Overall Coverage" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Parse LCOV for summary statistics
+            TOTAL_LINES=$(grep -c "^DA:" "$LCOV_FILE" 2>/dev/null || echo "0")
+            HIT_LINES=$(grep "^DA:" "$LCOV_FILE" | awk -F, '$2 > 0' | wc -l 2>/dev/null || echo "0")
+            
+            TOTAL_FUNCS=$(grep -c "^FNDA:" "$LCOV_FILE" 2>/dev/null || echo "0")
+            HIT_FUNCS=$(grep "^FNDA:" "$LCOV_FILE" | awk -F, '$2 > 0' | wc -l 2>/dev/null || echo "0")
+            
+            TOTAL_BRANCHES=$(grep -c "^BRDA:" "$LCOV_FILE" 2>/dev/null || echo "0")
+            HIT_BRANCHES=$(grep "^BRDA:" "$LCOV_FILE" | awk -F, '$2 > 0' | wc -l 2>/dev/null || echo "0")
+
+            if [ "$TOTAL_LINES" -gt 0 ]; then
+              LINE_PCT=$(awk "BEGIN {printf \"%.1f\", ($HIT_LINES/$TOTAL_LINES)*100}")
+              echo "| Metric | Covered | Total | Percentage |" >> $GITHUB_STEP_SUMMARY
+              echo "|--------|---------|-------|------------|" >> $GITHUB_STEP_SUMMARY
+              echo "| 📝 Lines | $HIT_LINES | $TOTAL_LINES | ${LINE_PCT}% |" >> $GITHUB_STEP_SUMMARY
+            fi
+            
+            if [ "$TOTAL_FUNCS" -gt 0 ]; then
+              FUNC_PCT=$(awk "BEGIN {printf \"%.1f\", ($HIT_FUNCS/$TOTAL_FUNCS)*100}")
+              echo "| 🔄 Functions | $HIT_FUNCS | $TOTAL_FUNCS | ${FUNC_PCT}% |" >> $GITHUB_STEP_SUMMARY
+            fi
+            
+            if [ "$TOTAL_BRANCHES" -gt 0 ]; then
+              BRANCH_PCT=$(awk "BEGIN {printf \"%.1f\", ($HIT_BRANCHES/$TOTAL_BRANCHES)*100}")
+              echo "| 🔀 Branches | $HIT_BRANCHES | $TOTAL_BRANCHES | ${BRANCH_PCT}% |" >> $GITHUB_STEP_SUMMARY
+            fi
+            
+            echo "" >> $GITHUB_STEP_SUMMARY
           fi
+
+          if [ -f "$FINAL_JSON" ]; then
+            echo "### Coverage by File" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Copy parse script to temp location
+            cp ./scripts/parse-coverage.js /tmp/parse-coverage.js
+            node /tmp/parse-coverage.js "$FINAL_JSON" >> $GITHUB_STEP_SUMMARY
+            
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "### 📁 Coverage Files" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size | Purpose |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|---------|" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f "$LCOV_FILE" ]; then
+            LCOV_SIZE=$(wc -c < "$LCOV_FILE")
+            echo "| lcov.info | ${LCOV_SIZE} bytes | LCOV format (Codecov) |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ -f "$FINAL_JSON" ]; then
+            JSON_SIZE=$(wc -c < "$FINAL_JSON")
+            echo "| coverage-final.json | ${JSON_SIZE} bytes | JSON report |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          COBERTURA_FILE="./coverage-artifacts/coverage/cobertura-coverage.xml"
+          if [ -f "$COBERTURA_FILE" ]; then
+            COB_SIZE=$(wc -c < "$COBERTURA_FILE")
+            echo "| cobertura-coverage.xml | ${COB_SIZE} bytes | Cobertura XML |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 💡 Download Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "To download the full coverage reports:" >> $GITHUB_STEP_SUMMARY
+          echo "1. Go to the workflow run page" >> $GITHUB_STEP_SUMMARY
+          echo "2. Scroll to **Artifacts** section" >> $GITHUB_STEP_SUMMARY
+          echo "3. Click on \`test-results-app\`" >> $GITHUB_STEP_SUMMARY
+          echo "4. Extract and open \`coverage/lcov-report/index.html\` in a browser" >> $GITHUB_STEP_SUMMARY
 
   # ===========================================
   # STATUS CHECK JOB

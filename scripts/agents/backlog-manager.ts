@@ -1,10 +1,10 @@
 /**
  * Backlog Manager
- * 
+ *
  * Handles GitHub Issues API interactions for managing the agentic SDLC backlog
  */
 
-import { Octokit } from '@octokit/rest';
+import { Octokit } from "@octokit/rest";
 import {
   GitHubIssue,
   BacklogItem,
@@ -12,7 +12,7 @@ import {
   SDLC_PHASES,
   getPhaseByStatusLabel,
   getNextPhase,
-} from './types';
+} from "./types";
 
 /**
  * Configuration for BacklogManager
@@ -39,9 +39,9 @@ export class BacklogManager {
 
   constructor(config: BacklogManagerConfig) {
     if (!config.token) {
-      throw new Error('GitHub token is required');
+      throw new Error("GitHub token is required");
     }
-    
+
     this.config = config;
     this.octokit = new Octokit({
       auth: config.token,
@@ -55,14 +55,12 @@ export class BacklogManager {
     const { data: issues } = await this.octokit.issues.listForRepo({
       owner: this.config.owner,
       repo: this.config.repo,
-      state: 'open',
+      state: "open",
       labels: this.config.backlogLabel,
       per_page: 100,
     });
 
-    return Promise.all(
-      issues.map(issue => this.parseBacklogItem(issue))
-    );
+    return Promise.all(issues.map((issue) => this.parseBacklogItem(issue)));
   }
 
   /**
@@ -82,9 +80,9 @@ export class BacklogManager {
    * Parse a GitHub issue into a BacklogItem
    */
   private async parseBacklogItem(issue: GitHubIssue): Promise<BacklogItem> {
-    const labels = issue.labels.map(l => 
-      typeof l === 'string' ? l : l.name
-    ).filter(Boolean) as string[];
+    const labels = issue.labels
+      .map((l) => (typeof l === "string" ? l : l.name))
+      .filter(Boolean) as string[];
 
     // Determine current status from labels
     const status = this.determineStatus(labels);
@@ -93,7 +91,7 @@ export class BacklogManager {
     // Calculate completed and pending phases
     const completedPhases: string[] = [];
     const pendingPhases: string[] = [];
-    
+
     let foundCurrent = false;
     for (const phase of SDLC_PHASES) {
       if (phase.statusLabel === status) {
@@ -108,8 +106,8 @@ export class BacklogManager {
 
     // Check if approval is needed and received
     const needsApproval = currentPhase?.requiresApproval ?? false;
-    const approvalReceived = needsApproval && 
-      labels.includes(currentPhase!.approvalLabel!);
+    const approvalReceived =
+      needsApproval && labels.includes(currentPhase!.approvalLabel!);
 
     return {
       issue,
@@ -134,11 +132,11 @@ export class BacklogManager {
     }
 
     // Check for final states
-    if (labels.includes('ready-to-merge')) return 'ready-to-merge';
-    if (labels.includes('done') || labels.includes('completed')) return 'done';
+    if (labels.includes("ready-to-merge")) return "ready-to-merge";
+    if (labels.includes("done") || labels.includes("completed")) return "done";
 
     // Default to backlog
-    return 'backlog';
+    return "backlog";
   }
 
   /**
@@ -147,22 +145,23 @@ export class BacklogManager {
   async updateStatus(
     issueNumber: number,
     newStatus: IssueStatus,
-    removeOldLabels: boolean = true
+    removeOldLabels: boolean = true,
   ): Promise<void> {
     const issue = await this.getIssue(issueNumber);
-    const currentLabels = issue.issue.labels.map(l => 
-      typeof l === 'string' ? l : l.name
-    ).filter(Boolean) as string[];
+    const currentLabels = issue.issue.labels
+      .map((l) => (typeof l === "string" ? l : l.name))
+      .filter(Boolean) as string[];
 
-    let newLabels = currentLabels.filter(l => l !== this.config.backlogLabel);
+    let newLabels = currentLabels.filter((l) => l !== this.config.backlogLabel);
 
     if (removeOldLabels) {
       // Remove old SDLC status labels
-      newLabels = newLabels.filter(l => 
-        !SDLC_PHASES.some(p => p.statusLabel === l) &&
-        l !== 'ready-to-merge' &&
-        l !== 'done' &&
-        l !== 'completed'
+      newLabels = newLabels.filter(
+        (l) =>
+          !SDLC_PHASES.some((p) => p.statusLabel === l) &&
+          l !== "ready-to-merge" &&
+          l !== "done" &&
+          l !== "completed",
       );
     }
 
@@ -181,7 +180,7 @@ export class BacklogManager {
    * Add a comment to an issue
    */
   async addComment(issueNumber: number, body: string): Promise<void> {
-    const commentBody = this.config.commentPrefix 
+    const commentBody = this.config.commentPrefix
       ? `**${this.config.commentPrefix}**: ${body}`
       : body;
 
@@ -196,11 +195,8 @@ export class BacklogManager {
   /**
    * Add approval label to an issue
    */
-  async addApprovalLabel(
-    issueNumber: number,
-    phaseId: string
-  ): Promise<void> {
-    const phase = SDLC_PHASES.find(p => p.id === phaseId);
+  async addApprovalLabel(issueNumber: number, phaseId: string): Promise<void> {
+    const phase = SDLC_PHASES.find((p) => p.id === phaseId);
     if (!phase?.approvalLabel) {
       throw new Error(`Phase ${phaseId} does not require approval`);
     }
@@ -216,19 +212,16 @@ export class BacklogManager {
   /**
    * Check if approval label exists for a phase
    */
-  async checkApproval(
-    issueNumber: number,
-    phaseId: string
-  ): Promise<boolean> {
+  async checkApproval(issueNumber: number, phaseId: string): Promise<boolean> {
     const issue = await this.getIssue(issueNumber);
-    const phase = SDLC_PHASES.find(p => p.id === phaseId);
-    
+    const phase = SDLC_PHASES.find((p) => p.id === phaseId);
+
     if (!phase?.approvalLabel) {
       return false;
     }
 
-    return issue.issue.labels.some(l => 
-      (typeof l === 'string' ? l : l.name) === phase.approvalLabel
+    return issue.issue.labels.some(
+      (l) => (typeof l === "string" ? l : l.name) === phase.approvalLabel,
     );
   }
 
@@ -238,7 +231,7 @@ export class BacklogManager {
   async createIssue(
     title: string,
     body: string,
-    labels: string[] = [this.config.backlogLabel]
+    labels: string[] = [this.config.backlogLabel],
   ): Promise<BacklogItem> {
     const { data: issue } = await this.octokit.issues.create({
       owner: this.config.owner,
@@ -259,7 +252,7 @@ export class BacklogManager {
       owner: this.config.owner,
       repo: this.config.repo,
       issue_number: issueNumber,
-      state: 'closed',
+      state: "closed",
     });
   }
 
@@ -268,7 +261,7 @@ export class BacklogManager {
    */
   async createBranch(
     branchName: string,
-    fromBranch: string = 'main'
+    fromBranch: string = "main",
   ): Promise<void> {
     // Get the latest commit SHA from the base branch
     const { data: ref } = await this.octokit.git.getRef({
@@ -293,8 +286,8 @@ export class BacklogManager {
     title: string,
     body: string,
     head: string,
-    base: string = 'main',
-    issueNumber?: number
+    base: string = "main",
+    issueNumber?: number,
   ): Promise<{ number: number; url: string }> {
     const { data: pr } = await this.octokit.pulls.create({
       owner: this.config.owner,
@@ -307,8 +300,9 @@ export class BacklogManager {
 
     // Link PR to issue if provided
     if (issueNumber) {
-      await this.addComment(issueNumber, 
-        `Created PR #${pr.number}: ${pr.html_url}`
+      await this.addComment(
+        issueNumber,
+        `Created PR #${pr.number}: ${pr.html_url}`,
       );
     }
 
@@ -323,9 +317,7 @@ export class BacklogManager {
    */
   async getIssuesNeedingApproval(): Promise<BacklogItem[]> {
     const items = await this.getBacklogItems();
-    return items.filter(
-      item => item.needsApproval && !item.approvalReceived
-    );
+    return items.filter((item) => item.needsApproval && !item.approvalReceived);
   }
 
   /**
@@ -333,15 +325,17 @@ export class BacklogManager {
    */
   async getIssuesReadyForNextPhase(): Promise<BacklogItem[]> {
     const items = await this.getBacklogItems();
-    return items.filter(
-      item => !item.needsApproval || item.approvalReceived
-    );
+    return items.filter((item) => !item.needsApproval || item.approvalReceived);
   }
 
   /**
    * Get repository info (useful for context building)
    */
-  async getRepoInfo(): Promise<{ name: string; description: string | null; default_branch: string }> {
+  async getRepoInfo(): Promise<{
+    name: string;
+    description: string | null;
+    default_branch: string;
+  }> {
     const { data: repo } = await this.octokit.repos.get({
       owner: this.config.owner,
       repo: this.config.repo,
@@ -365,7 +359,7 @@ export function createBacklogManagerFromEnv(): BacklogManager {
 
   if (!token || !owner || !repo) {
     throw new Error(
-      'Missing required environment variables: GITHUB_TOKEN, GITHUB_REPO_OWNER, GITHUB_REPO_NAME'
+      "Missing required environment variables: GITHUB_TOKEN, GITHUB_REPO_OWNER, GITHUB_REPO_NAME",
     );
   }
 
@@ -373,7 +367,7 @@ export function createBacklogManagerFromEnv(): BacklogManager {
     token,
     owner,
     repo,
-    backlogLabel: 'backlog-item',
-    commentPrefix: '🤖 Agent Pipeline',
+    backlogLabel: "backlog-item",
+    commentPrefix: "🤖 Agent Pipeline",
   });
 }

@@ -13,6 +13,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 ### Milestones
 
 #### M0.1: Project Setup
+
 - [ ] Initialize React Native + Expo project
 - [ ] Configure TypeScript and ESLint
 - [ ] Set up testing framework (Jest + React Native Testing Library)
@@ -20,18 +21,21 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 - [ ] Create component library foundation
 
 #### M0.2: Architecture Implementation
+
 - [ ] Implement folder structure and naming conventions
 - [ ] Set up state management approach
 - [ ] Create navigation structure
 - [ ] Define coding standards and review process
 
 #### M0.3: Design System
+
 - [ ] Define color palette and typography
 - [ ] Create core UI components (Button, Input, Card)
 - [ ] Establish accessibility guidelines
 - [ ] Document component usage
 
 **Deliverables:**
+
 - Working development environment
 - Component library v0.1
 - Architecture documentation
@@ -46,6 +50,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 ### Milestones
 
 #### M1.1: Authentication (Weeks 5-6)
+
 - [ ] User registration flow
 - [ ] Login/logout functionality
 - [ ] Session persistence with AsyncStorage
@@ -55,6 +60,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 **User Stories:** US-1.1, US-1.2, US-1.3, US-1.4
 
 #### M1.2: Workout Logging (Weeks 7-8)
+
 - [ ] Running workout logging
 - [ ] Strength exercise logging (squats, pushups, pullups)
 - [ ] Quick log functionality
@@ -64,6 +70,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 **User Stories:** US-2.1, US-2.2, US-2.3, US-2.4, US-2.5
 
 #### M1.3: Calendar & History (Weeks 9-10)
+
 - [ ] Calendar view implementation
 - [ ] Workout history list
 - [ ] Day view for workouts
@@ -72,6 +79,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 **User Stories:** US-3.1, US-3.2, US-3.3
 
 #### M1.4: Statistics & Achievements (Weeks 11-12)
+
 - [ ] Weekly summary statistics
 - [ ] Personal records tracking
 - [ ] Basic achievement system (unlock notifications)
@@ -84,12 +92,14 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 ### MVP Launch Criteria
 
 **Feature Complete:**
+
 - [ ] All Must-Have user stories implemented (17 stories)
 - [ ] Core user journey works end-to-end
 - [ ] Data persists correctly
 - [ ] **Workout logging completes in under 10 seconds (validated)**
 
 **Quality Gates:**
+
 - [ ] 80%+ test coverage on core features
 - [ ] No critical or high-priority bugs
 - [ ] App loads in under 3 seconds
@@ -97,6 +107,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 - [ ] All screens have empty, loading, and error states
 
 **Launch Readiness:**
+
 - [ ] App Store/Play Store assets prepared
 - [ ] Privacy policy and terms of service
 - [ ] Basic analytics implemented
@@ -111,6 +122,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 ### Milestones
 
 #### M2.1: Enhanced Statistics (Weeks 13-14)
+
 - [ ] Progress trend charts
 - [ ] Monthly and yearly summaries
 - [ ] Workout type distribution
@@ -119,6 +131,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 **User Stories:** US-4.3
 
 #### M2.2: Achievement Expansion (Weeks 15-16)
+
 - [ ] Additional achievement categories
 - [ ] Achievement gallery with locked achievements
 - [ ] Milestone celebration animations
@@ -127,6 +140,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 **User Stories:** US-5.2, US-5.3
 
 #### M2.3: User Experience Improvements (Weeks 17-18)
+
 - [ ] Onboarding flow
 - [ ] Improved error handling
 - [ ] Loading states and animations
@@ -136,6 +150,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 **User Stories:** US-7.1, US-7.3
 
 #### M2.4: Data Management (Weeks 19-20)
+
 - [ ] Enhanced local storage
 - [ ] Data export functionality
 - [ ] Backup and restore
@@ -160,6 +175,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 ### Milestones
 
 #### M3.1: Backend Integration (Weeks 21-24)
+
 - [ ] Express.js backend deployment
 - [ ] User authentication with JWT
 - [ ] Cloud sync implementation
@@ -169,12 +185,14 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 **User Stories:** US-6.2
 
 #### M3.2: Multi-Device Support (Weeks 25-26)
+
 - [ ] Cross-device data synchronization
 - [ ] Offline-first architecture refinement
 - [ ] Sync status indicators
 - [ ] Manual sync trigger
 
 #### M3.3: Performance & Scale (Weeks 27-28)
+
 - [ ] Database optimization
 - [ ] API response time < 200ms
 - [ ] Support for 10,000+ concurrent users
@@ -196,6 +214,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 ### Potential Features (Prioritized)
 
 #### High Priority
+
 1. **Social Features**
    - Friend connections
    - Workout challenges
@@ -215,6 +234,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
    - Adaptive difficulty
 
 #### Medium Priority
+
 4. **Advanced Analytics**
    - AI-powered insights
    - Performance predictions
@@ -228,6 +248,7 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
    - Training programs
 
 #### Lower Priority
+
 6. **Monetization Features**
    - Premium subscription tier
    - Advanced analytics (premium)
@@ -244,14 +265,14 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 
 ## Release Schedule
 
-| Release | Target Date | Version | Focus |
-|---------|-------------|---------|-------|
-| Alpha | Week 8 | 0.1.0 | Internal testing |
-| Beta | Week 12 | 0.5.0 | Limited user testing |
-| MVP Launch | Week 12 | 1.0.0 | Public launch (iOS/Android) |
-| Enhancement | Week 20 | 1.5.0 | UX improvements |
-| Sync Release | Week 28 | 2.0.0 | Cloud sync enabled |
-| Growth Release | Week 36 | 2.5.0 | Social features |
+| Release        | Target Date | Version | Focus                       |
+| -------------- | ----------- | ------- | --------------------------- |
+| Alpha          | Week 8      | 0.1.0   | Internal testing            |
+| Beta           | Week 12     | 0.5.0   | Limited user testing        |
+| MVP Launch     | Week 12     | 1.0.0   | Public launch (iOS/Android) |
+| Enhancement    | Week 20     | 1.5.0   | UX improvements             |
+| Sync Release   | Week 28     | 2.0.0   | Cloud sync enabled          |
+| Growth Release | Week 36     | 2.5.0   | Social features             |
 
 ---
 
@@ -259,21 +280,21 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 
 ### Technical Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Expo limitations | Low | Medium | Validate requirements early; have fallback to bare RN |
-| Sync conflicts | Medium | High | Implement robust conflict resolution; user-friendly UI |
-| Performance degradation | Medium | Medium | Regular performance testing; optimization sprints |
-| Third-party API changes | Low | Medium | Abstract integrations; monitor deprecation notices |
+| Risk                    | Probability | Impact | Mitigation                                             |
+| ----------------------- | ----------- | ------ | ------------------------------------------------------ |
+| Expo limitations        | Low         | Medium | Validate requirements early; have fallback to bare RN  |
+| Sync conflicts          | Medium      | High   | Implement robust conflict resolution; user-friendly UI |
+| Performance degradation | Medium      | Medium | Regular performance testing; optimization sprints      |
+| Third-party API changes | Low         | Medium | Abstract integrations; monitor deprecation notices     |
 
 ### Business Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Low user adoption | Medium | High | Focus on onboarding; iterate based on feedback |
-| High churn rate | Medium | High | Implement engagement features; analyze drop-off points |
-| Competition | High | Medium | Differentiate through simplicity and UX |
-| Monetization challenges | Medium | Medium | Validate willingness to pay before building |
+| Risk                    | Probability | Impact | Mitigation                                             |
+| ----------------------- | ----------- | ------ | ------------------------------------------------------ |
+| Low user adoption       | Medium      | High   | Focus on onboarding; iterate based on feedback         |
+| High churn rate         | Medium      | High   | Implement engagement features; analyze drop-off points |
+| Competition             | High        | Medium | Differentiate through simplicity and UX                |
+| Monetization challenges | Medium      | Medium | Validate willingness to pay before building            |
 
 ---
 
@@ -281,47 +302,51 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 
 ### Team Composition (MVP Phase)
 
-| Role | Allocation | Responsibilities |
-|------|------------|------------------|
-| Product Manager | 50% | Roadmap, priorities, user research |
-| Tech Lead | 100% | Architecture, code review, technical decisions |
-| React Native Developer | 100% | Frontend implementation |
-| Backend Developer | 50% | API development (Phase 3+) |
-| Designer | 25% | UI/UX design, assets |
-| QA Engineer | 25% | Testing, quality assurance |
+| Role                   | Allocation | Responsibilities                               |
+| ---------------------- | ---------- | ---------------------------------------------- |
+| Product Manager        | 50%        | Roadmap, priorities, user research             |
+| Tech Lead              | 100%       | Architecture, code review, technical decisions |
+| React Native Developer | 100%       | Frontend implementation                        |
+| Backend Developer      | 50%        | API development (Phase 3+)                     |
+| Designer               | 25%        | UI/UX design, assets                           |
+| QA Engineer            | 25%        | Testing, quality assurance                     |
 
 ### Estimated Effort by Phase
 
-| Phase | Duration | Story Points | Team Weeks |
-|-------|----------|--------------|------------|
-| Phase 0 | 4 weeks | 40 | 8 |
-| Phase 1 | 8 weeks | 120 | 24 |
-| Phase 2 | 8 weeks | 100 | 20 |
-| Phase 3 | 8 weeks | 140 | 28 |
+| Phase   | Duration | Story Points | Team Weeks |
+| ------- | -------- | ------------ | ---------- |
+| Phase 0 | 4 weeks  | 40           | 8          |
+| Phase 1 | 8 weeks  | 120          | 24         |
+| Phase 2 | 8 weeks  | 100          | 20         |
+| Phase 3 | 8 weeks  | 140          | 28         |
 
 ---
 
 ## Success Criteria by Phase
 
 ### Phase 1 (MVP) Success
+
 - [ ] App published to App Store and Play Store
 - [ ] 100+ beta users actively using the app
 - [ ] Core user journey works flawlessly
 - [ ] No critical bugs
 
 ### Phase 2 Success
+
 - [ ] 1,000+ active users
 - [ ] Day-30 retention > 35%
 - [ ] App Store rating > 4.3 stars
 - [ ] < 1% crash rate
 
 ### Phase 3 Success
+
 - [ ] 5,000+ active users
 - [ ] 99%+ sync success rate
 - [ ] API uptime > 99.5%
 - [ ] Positive user feedback on sync experience
 
 ### Phase 4 Success
+
 - [ ] 10,000+ active users
 - [ ] Sustainable growth rate
 - [ ] Clear path to monetization
@@ -331,10 +356,10 @@ This roadmap outlines the phased development approach for Trapp Tracker, from MV
 
 ## Document History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2026-03-15 | Product Team | Initial roadmap |
+| Version | Date       | Author       | Changes         |
+| ------- | ---------- | ------------ | --------------- |
+| 1.0     | 2026-03-15 | Product Team | Initial roadmap |
 
 ---
 
-*This roadmap should be reviewed and updated every sprint based on learnings, user feedback, and changing priorities.*
+_This roadmap should be reviewed and updated every sprint based on learnings, user feedback, and changing priorities._

@@ -8,11 +8,12 @@ import {
   TextInput,
   View,
 } from "react-native";
+
+import { Card } from "../components/Card";
+import { DateTimeField } from "../components/DateTimeField";
+import { PrimaryButton } from "../components/PrimaryButton";
 import { ActivityEntry, ActivityType } from "../models";
 import { loadAppState, saveAppState } from "../storage";
-import { Card } from "../components/Card";
-import { PrimaryButton } from "../components/PrimaryButton";
-import { DateTimeField } from "../components/DateTimeField";
 import { colors, spacing, typography } from "../theme";
 
 const activityTypes: { label: string; value: ActivityType }[] = [
@@ -22,10 +23,6 @@ const activityTypes: { label: string; value: ActivityType }[] = [
   { label: "Pull-ups", value: "pullups" },
   { label: "Other", value: "other" },
 ];
-
-function formatDate(date: Date) {
-  return date.toISOString().split("T")[0];
-}
 
 function uuid() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -94,7 +91,9 @@ export function LogScreen() {
           <Text style={styles.entryDate}>{formatEntryDate(item.date)}</Text>
         </View>
         <Text style={styles.entryQuantity}>{item.quantity}</Text>
-        {item.notes ? <Text style={styles.entryNotes}>{item.notes}</Text> : null}
+        {item.notes ? (
+          <Text style={styles.entryNotes}>{item.notes}</Text>
+        ) : null}
       </Card>
     );
   };

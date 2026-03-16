@@ -1,22 +1,22 @@
 /**
  * Approval Gate System
- * 
+ *
  * Manages approval gates in the SDLC pipeline, waiting for human review
  * before proceeding to the next phase
  */
 
-import { BacklogManager } from './backlog-manager';
-import { BacklogItem, SDLC_PHASES, SDLCPhase, ApprovalResult } from './types';
+import { BacklogManager } from "./backlog-manager";
+import { BacklogItem, SDLC_PHASES, SDLCPhase, ApprovalResult } from "./types";
 
 /**
  * Approval gate status
  */
-export type GateStatus = 
-  | 'pending'      // Waiting for approval
-  | 'approved'     // Approval received
-  | 'rejected'     // Approval rejected
-  | 'timeout'      // Approval timeout
-  | 'skipped';     // Gate skipped (not required)
+export type GateStatus =
+  | "pending" // Waiting for approval
+  | "approved" // Approval received
+  | "rejected" // Approval rejected
+  | "timeout" // Approval timeout
+  | "skipped"; // Gate skipped (not required)
 
 /**
  * Configuration for approval gate
@@ -34,8 +34,8 @@ export interface ApprovalGateConfig {
 
 const DEFAULT_CONFIG: ApprovalGateConfig = {
   timeout: 24 * 60 * 60 * 1000, // 24 hours
-  pollInterval: 5 * 60 * 1000,  // 5 minutes
-  waitForApproval: false,        // Non-blocking by default
+  pollInterval: 5 * 60 * 1000, // 5 minutes
+  waitForApproval: false, // Non-blocking by default
   pendingComment: undefined,
 };
 
@@ -48,7 +48,7 @@ export class ApprovalGate {
 
   constructor(
     backlogManager: BacklogManager,
-    config: Partial<ApprovalGateConfig> = {}
+    config: Partial<ApprovalGateConfig> = {},
   ) {
     this.backlogManager = backlogManager;
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -66,7 +66,7 @@ export class ApprovalGate {
    */
   async checkApproval(
     issueNumber: number,
-    phase: SDLCPhase
+    phase: SDLCPhase,
   ): Promise<ApprovalResult> {
     if (!phase.approvalLabel) {
       return { approved: false };
@@ -74,7 +74,7 @@ export class ApprovalGate {
 
     const hasApproval = await this.backlogManager.checkApproval(
       issueNumber,
-      phase.id
+      phase.id,
     );
 
     if (hasApproval) {
@@ -92,39 +92,39 @@ export class ApprovalGate {
 
   /**
    * Wait for approval (blocking)
-   * 
+   *
    * Polls GitHub until approval is received or timeout occurs
    */
   async waitForApproval(
     issueNumber: number,
-    phase: SDLCPhase
+    phase: SDLCPhase,
   ): Promise<ApprovalResult> {
     if (!phase.requiresApproval || !phase.approvalLabel) {
       return { approved: true }; // Skip if no approval needed
     }
 
     const startTime = Date.now();
-    const issueUrl = `https://github.com/${this.backlogManager['config'].owner}/${this.backlogManager['config'].repo}/issues/${issueNumber}`;
+    const issueUrl = `https://github.com/${this.backlogManager["config"].owner}/${this.backlogManager["config"].repo}/issues/${issueNumber}`;
 
     // Post pending comment
     await this.backlogManager.addComment(
       issueNumber,
       this.config.pendingComment ||
         `⏳ **Approval Required**: Waiting for human review before proceeding to next phase.\n\n` +
-        `Phase: **${phase.name}**\n\n` +
-        `Please review the output above and add the \`${phase.approvalLabel}\` label to approve, ` +
-        `or comment with feedback if changes are needed.\n\n` +
-        `[View Issue](${issueUrl})`
+          `Phase: **${phase.name}**\n\n` +
+          `Please review the output above and add the \`${phase.approvalLabel}\` label to approve, ` +
+          `or comment with feedback if changes are needed.\n\n` +
+          `[View Issue](${issueUrl})`,
     );
 
     // Poll for approval
     while (Date.now() - startTime < this.config.timeout) {
       const result = await this.checkApproval(issueNumber, phase);
-      
+
       if (result.approved) {
         await this.backlogManager.addComment(
           issueNumber,
-          `✅ **Approval Received**: ${phase.name} phase approved. Continuing pipeline...`
+          `✅ **Approval Received**: ${phase.name} phase approved. Continuing pipeline...`,
         );
         return result;
       }
@@ -140,12 +140,12 @@ export class ApprovalGate {
     await this.backlogManager.addComment(
       issueNumber,
       `⏰ **Approval Timeout**: No approval received within ${this.config.timeout / (60 * 60 * 1000)} hours.\n\n` +
-      `The pipeline has paused. Add the \`${phase.approvalLabel}\` label to resume.`
+        `The pipeline has paused. Add the \`${phase.approvalLabel}\` label to resume.`,
     );
 
     return {
       approved: false,
-      feedback: 'Timeout waiting for approval',
+      feedback: "Timeout waiting for approval",
       timestamp: new Date().toISOString(),
     };
   }
@@ -155,38 +155,32 @@ export class ApprovalGate {
    */
   async processGate(
     item: BacklogItem,
-    phase: SDLCPhase
+    phase: SDLCPhase,
   ): Promise<{ status: GateStatus; result?: ApprovalResult }> {
     if (!phase.requiresApproval) {
-      return { status: 'skipped' };
+      return { status: "skipped" };
     }
 
     // Check if already approved
-    const existingApproval = await this.checkApproval(
-      item.issue.number,
-      phase
-    );
+    const existingApproval = await this.checkApproval(item.issue.number, phase);
 
     if (existingApproval.approved) {
-      return { status: 'approved', result: existingApproval };
+      return { status: "approved", result: existingApproval };
     }
 
     if (!this.config.waitForApproval) {
       // Non-blocking: just report status
-      return { status: 'pending' };
+      return { status: "pending" };
     }
 
     // Blocking: wait for approval
-    const result = await this.waitForApproval(
-      item.issue.number,
-      phase
-    );
+    const result = await this.waitForApproval(item.issue.number, phase);
 
     if (result.approved) {
-      return { status: 'approved', result };
+      return { status: "approved", result };
     }
 
-    return { status: 'timeout', result };
+    return { status: "timeout", result };
   }
 
   /**
@@ -194,9 +188,7 @@ export class ApprovalGate {
    */
   async getIssuesWaitingForApproval(): Promise<BacklogItem[]> {
     const items = await this.backlogManager.getBacklogItems();
-    return items.filter(item => 
-      item.needsApproval && !item.approvalReceived
-    );
+    return items.filter((item) => item.needsApproval && !item.approvalReceived);
   }
 
   /**
@@ -209,7 +201,7 @@ export class ApprovalGate {
     byPhase: Record<string, { waiting: number; approved: number }>;
   }> {
     const items = await this.backlogManager.getBacklogItems();
-    
+
     const summary = {
       total: items.length,
       waiting: 0,
@@ -219,8 +211,8 @@ export class ApprovalGate {
 
     for (const item of items) {
       if (item.needsApproval) {
-        const phaseId = item.currentPhase?.id || 'unknown';
-        
+        const phaseId = item.currentPhase?.id || "unknown";
+
         if (!summary.byPhase[phaseId]) {
           summary.byPhase[phaseId] = { waiting: 0, approved: 0 };
         }
@@ -242,16 +234,16 @@ export class ApprovalGate {
    * Manually trigger approval for a phase (for testing/CLI)
    */
   async approvePhase(issueNumber: number, phaseId: string): Promise<void> {
-    const phase = SDLC_PHASES.find(p => p.id === phaseId);
+    const phase = SDLC_PHASES.find((p) => p.id === phaseId);
     if (!phase?.approvalLabel) {
       throw new Error(`Phase ${phaseId} does not require approval`);
     }
 
     await this.backlogManager.addApprovalLabel(issueNumber, phaseId);
-    
+
     await this.backlogManager.addComment(
       issueNumber,
-      `✅ Phase **${phase.name}** approved via CLI. Continuing pipeline...`
+      `✅ Phase **${phase.name}** approved via CLI. Continuing pipeline...`,
     );
   }
 
@@ -259,7 +251,7 @@ export class ApprovalGate {
    * Sleep utility
    */
   private sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
 
@@ -268,7 +260,7 @@ export class ApprovalGate {
  */
 export function createApprovalGate(
   backlogManager: BacklogManager,
-  config?: Partial<ApprovalGateConfig>
+  config?: Partial<ApprovalGateConfig>,
 ): ApprovalGate {
   return new ApprovalGate(backlogManager, config);
 }

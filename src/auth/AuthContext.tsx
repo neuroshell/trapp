@@ -1,5 +1,12 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import * as Crypto from "expo-crypto";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import { loadAuthState, saveAuthState, clearAuthState } from "../storage";
 
 export type AuthUser = {
@@ -45,7 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const passwordHash = await hash(password);
 
     const authState: AuthState = {
-      user: { username },
+      user: { username: username.trim() },
       passwordHash,
     };
 
@@ -59,7 +66,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const value = useMemo(
-    () => ({ user: state.user, passwordHash: state.passwordHash, loading, signIn, signOut }),
+    () => ({
+      user: state.user,
+      passwordHash: state.passwordHash,
+      loading,
+      signIn,
+      signOut,
+    }),
     [state.user, state.passwordHash, loading],
   );
 

@@ -18,6 +18,7 @@ By default the server runs on `http://localhost:4000` and stores state in `data.
 ### POST /sync
 
 Body:
+
 ```json
 {
   "deviceId": "<device-id>",
@@ -26,6 +27,7 @@ Body:
 ```
 
 Response:
+
 ```json
 { "ok": true, "device": { ... } }
 ```
@@ -33,6 +35,7 @@ Response:
 ### GET /sync?deviceId=<device-id>
 
 Response:
+
 ```json
 { "ok": true, "device": { ... } }
 ```

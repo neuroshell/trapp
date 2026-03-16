@@ -11,8 +11,8 @@ export function DashboardScreen() {
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Coming soon</Text>
         <Text style={styles.cardText}>
-          Once you have logged workouts, this screen will help you see how you're
-          doing over time.
+          Once you have logged workouts, this screen will help you see how
+          you're doing over time.
         </Text>
       </View>
     </SafeAreaView>
