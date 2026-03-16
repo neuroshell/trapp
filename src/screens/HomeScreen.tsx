@@ -1,7 +1,6 @@
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import {
   ScrollView,
   StatusBar,
@@ -9,6 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Card } from "../components/Card";
 import {

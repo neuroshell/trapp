@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Alert,
-  SafeAreaView,
   ScrollView,
   Share,
   StyleSheet,
   Text,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAuth } from "../auth/AuthContext";
 import { AppState } from "../models";
