@@ -269,6 +269,9 @@ jobs:
           path: codeql-results.sarif
           retention-days: 30
 
+      - name: Create security reports directory
+        run: mkdir -p security-reports
+
       - name: Generate CodeQL summary
         run: |
           echo "## CodeQL Analysis Report" > security-reports/codeql-report.md
