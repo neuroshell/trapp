@@ -1,0 +1,78 @@
+
+> trapp@0.1.0 test:app
+> jest --testPathPattern=storage.test
+
+  console.warn
+    Failed to update workout Error: Workout not found
+        at C:\Users\neuroshell\Documents\src\trapp\src\storage.ts:220:13
+        at Generator.next (<anonymous>)
+        at asyncGeneratorStep (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:3:17)
+        at _next (C:\Users\neuroshell\Documents\src\trapp\node_modules\@babel\runtime\helpers\asyncToGenerator.js:17:9)
+
+    [0m [90m 227 |[39m     [36mawait[39m [33mAsyncStorage[39m[33m.[39msetItem([33mWORKOUTS_KEY[39m[33m,[39m [33mJSON[39m[33m.[39mstringify(workouts))[33m;[39m
+     [90m 228 |[39m   } [36mcatch[39m (error) {
+    [31m[1m>[22m[39m[90m 229 |[39m     console[33m.[39mwarn([32m"Failed to update workout"[39m[33m,[39m error)[33m;[39m
+     [90m     |[39m             [31m[1m^[22m[39m
+     [90m 230 |[39m     [36mthrow[39m error[33m;[39m
+     [90m 231 |[39m   }
+     [90m 232 |[39m }[0m
+
+      at warn (src/storage.ts:229:13)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+FAIL __tests__/storage.test.ts
+  Storage Functions
+    loadWorkouts
+      √ should return empty array when no workouts exist (1 ms)
+      √ should return workouts after saving (1 ms)
+    saveWorkout
+      √ should save a workout to storage
+      √ should append multiple workouts
+    deleteWorkout
+      √ should delete a workout by id (1 ms)
+      × should only delete the specified workout (1 ms)
+    getWorkouts
+      √ should return all workouts
+    getLastWorkoutValues
+      √ should return default values when no workouts exist
+      √ should return most recent workout values (1 ms)
+      √ should filter by workout type
+    getDefaultValues
+      √ should return running defaults
+      √ should return squats defaults
+      √ should return pushups defaults
+      √ should return pullups defaults (1 ms)
+      √ should return empty object for other type
+    updateWorkout
+      √ should update an existing workout
+      √ should throw error if workout not found (17 ms)
+      √ should update updatedAt timestamp (16 ms)
+    clearWorkouts
+      √ should remove all workouts
+
+  ● Storage Functions › deleteWorkout › should only delete the specified workout
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 1
+    Received length: 0
+    Received array:  []
+
+    [0m [90m 105 |[39m
+     [90m 106 |[39m       [36mconst[39m workouts [33m=[39m [36mawait[39m getWorkouts()[33m;[39m
+    [31m[1m>[22m[39m[90m 107 |[39m       expect(workouts)[33m.[39mtoHaveLength([35m1[39m)[33m;[39m
+     [90m     |[39m                        [31m[1m^[22m[39m
+     [90m 108 |[39m       expect(workouts[[35m0[39m][33m.[39mid)[33m.[39mtoBe(workout2[33m.[39mid)[33m;[39m
+     [90m 109 |[39m     })[33m;[39m
+     [90m 110 |[39m   })[33m;[39m[0m
+
+      at Object.toHaveLength (__tests__/storage.test.ts:107:24)
+      at asyncGeneratorStep (node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:17)
+      at _next (node_modules/@babel/runtime/helpers/asyncToGenerator.js:17:9)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        0.411 s, estimated 1 s
+Ran all test suites matching /storage.test/i.

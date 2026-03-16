@@ -202,6 +202,8 @@ describe("AuthContext", () => {
       const mockUser = {
         id: "user_123",
         email: "test@example.com",
+        username: "testuser",
+        displayName: "Test User",
         passwordHash: "hash_password123",
         createdAt: new Date().toISOString(),
       };
@@ -244,8 +246,10 @@ describe("AuthContext", () => {
         );
       });
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.email).toBe("test@example.com");
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.user?.email).toBe("test@example.com");
+      });
     });
 
     it("rejects invalid email format", async () => {
@@ -273,8 +277,10 @@ describe("AuthContext", () => {
 
       await signInFn("invalid-email", "password123");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.error).toBe("Please enter a valid email address");
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.error).toBe("Please enter a valid email address");
+      });
     });
 
     it("rejects password shorter than 8 characters", async () => {
@@ -302,10 +308,12 @@ describe("AuthContext", () => {
 
       await signInFn("test@example.com", "short");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.error).toBe(
-        "Password must be at least 8 characters"
-      );
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.error).toBe(
+          "Password must be at least 8 characters"
+        );
+      });
     });
 
     it("shows generic error for non-existent user", async () => {
@@ -335,14 +343,18 @@ describe("AuthContext", () => {
 
       await signInFn("nonexistent@example.com", "password123");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.error).toBe("Invalid email or password");
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.error).toBe("Invalid email or password");
+      });
     });
 
     it("shows generic error for wrong password", async () => {
       const mockUser = {
         id: "user_123",
         email: "test@example.com",
+        username: "testuser",
+        displayName: "Test User",
         passwordHash: "hash_correctpassword",
         createdAt: new Date().toISOString(),
       };
@@ -376,16 +388,21 @@ describe("AuthContext", () => {
         expect(testFn).toHaveBeenCalled();
       });
 
-      await signInFn("test@example.com", "wrongpassword");
+      // Password must pass validation (min 8 chars + at least one number)
+      await signInFn("test@example.com", "wrongpass1");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.error).toBe("Invalid email or password");
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.error).toBe("Invalid email or password");
+      });
     });
 
     it("hashes password during sign in", async () => {
       const mockUser = {
         id: "user_123",
         email: "test@example.com",
+        username: "testuser",
+        displayName: "Test User",
         passwordHash: "hash_password123",
         createdAt: new Date().toISOString(),
       };
@@ -429,6 +446,8 @@ describe("AuthContext", () => {
       const mockUser = {
         id: "user_123",
         email: "test@example.com",
+        username: "testuser",
+        displayName: "Test User",
         passwordHash: "hash_password123",
         createdAt: new Date().toISOString(),
       };
@@ -464,8 +483,10 @@ describe("AuthContext", () => {
 
       await signInFn("TEST@EXAMPLE.COM", "password123");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.email).toBe("test@example.com");
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.user?.email).toBe("test@example.com");
+      });
     });
   });
 
@@ -504,8 +525,10 @@ describe("AuthContext", () => {
         );
       });
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.email).toBe("newuser@example.com");
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.user?.email).toBe("newuser@example.com");
+      });
     });
 
     it("rejects invalid email format", async () => {
@@ -533,8 +556,10 @@ describe("AuthContext", () => {
 
       await signUpFn("invalid-email", "password123");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.error).toBe("Please enter a valid email address");
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.error).toBe("Please enter a valid email address");
+      });
     });
 
     it("rejects password shorter than 8 characters", async () => {
@@ -562,10 +587,12 @@ describe("AuthContext", () => {
 
       await signUpFn("test@example.com", "short");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.error).toBe(
-        "Password must be at least 8 characters"
-      );
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.error).toBe(
+          "Password must be at least 8 characters"
+        );
+      });
     });
 
     it("rejects password without numbers", async () => {
@@ -593,16 +620,20 @@ describe("AuthContext", () => {
 
       await signUpFn("test@example.com", "abcdefgh");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.error).toBe(
-        "Password should contain at least one number"
-      );
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.error).toBe(
+          "Password should contain at least one number"
+        );
+      });
     });
 
     it("rejects duplicate email registration", async () => {
       const existingUser = {
         id: "user_123",
         email: "existing@example.com",
+        username: "existinguser",
+        displayName: "Existing User",
         passwordHash: "hash_password123",
         createdAt: new Date().toISOString(),
       };
@@ -638,8 +669,10 @@ describe("AuthContext", () => {
 
       await signUpFn("existing@example.com", "NewPass123");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.error).toBe("This email is already registered");
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.error).toBe("This email is already registered");
+      });
     });
 
     it("normalizes email to lowercase", async () => {
@@ -669,8 +702,10 @@ describe("AuthContext", () => {
 
       await signUpFn("NEWUSER@EXAMPLE.COM", "SecurePass123");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.email).toBe("newuser@example.com");
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.user?.email).toBe("newuser@example.com");
+      });
     });
 
     it("generates unique user id", async () => {
@@ -700,9 +735,11 @@ describe("AuthContext", () => {
 
       await signUpFn("user1@example.com", "SecurePass123");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.id).toBeDefined();
-      expect(authState.user?.id).toMatch(/^user_\d+_[a-z0-9]+$/);
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.user?.id).toBeDefined();
+        expect(authState.user?.id).toMatch(/^user_\d+_[a-z0-9]+$/);
+      });
     });
 
     it("sets createdAt timestamp", async () => {
@@ -732,9 +769,11 @@ describe("AuthContext", () => {
 
       await signUpFn("user1@example.com", "SecurePass123");
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user?.createdAt).toBeDefined();
-      expect(new Date(authState.user?.createdAt!).toISOString()).toBeDefined();
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.user?.createdAt).toBeDefined();
+        expect(new Date(authState.user?.createdAt!).toISOString()).toBeDefined();
+      });
     });
   });
 
@@ -787,8 +826,10 @@ describe("AuthContext", () => {
         );
       });
 
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user).toBeNull();
+      await waitFor(() => {
+        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+        expect(authState.user).toBeNull();
+      });
     });
 
     it("clears error on sign out", async () => {

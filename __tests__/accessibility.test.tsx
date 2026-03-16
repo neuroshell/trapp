@@ -1,10 +1,18 @@
 import { render, screen, waitFor } from "@testing-library/react-native";
+import { act } from "react-test-renderer";
 import React from "react";
 
 import { LogRunningForm } from "../src/components/LogRunningForm";
 import { LogStrengthForm } from "../src/components/LogStrengthForm";
 import { DeleteConfirmationDialog } from "../src/components/DeleteConfirmationDialog";
 import { QuickLogButton } from "../src/components/QuickLogButton";
+
+// Helper to wait for async operations
+const waitForAsync = async () => {
+  await act(async () => {
+    await new Promise(resolve => setTimeout(resolve, 50));
+  });
+};
 
 describe("Accessibility Tests", () => {
   describe("LogRunningForm Accessibility", () => {
@@ -87,7 +95,7 @@ describe("Accessibility Tests", () => {
       expect(json).toBeTruthy();
     });
 
-    it("should announce pace changes to screen readers", () => {
+    it("should announce pace changes to screen readers", async () => {
       const { rerender } = render(
         <LogRunningForm
           distance=""
@@ -97,6 +105,7 @@ describe("Accessibility Tests", () => {
         />,
       );
 
+      await waitForAsync();
       rerender(
         <LogRunningForm
           distance="10"
@@ -106,6 +115,7 @@ describe("Accessibility Tests", () => {
         />,
       );
 
+      await waitForAsync();
       // Pace display should be present with summary role
       const paceDisplay = screen.getByTestId("pace-display");
       expect(paceDisplay).toBeTruthy();

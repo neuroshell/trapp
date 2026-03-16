@@ -1,5 +1,6 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
+import { act } from "react-test-renderer";
 import { RegisterScreen } from "../src/screens/RegisterScreen";
 import { AuthProvider } from "../src/auth/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,6 +17,13 @@ jest.mock("expo-crypto", () => ({
 
 const renderWithAuthProvider = (component: React.ReactElement) => {
   return render(<AuthProvider>{component}</AuthProvider>);
+};
+
+// Helper to wait for async operations
+const waitForAsync = async () => {
+  await act(async () => {
+    await new Promise(resolve => setTimeout(resolve, 50));
+  });
 };
 
 describe("RegisterScreen", () => {
@@ -88,11 +96,10 @@ describe("RegisterScreen", () => {
     const registerButton = getByRole("button", { name: /Create Account/i });
     fireEvent.press(registerButton);
 
-    await waitFor(() => {
-      expect(
-        getByText("Please enter a valid email address")
-      ).toBeTruthy();
-    });
+    await waitForAsync();
+    expect(
+      getByText("Please enter a valid email address")
+    ).toBeTruthy();
   });
 
   it("displays password length error for short password", async () => {
@@ -115,11 +122,10 @@ describe("RegisterScreen", () => {
     const registerButton = getByRole("button", { name: /Create Account/i });
     fireEvent.press(registerButton);
 
-    await waitFor(() => {
-      expect(
-        getByText("Password must be at least 8 characters")
-      ).toBeTruthy();
-    });
+    await waitForAsync();
+    expect(
+      getByText("Password must be at least 8 characters")
+    ).toBeTruthy();
   });
 
   it("displays password number requirement error", async () => {
@@ -142,11 +148,10 @@ describe("RegisterScreen", () => {
     const registerButton = getByRole("button", { name: /Create Account/i });
     fireEvent.press(registerButton);
 
-    await waitFor(() => {
-      expect(
-        getByText("Password should contain at least one number")
-      ).toBeTruthy();
-    });
+    await waitForAsync();
+    expect(
+      getByText("Password should contain at least one number")
+    ).toBeTruthy();
   });
 
   it("displays password mismatch error", async () => {
@@ -169,9 +174,8 @@ describe("RegisterScreen", () => {
     const registerButton = getByRole("button", { name: /Create Account/i });
     fireEvent.press(registerButton);
 
-    await waitFor(() => {
-      expect(getByText("Passwords do not match")).toBeTruthy();
-    });
+    await waitForAsync();
+    expect(getByText("Passwords do not match")).toBeTruthy();
   });
 
   it("displays terms acceptance error when not checked", async () => {
@@ -192,11 +196,10 @@ describe("RegisterScreen", () => {
     const registerButton = createAccountButtons[1]; // Second one is the button
     fireEvent.press(registerButton);
 
-    await waitFor(() => {
-      expect(
-        getByLabelText("You must accept the terms to continue")
-      ).toBeTruthy();
-    });
+    await waitForAsync();
+    expect(
+      getByLabelText("You must accept the terms to continue")
+    ).toBeTruthy();
   });
 
   it("submits form with valid data", async () => {
@@ -221,12 +224,11 @@ describe("RegisterScreen", () => {
     const registerButton = getByText("Create Account");
     fireEvent.press(registerButton);
 
-    await waitFor(() => {
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        expect.stringContaining("AUTH"),
-        expect.any(String)
-      );
-    });
+    await waitForAsync();
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+      expect.stringContaining("AUTH"),
+      expect.any(String)
+    );
   });
 
   it("shows password strength indicator", async () => {
@@ -238,21 +240,18 @@ describe("RegisterScreen", () => {
 
     // Weak password
     fireEvent.changeText(passwordInput, "abc");
-    await waitFor(() => {
-      expect(getByText("Weak")).toBeTruthy();
-    });
+    await waitForAsync();
+    expect(getByText("Weak")).toBeTruthy();
 
     // Fair password
     fireEvent.changeText(passwordInput, "abcdef1");
-    await waitFor(() => {
-      expect(getByText("Fair")).toBeTruthy();
-    });
+    await waitForAsync();
+    expect(getByText("Fair")).toBeTruthy();
 
     // Strong password
     fireEvent.changeText(passwordInput, "SecurePass123");
-    await waitFor(() => {
-      expect(getByText("Strong")).toBeTruthy();
-    });
+    await waitForAsync();
+    expect(getByText("Strong")).toBeTruthy();
   });
 
   it("shows loading state during registration", async () => {
@@ -277,6 +276,7 @@ describe("RegisterScreen", () => {
     const registerButton = getByText("Create Account");
     fireEvent.press(registerButton);
 
+    await waitForAsync();
     // Button should be disabled during loading
     expect(registerButton.props.disabled).toBe(true);
   });
@@ -302,10 +302,9 @@ describe("RegisterScreen", () => {
     const registerButton = getByText("Create Account");
     fireEvent.press(registerButton);
 
-    await waitFor(() => {
-      const errorText = getByRole("alert");
-      expect(errorText).toBeTruthy();
-    });
+    await waitForAsync();
+    const errorText = getByRole("alert");
+    expect(errorText).toBeTruthy();
   });
 
   it("clears field errors when user starts typing", async () => {
@@ -330,13 +329,13 @@ describe("RegisterScreen", () => {
     const registerButton = getByText("Create Account");
     fireEvent.press(registerButton);
 
+    await waitForAsync();
     // Clear error by typing valid input
     fireEvent.changeText(emailInput, "test@example.com");
 
+    await waitForAsync();
     // Error should be cleared
-    await waitFor(() => {
-      expect(queryByText("Please enter a valid email address")).toBeNull();
-    });
+    expect(queryByText("Please enter a valid email address")).toBeNull();
   });
 
   it("has proper accessibility labels on all inputs", () => {
@@ -435,6 +434,8 @@ describe("RegisterScreen", () => {
     const existingUser = {
       id: "user_123",
       email: "existing@example.com",
+      username: "existinguser",
+      displayName: "Existing User",
       passwordHash: "hash_password123",
       createdAt: new Date().toISOString(),
     };
@@ -465,9 +466,8 @@ describe("RegisterScreen", () => {
     const registerButton = getByText("Create Account");
     fireEvent.press(registerButton);
 
-    await waitFor(() => {
-      expect(getByText("This email is already registered")).toBeTruthy();
-    });
+    await waitForAsync();
+    expect(getByText("This email is already registered")).toBeTruthy();
   });
 
   it("has proper touch target for register button", () => {
@@ -547,8 +547,7 @@ describe("RegisterScreen", () => {
     const registerButton = getByText("Create Account");
     fireEvent.press(registerButton);
 
-    await waitFor(() => {
-      expect(getByText("Please confirm your password")).toBeTruthy();
-    });
+    await waitForAsync();
+    expect(getByText("Please confirm your password")).toBeTruthy();
   });
 });

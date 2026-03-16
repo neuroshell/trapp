@@ -95,8 +95,8 @@ describe("Storage Functions", () => {
     });
 
     it("should only delete the specified workout", async () => {
-      const workout1 = createTestWorkout("running");
-      const workout2 = createTestWorkout("squats");
+      const workout1 = createTestWorkout("running", { id: "test-workout-1" });
+      const workout2 = createTestWorkout("squats", { id: "test-workout-2" });
 
       await saveWorkout(workout1);
       await saveWorkout(workout2);

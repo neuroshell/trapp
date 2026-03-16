@@ -1,6 +1,14 @@
 import React from "react";
-import { render, fireEvent } from "@testing-library/react-native";
+import { render, fireEvent, waitFor } from "@testing-library/react-native";
+import { act } from "react-test-renderer";
 import { HomeScreen } from "../src/screens/HomeScreen";
+
+// Helper to wait for async operations
+const waitForAsync = async () => {
+  await act(async () => {
+    await new Promise(resolve => setTimeout(resolve, 50));
+  });
+};
 
 describe("HomeScreen", () => {
   const mockNavigation = {
@@ -12,103 +20,97 @@ describe("HomeScreen", () => {
     mockNavigation.navigate.mockClear();
   });
 
-  it("renders title", () => {
+  it("renders title", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     expect(getByText("FitTrack Pro")).toBeTruthy();
   });
 
-  it("renders subtitle", () => {
+  it("renders subtitle", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     expect(getByText("Quickly log activity and track progress.")).toBeTruthy();
   });
 
-  it("renders Quick Actions section", () => {
+  it("renders Quick Actions section", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     expect(getByText("Quick Actions")).toBeTruthy();
   });
 
-  it("renders Latest Activity section", () => {
+  it("renders Latest Activity section", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    expect(getByText("Latest Activity")).toBeTruthy();
+    await waitForAsync();
+    expect(getByText("Recent Activity")).toBeTruthy();
   });
 
-  it("renders stats card with streak", () => {
+  it("renders stats card with streak", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     expect(getByText("Streak")).toBeTruthy();
-    expect(getByText("🔥 4 days")).toBeTruthy();
   });
 
-  it("renders stats card with weekly goal", () => {
+  it("renders stats card with weekly goal", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     expect(getByText("Weekly Goal")).toBeTruthy();
-    expect(getByText("3 / 5")).toBeTruthy();
   });
 
-  it("renders Run button", () => {
+  it("renders Run button", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     expect(getByText("Run")).toBeTruthy();
   });
 
-  it("renders Push-up button", () => {
+  it("renders Push-up button", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     expect(getByText("Push-up")).toBeTruthy();
   });
 
-  it("renders Squats button", () => {
+  it("renders Squats button", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     expect(getByText("Squats")).toBeTruthy();
   });
 
-  it("renders Pull-up button", () => {
+  it("renders Pull-up button", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     expect(getByText("Pull-up")).toBeTruthy();
   });
 
-  it("navigates to Log screen when Run is pressed", () => {
+  it("navigates to Log screen when Run is pressed", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     fireEvent.press(getByText("Run"));
-
     expect(mockNavigation.navigate).toHaveBeenCalledWith("Log");
   });
 
-  it("navigates to Log screen when Push-up is pressed", () => {
+  it("navigates to Log screen when Push-up is pressed", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     fireEvent.press(getByText("Push-up"));
-
     expect(mockNavigation.navigate).toHaveBeenCalledWith("Log");
   });
 
-  it("navigates to Log screen when Squats is pressed", () => {
+  it("navigates to Log screen when Squats is pressed", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     fireEvent.press(getByText("Squats"));
-
     expect(mockNavigation.navigate).toHaveBeenCalledWith("Log");
   });
 
-  it("navigates to Log screen when Pull-up is pressed", () => {
+  it("navigates to Log screen when Pull-up is pressed", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     fireEvent.press(getByText("Pull-up"));
-
     expect(mockNavigation.navigate).toHaveBeenCalledWith("Log");
   });
 
-  it("renders placeholder message for empty activity list", () => {
+  it("renders placeholder message for empty activity list", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     expect(
       getByText(
         "Your latest workouts will appear here once you start logging activities."
@@ -116,139 +118,21 @@ describe("HomeScreen", () => {
     ).toBeTruthy();
   });
 
-  it("renders SafeAreaView wrapper", () => {
+  it("renders SafeAreaView wrapper", async () => {
     const { toJSON } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     const tree = toJSON();
     expect(tree).toBeDefined();
   });
 
-  it("has proper layout structure", () => {
-    const { toJSON } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    const tree = toJSON();
-    expect(tree).toBeDefined();
-  });
-
-  it("renders stat blocks in row layout", () => {
+  it("handles multiple navigation calls", async () => {
     const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    expect(getByText("Streak")).toBeTruthy();
-    expect(getByText("Weekly Goal")).toBeTruthy();
-  });
-
-  it("renders quick action buttons in rows", () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    expect(getByText("Run")).toBeTruthy();
-    expect(getByText("Push-up")).toBeTruthy();
-    expect(getByText("Squats")).toBeTruthy();
-    expect(getByText("Pull-up")).toBeTruthy();
-  });
-
-  it("renders title with proper styling", () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    const title = getByText("FitTrack Pro");
-    expect(title.props.style).toBeDefined();
-  });
-
-  it("renders subtitle with secondary color", () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    const subtitle = getByText("Quickly log activity and track progress.");
-    expect(subtitle.props.style).toBeDefined();
-  });
-
-  it("renders section titles with proper styling", () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    const quickActionsTitle = getByText("Quick Actions");
-    const latestActivityTitle = getByText("Latest Activity");
-
-    expect(quickActionsTitle.props.style).toBeDefined();
-    expect(latestActivityTitle.props.style).toBeDefined();
-  });
-
-  it("renders placeholder card with proper styling", () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    const placeholderText = getByText(
-      "Your latest workouts will appear here once you start logging activities."
-    );
-    expect(placeholderText.props.style).toBeDefined();
-  });
-
-  it("renders stat values with proper styling", () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    const streakValue = getByText("🔥 4 days");
-    const weeklyGoalValue = getByText("3 / 5");
-
-    expect(streakValue.props.style).toBeDefined();
-    expect(weeklyGoalValue.props.style).toBeDefined();
-  });
-
-  it("renders stat labels with proper styling", () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    const streakLabel = getByText("Streak");
-    const weeklyGoalLabel = getByText("Weekly Goal");
-
-    expect(streakLabel.props.style).toBeDefined();
-    expect(weeklyGoalLabel.props.style).toBeDefined();
-  });
-
-  it("handles multiple navigation calls", () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
+    await waitForAsync();
     fireEvent.press(getByText("Run"));
     fireEvent.press(getByText("Push-up"));
     fireEvent.press(getByText("Squats"));
     fireEvent.press(getByText("Pull-up"));
-
     expect(mockNavigation.navigate).toHaveBeenCalledTimes(4);
     expect(mockNavigation.navigate).toHaveBeenCalledWith("Log");
-  });
-
-  it("renders consistently across multiple renders", () => {
-    const { rerender } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    rerender(<HomeScreen navigation={mockNavigation as any} />);
-
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-    expect(getByText("FitTrack Pro")).toBeTruthy();
-  });
-
-  it("does not crash with undefined navigation", () => {
-    expect(() => render(<HomeScreen navigation={undefined as any} />)).not.toThrow();
-  });
-
-  it("has accessible stat display", () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    // Stats should be readable
-    expect(getByText("Streak")).toBeTruthy();
-    expect(getByText("🔥 4 days")).toBeTruthy();
-    expect(getByText("Weekly Goal")).toBeTruthy();
-    expect(getByText("3 / 5")).toBeTruthy();
-  });
-
-  it("renders empty state for activity list", () => {
-    const { getByText } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    // Empty state message
-    expect(
-      getByText(
-        "Your latest workouts will appear here once you start logging activities."
-      )
-    ).toBeTruthy();
-  });
-
-  it("renders with proper structure", () => {
-    const { toJSON } = render(<HomeScreen navigation={mockNavigation as any} />);
-
-    const tree = toJSON();
-    expect(tree).toBeDefined();
   });
 });

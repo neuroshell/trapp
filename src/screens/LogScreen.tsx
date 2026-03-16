@@ -331,7 +331,7 @@ export function LogScreen() {
     const color = getWorkoutColor(item.type);
 
     return (
-      <Card style={styles.workoutCard}>
+      <Card style={styles.workoutCard} testID="workout-item">
         <View style={styles.workoutHeader}>
           <View style={styles.workoutIconContainer}>
             <MaterialCommunityIcons
@@ -363,6 +363,7 @@ export function LogScreen() {
               style={styles.deleteButton}
               accessibilityLabel={`Delete ${item.type} workout`}
               accessibilityHint="Remove this workout from your history"
+              testID="delete-workout-button"
             >
               <MaterialCommunityIcons
                 name="trash-can-outline"
@@ -387,7 +388,7 @@ export function LogScreen() {
         ListHeaderComponent={
           <Card style={styles.formCard}>
             {/* Workout Type Selector */}
-            <View style={styles.formRow}>
+            <View style={styles.formRow} testID="workout-type-selector">
               <Text style={styles.label}>Workout Type</Text>
               <View style={styles.typeSelector}>
                 {activityTypes.map((option) => (
@@ -398,6 +399,7 @@ export function LogScreen() {
                     style={styles.typeButton}
                     accessibilityLabel={option.label}
                     accessibilityHint={`Select ${option.label.toLowerCase()} workout`}
+                    testID={`type-${option.value}`}
                   >
                     <View style={styles.typeButtonContent}>
                       <MaterialCommunityIcons
@@ -476,6 +478,7 @@ export function LogScreen() {
               style={styles.saveButton}
               accessibilityLabel="Save workout"
               accessibilityHint="Save your workout to history"
+              testID="save-button"
             >
               {saving ? "Saving..." : "Save Workout"}
             </PrimaryButton>
