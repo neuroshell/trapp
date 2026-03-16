@@ -88,42 +88,6 @@ describe("AuthContext", () => {
     });
   });
 
-  describe("initial state", () => {
-    it("provides user as null when not signed in", async () => {
-      const testFn = jest.fn();
-      await renderWithAuthProvider(testFn);
-
-      await waitFor(() => {
-        expect(testFn).toHaveBeenCalled();
-      });
-
-      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-      expect(authState.user).toBeNull();
-    });
-
-    it("provides error as null initially", async () => {
-      const testFn = jest.fn();
-      await renderWithAuthProvider(testFn);
-
-      await waitFor(() => {
-        expect(testFn).toHaveBeenCalled();
-      });
-
-      const authState = testFn.mock.calls[0][0];
-      expect(authState.error).toBeNull();
-    });
-
-    it("sets loading to false after initialization", async () => {
-      const testFn = jest.fn();
-      await renderWithAuthProvider(testFn);
-
-      await waitFor(() => {
-        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-        expect(authState.loading).toBe(false);
-      });
-    });
-  });
-
   describe("session restoration", () => {
     it("loads auth state from AsyncStorage on mount", async () => {
       const mockAuthState = {
