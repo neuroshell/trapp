@@ -85,7 +85,7 @@ jobs:
       - name: Build Expo Web App
         id: build
         run: |
-          npx expo export:web
+          npx expo export -p web
           BUILD_HASH=$(git rev-parse --short HEAD)
           echo "hash=${BUILD_HASH}" >> $GITHUB_OUTPUT
         env:
@@ -93,25 +93,25 @@ jobs:
 
       - name: Create 404.html for SPA routing
         run: |
-          cp web-build/index.html web-build/404.html
+          cp dist/index.html dist/404.html
 
       - name: Create asset manifest for caching
         run: |
-          echo "Build completed at: $(date -u)" > web-build/BUILD_INFO.txt
-          echo "Commit: ${{ github.sha }}" >> web-build/BUILD_INFO.txt
-          echo "Version: ${{ steps.version.outputs.version }}" >> web-build/BUILD_INFO.txt
+          echo "Build completed at: $(date -u)" > dist/BUILD_INFO.txt
+          echo "Commit: ${{ github.sha }}" >> dist/BUILD_INFO.txt
+          echo "Version: ${{ steps.version.outputs.version }}" >> dist/BUILD_INFO.txt
 
       - name: Upload web build artifact
         uses: actions/upload-artifact@v4
         with:
           name: web-build
-          path: web-build/
+          path: dist/
           retention-days: 14
 
       - name: Upload build for preview
         uses: actions/upload-pages-artifact@v3
         with:
-          path: web-build/
+          path: dist/
 
   # ===========================================
   # DEPLOY TO GITHUB PAGES (MAIN)
