@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const passwordHash = await hash(password);
 
     const authState: AuthState = {
-      user: { username },
+      user: { username: username.trim() },
       passwordHash,
     };
 

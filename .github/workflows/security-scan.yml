@@ -78,8 +78,8 @@ jobs:
           npm audit --audit-level=moderate 2>/dev/null || echo "Backend vulnerabilities found"
         continue-on-error: true
 
-      - name: Install npm-audit-fix for detailed report
-        run: npm install -g npm-audit-fix
+      - name: Create security reports directory
+        run: mkdir -p security-reports
 
       - name: Generate vulnerability report
         run: |
@@ -164,6 +164,9 @@ jobs:
           head: HEAD
           extra_args: --only-verified
         continue-on-error: true
+
+      - name: Create security reports directory
+        run: mkdir -p security-reports
 
       - name: Custom secret pattern scan
         run: |

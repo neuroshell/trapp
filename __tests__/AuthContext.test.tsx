@@ -100,11 +100,16 @@ describe("AuthContext", () => {
     renderWithAuthProvider(testFn);
 
     await waitFor(() => {
-      expect(AsyncStorage.getItem).toHaveBeenCalled();
-    });
+      expect(AsyncStorage.getItem).toHaveBeenCalledWith("TRAPP_TRACKER_AUTH_V1");
+    }, { timeout: 2000 });
+
+    // Wait for the state to update after loading
+    await waitFor(() => {
+      const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
+      expect(authState.user?.username).toBe("testuser");
+    }, { timeout: 2000 });
 
     const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-    expect(authState.user?.username).toBe("testuser");
     expect(authState.passwordHash).toBe("stored_hash");
   });
 
