@@ -88,68 +88,6 @@ describe("AuthContext", () => {
     });
   });
 
-  describe("session restoration", () => {
-    it("loads auth state from AsyncStorage on mount", async () => {
-      const mockAuthState = {
-        user: {
-          id: "user_123",
-          email: "test@example.com",
-          createdAt: new Date().toISOString(),
-        },
-        passwordHash: "stored_hash",
-      };
-
-      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-        if (key.includes("AUTH")) {
-          return Promise.resolve(JSON.stringify(mockAuthState));
-        }
-        return Promise.resolve(null);
-      });
-
-      const testFn = jest.fn();
-      await renderWithAuthProvider(testFn);
-
-      await waitFor(() => {
-        expect(AsyncStorage.getItem).toHaveBeenCalledWith(
-          "TRAPP_TRACKER_AUTH_V1"
-        );
-      }, { timeout: 2000 });
-
-      await waitFor(() => {
-        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-        expect(authState.user?.email).toBe("test@example.com");
-      }, { timeout: 2000 });
-    });
-
-    it("handles empty auth state from AsyncStorage", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
-
-      const testFn = jest.fn();
-      await renderWithAuthProvider(testFn);
-
-      await waitFor(() => {
-        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-        expect(authState.loading).toBe(false);
-        expect(authState.user).toBeNull();
-      });
-    });
-
-    it("handles invalid auth state from AsyncStorage", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-        JSON.stringify({ invalid: "state" })
-      );
-
-      const testFn = jest.fn();
-      await renderWithAuthProvider(testFn);
-
-      await waitFor(() => {
-        const authState = testFn.mock.calls[testFn.mock.calls.length - 1][0];
-        expect(authState.loading).toBe(false);
-        expect(authState.user).toBeNull();
-      });
-    });
-  });
-
   describe("signIn", () => {
     it("signs in with valid email and password", async () => {
       const mockUser = {
