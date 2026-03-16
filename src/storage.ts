@@ -8,7 +8,8 @@ import {
   User,
   WorkoutEntry,
 } from "./models";
-import { Achievement, PersonalRecord } from "./utils/achievements";
+import { Achievement } from "./utils/achievements";
+import { PersonalRecord } from "./utils/statistics";
 
 const STORAGE_KEY = "TRAPP_TRACKER_STATE_V1";
 const DEVICE_ID_KEY = "TRAPP_TRACKER_DEVICE_ID";

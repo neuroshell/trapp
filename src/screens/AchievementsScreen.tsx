@@ -37,7 +37,7 @@ import {
   getUnlockedAchievements,
   sortAchievementsByTier,
 } from "../utils/achievements";
-import { calculateStreak, StreakData } from "../utils/statistics";
+import { calculateStreak } from "../utils/statistics";
 
 type FilterType = "all" | "unlocked" | "locked";
 
@@ -68,20 +68,29 @@ export function AchievementsScreen() {
     try {
       const workouts = await getWorkouts();
       console.log("AchievementsScreen: Loaded workouts:", workouts.length);
-      
+
       const newStreak = calculateStreak(workouts);
-      console.log("AchievementsScreen: Calculated streak:", newStreak.currentStreak);
+      console.log(
+        "AchievementsScreen: Calculated streak:",
+        newStreak.currentStreak,
+      );
 
       // Calculate all achievement progress
       const allAchievements = calculateAllAchievementProgress(
         workouts,
         newStreak,
       );
-      console.log("AchievementsScreen: Calculated achievements:", allAchievements.length);
+      console.log(
+        "AchievementsScreen: Calculated achievements:",
+        allAchievements.length,
+      );
       if (allAchievements.length > 0) {
-        console.log("AchievementsScreen: First achievement:", JSON.stringify(allAchievements[0], null, 2));
+        console.log(
+          "AchievementsScreen: First achievement:",
+          JSON.stringify(allAchievements[0], null, 2),
+        );
       }
-      
+
       setAchievements(allAchievements);
 
       // Check for new achievements to celebrate

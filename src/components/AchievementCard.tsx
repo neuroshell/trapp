@@ -19,6 +19,7 @@ import {
   TouchableWithoutFeedback,
   View,
   ViewStyle,
+  StyleProp,
 } from "react-native";
 
 import { Card } from "./Card";
@@ -175,7 +176,7 @@ export function AchievementCard({
     </>
   );
 
-  const cardStyle: ViewStyle = [
+  const cardStyle: StyleProp<ViewStyle> = [
     styles.container,
     !achievement.unlocked && styles.containerLocked,
   ];

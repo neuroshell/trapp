@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/storage.ts</title>
+    <title>Code coverage report for src/utils/achievements.ts</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../prettify.css" />
-    <link rel="stylesheet" href="../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../sort-arrow-sprite.png);
+            background-image: url(../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">src</a> storage.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/utils</a> achievements.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">79.26% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>76/190</span>
+                <span class='fraction'>65/82</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">45.45% </span>
+                <span class="strong">68.96% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>15/33</span>
+                <span class='fraction'>40/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">45.45% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>20/44</span>
+                <span class='fraction'>21/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40.34% </span>
+                <span class="strong">79.72% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>71/176</span>
+                <span class='fraction'>59/74</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -505,7 +505,107 @@
 <a name='L440'></a><a href='#L440'>440</a>
 <a name='L441'></a><a href='#L441'>441</a>
 <a name='L442'></a><a href='#L442'>442</a>
-<a name='L443'></a><a href='#L443'>443</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a>
+<a name='L470'></a><a href='#L470'>470</a>
+<a name='L471'></a><a href='#L471'>471</a>
+<a name='L472'></a><a href='#L472'>472</a>
+<a name='L473'></a><a href='#L473'>473</a>
+<a name='L474'></a><a href='#L474'>474</a>
+<a name='L475'></a><a href='#L475'>475</a>
+<a name='L476'></a><a href='#L476'>476</a>
+<a name='L477'></a><a href='#L477'>477</a>
+<a name='L478'></a><a href='#L478'>478</a>
+<a name='L479'></a><a href='#L479'>479</a>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a>
+<a name='L482'></a><a href='#L482'>482</a>
+<a name='L483'></a><a href='#L483'>483</a>
+<a name='L484'></a><a href='#L484'>484</a>
+<a name='L485'></a><a href='#L485'>485</a>
+<a name='L486'></a><a href='#L486'>486</a>
+<a name='L487'></a><a href='#L487'>487</a>
+<a name='L488'></a><a href='#L488'>488</a>
+<a name='L489'></a><a href='#L489'>489</a>
+<a name='L490'></a><a href='#L490'>490</a>
+<a name='L491'></a><a href='#L491'>491</a>
+<a name='L492'></a><a href='#L492'>492</a>
+<a name='L493'></a><a href='#L493'>493</a>
+<a name='L494'></a><a href='#L494'>494</a>
+<a name='L495'></a><a href='#L495'>495</a>
+<a name='L496'></a><a href='#L496'>496</a>
+<a name='L497'></a><a href='#L497'>497</a>
+<a name='L498'></a><a href='#L498'>498</a>
+<a name='L499'></a><a href='#L499'>499</a>
+<a name='L500'></a><a href='#L500'>500</a>
+<a name='L501'></a><a href='#L501'>501</a>
+<a name='L502'></a><a href='#L502'>502</a>
+<a name='L503'></a><a href='#L503'>503</a>
+<a name='L504'></a><a href='#L504'>504</a>
+<a name='L505'></a><a href='#L505'>505</a>
+<a name='L506'></a><a href='#L506'>506</a>
+<a name='L507'></a><a href='#L507'>507</a>
+<a name='L508'></a><a href='#L508'>508</a>
+<a name='L509'></a><a href='#L509'>509</a>
+<a name='L510'></a><a href='#L510'>510</a>
+<a name='L511'></a><a href='#L511'>511</a>
+<a name='L512'></a><a href='#L512'>512</a>
+<a name='L513'></a><a href='#L513'>513</a>
+<a name='L514'></a><a href='#L514'>514</a>
+<a name='L515'></a><a href='#L515'>515</a>
+<a name='L516'></a><a href='#L516'>516</a>
+<a name='L517'></a><a href='#L517'>517</a>
+<a name='L518'></a><a href='#L518'>518</a>
+<a name='L519'></a><a href='#L519'>519</a>
+<a name='L520'></a><a href='#L520'>520</a>
+<a name='L521'></a><a href='#L521'>521</a>
+<a name='L522'></a><a href='#L522'>522</a>
+<a name='L523'></a><a href='#L523'>523</a>
+<a name='L524'></a><a href='#L524'>524</a>
+<a name='L525'></a><a href='#L525'>525</a>
+<a name='L526'></a><a href='#L526'>526</a>
+<a name='L527'></a><a href='#L527'>527</a>
+<a name='L528'></a><a href='#L528'>528</a>
+<a name='L529'></a><a href='#L529'>529</a>
+<a name='L530'></a><a href='#L530'>530</a>
+<a name='L531'></a><a href='#L531'>531</a>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a>
+<a name='L534'></a><a href='#L534'>534</a>
+<a name='L535'></a><a href='#L535'>535</a>
+<a name='L536'></a><a href='#L536'>536</a>
+<a name='L537'></a><a href='#L537'>537</a>
+<a name='L538'></a><a href='#L538'>538</a>
+<a name='L539'></a><a href='#L539'>539</a>
+<a name='L540'></a><a href='#L540'>540</a>
+<a name='L541'></a><a href='#L541'>541</a>
+<a name='L542'></a><a href='#L542'>542</a>
+<a name='L543'></a><a href='#L543'>543</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -518,52 +618,260 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -572,24 +880,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -602,121 +899,193 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">52x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">184x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">71x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">61x</span>
-<span class="cline-any cline-yes">61x</span>
-<span class="cline-any cline-yes">61x</span>
-<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">52x</span>
+<span class="cline-any cline-yes">52x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">65x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">52x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">120x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118x</span>
+<span class="cline-any cline-yes">118x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">60x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">60x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">60x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">25x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -725,669 +1094,600 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import AsyncStorage from "@react-native-async-storage/async-storage";
-import React from "react";
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
+ * Achievement Detection Engine
+ *
+ * Provides achievement tracking and detection functionality:
+ * - Achievement definitions (15 achievements)
+ * - Progress calculation
+ * - Automatic detection of unlocked achievements
+ *
+ * All calculations are optimized to complete in &lt;200ms
+ */
 &nbsp;
-import {
-  ActivityType,
-  AppState,
-  AuthState,
-  User,
-  WorkoutEntry,
-} from "./models";
-import { Achievement } from "./utils/achievements";
-import { PersonalRecord } from "./utils/statistics";
+import { ActivityType, WorkoutEntry } from "../models";
+import { StreakData, calculateTotalReps } from "./statistics";
 &nbsp;
-const STORAGE_KEY = "TRAPP_TRACKER_STATE_V1";
-const DEVICE_ID_KEY = "TRAPP_TRACKER_DEVICE_ID";
-const AUTH_KEY = "TRAPP_TRACKER_AUTH_V1";
-const USERS_KEY = "TRAPP_TRACKER_USERS_V1";
-const WORKOUTS_KEY = "TRAPP_TRACKER_WORKOUTS_V1";
-const ACHIEVEMENTS_KEY = "TRAPP_TRACKER_ACHIEVEMENTS_V1";
-const PERSONAL_RECORDS_KEY = "TRAPP_TRACKER_PR_V1";
+/**
+ * Achievement categories
+ */
+export type AchievementCategory = "consistency" | "streak" | "exercise";
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >loadAppState(</span>): Promise&lt;AppState&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const json = <span class="cstat-no" title="statement not covered" >await AsyncStorage.getItem(STORAGE_KEY);</span>
-<span class="cstat-no" title="statement not covered" >    if (!json) <span class="cstat-no" title="statement not covered" >return { entries: [] };</span></span>
-    const parsed = <span class="cstat-no" title="statement not covered" >JSON.parse(json) as AppState;</span>
-<span class="cstat-no" title="statement not covered" >    return parsed;</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to load app state", error);</span>
-<span class="cstat-no" title="statement not covered" >    return { entries: [] };</span>
+/**
+ * Achievement tiers
+ */
+export type AchievementTier =
+  | "bronze"
+  | "silver"
+  | "gold"
+  | "platinum"
+  | "diamond";
+&nbsp;
+/**
+ * Achievement types matching user stories
+ */
+export type AchievementType =
+  | "first_workout"
+  | "workouts_5"
+  | "workouts_10"
+  | "workouts_25"
+  | "workouts_50"
+  | "workouts_100"
+  | "streak_3"
+  | "streak_7"
+  | "streak_14"
+  | "streak_30"
+  | "streak_100"
+  | "runs_10"
+  | "squats_1000"
+  | "pushups_500"
+  | "pullups_200";
+&nbsp;
+/**
+ * Achievement model
+ */
+export interface Achievement {
+  id: string;
+  type: AchievementType;
+  category: AchievementCategory;
+  tier: AchievementTier;
+  title: string;
+  description: string;
+  requirement: number;
+  icon: string; // Material Community Icons name
+  unlocked: boolean;
+  unlockedAt?: string;
+  progress: number;
+}
+&nbsp;
+/**
+ * Achievement definition (without user-specific state)
+ */
+export interface AchievementDefinition {
+  id: string;
+  type: AchievementType;
+  category: AchievementCategory;
+  tier: AchievementTier;
+  title: string;
+  description: string;
+  requirement: number;
+  icon: string;
+}
+&nbsp;
+/**
+ * All achievement definitions (15 total)
+ * Ordered by category and tier
+ */
+export const ACHIEVEMENT_DEFINITIONS: AchievementDefinition[] = [
+  // ==================== CONSISTENCY ACHIEVEMENTS ====================
+  {
+    id: "first_step",
+    type: "first_workout",
+    category: "consistency",
+    tier: "bronze",
+    title: "First Step",
+    description: "Log your first workout",
+    requirement: 1,
+    icon: "foot-print",
+  },
+  {
+    id: "getting_started",
+    type: "workouts_5",
+    category: "consistency",
+    tier: "bronze",
+    title: "Getting Started",
+    description: "Log 5 workouts",
+    requirement: 5,
+    icon: "seedling",
+  },
+  {
+    id: "committed",
+    type: "workouts_10",
+    category: "consistency",
+    tier: "silver",
+    title: "Committed",
+    description: "Log 10 workouts",
+    requirement: 10,
+    icon: "medal",
+  },
+  {
+    id: "dedicated",
+    type: "workouts_25",
+    category: "consistency",
+    tier: "silver",
+    title: "Dedicated",
+    description: "Log 25 workouts",
+    requirement: 25,
+    icon: "trophy-outline",
+  },
+  {
+    id: "devoted",
+    type: "workouts_50",
+    category: "consistency",
+    tier: "gold",
+    title: "Devoted",
+    description: "Log 50 workouts",
+    requirement: 50,
+    icon: "trophy",
+  },
+  {
+    id: "obsessed",
+    type: "workouts_100",
+    category: "consistency",
+    tier: "platinum",
+    title: "Obsessed",
+    description: "Log 100 workouts",
+    requirement: 100,
+    icon: "crown",
+  },
+&nbsp;
+  // ==================== STREAK ACHIEVEMENTS ====================
+  {
+    id: "on_fire",
+    type: "streak_3",
+    category: "streak",
+    tier: "bronze",
+    title: "On Fire",
+    description: "3-day workout streak",
+    requirement: 3,
+    icon: "fire",
+  },
+  {
+    id: "hot_streak",
+    type: "streak_7",
+    category: "streak",
+    tier: "silver",
+    title: "Hot Streak",
+    description: "7-day workout streak",
+    requirement: 7,
+    icon: "flame",
+  },
+  {
+    id: "unstoppable",
+    type: "streak_14",
+    category: "streak",
+    tier: "gold",
+    title: "Unstoppable",
+    description: "14-day workout streak",
+    requirement: 14,
+    icon: "local-fire-department",
+  },
+  {
+    id: "legendary",
+    type: "streak_30",
+    category: "streak",
+    tier: "platinum",
+    title: "Legendary",
+    description: "30-day workout streak",
+    requirement: 30,
+    icon: "star-circle",
+  },
+  {
+    id: "immortal",
+    type: "streak_100",
+    category: "streak",
+    tier: "diamond",
+    title: "Immortal",
+    description: "100-day workout streak",
+    requirement: 100,
+    icon: "infinity",
+  },
+&nbsp;
+  // ==================== EXERCISE-SPECIFIC ACHIEVEMENTS ====================
+  {
+    id: "runner",
+    type: "runs_10",
+    category: "exercise",
+    tier: "bronze",
+    title: "Runner",
+    description: "Complete 10 runs",
+    requirement: 10,
+    icon: "run",
+  },
+  {
+    id: "squat_master",
+    type: "squats_1000",
+    category: "exercise",
+    tier: "silver",
+    title: "Squat Master",
+    description: "Complete 1000 squats total",
+    requirement: 1000,
+    icon: "dumbbell",
+  },
+  {
+    id: "pushup_king",
+    type: "pushups_500",
+    category: "exercise",
+    tier: "gold",
+    title: "Pushup King",
+    description: "Complete 500 pushups total",
+    requirement: 500,
+    icon: "arm-flex",
+  },
+  {
+    id: "pullup_champion",
+    type: "pullups_200",
+    category: "exercise",
+    tier: "platinum",
+    title: "Pullup Champion",
+    description: "Complete 200 pullups total",
+    requirement: 200,
+    icon: "weight-lifter",
+  },
+];
+&nbsp;
+/**
+ * Get achievement definition by ID
+ */
+export function <span class="fstat-no" title="function not covered" >getAchievementById(</span>
+  id: string,
+): AchievementDefinition | undefined {
+<span class="cstat-no" title="statement not covered" >  return ACHIEVEMENT_DEFINITIONS.find(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.id === id)</span>;</span>
+}
+&nbsp;
+/**
+ * Get achievement tier color
+ */
+export function getTierColor(tier: AchievementTier): string {
+  switch (tier) {
+    case "bronze":
+      return "#CD7F32";
+    case "silver":
+      return "#C0C0C0";
+    case "gold":
+      return "#FFD700";
+    case "platinum":
+      return "#E5E4E2";
+    case "diamond":
+      return "#B9F2FF";
+<span class="branch-5 cbranch-no" title="branch not covered" >    default:</span>
+<span class="cstat-no" title="statement not covered" >      return "#808080";</span>
   }
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >saveAppState(</span>state: AppState): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state));</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to save app state", error);</span>
+/**
+ * Get achievement tier background color (subtle version)
+ */
+export function getTierBackgroundColor(tier: AchievementTier): string {
+  switch (tier) {
+    case "bronze":
+      return "#FFF5EB";
+    case "silver":
+      return "#F5F7FB";
+    case "gold":
+      return "#FFFBEB";
+<span class="branch-3 cbranch-no" title="branch not covered" >    case "platinum":</span>
+<span class="cstat-no" title="statement not covered" >      return "#F8F9FA";</span>
+<span class="branch-4 cbranch-no" title="branch not covered" >    case "diamond":</span>
+<span class="cstat-no" title="statement not covered" >      return "#EBF9FF";</span>
+<span class="branch-5 cbranch-no" title="branch not covered" >    default:</span>
+<span class="cstat-no" title="statement not covered" >      return "#F5F5F5";</span>
   }
 }
 &nbsp;
-export async function <span class="fstat-no" title="function not covered" >clearAppState(</span>): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.removeItem(STORAGE_KEY);</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to clear app state", error);</span>
-  }
-}
-&nbsp;
-export async function <span class="fstat-no" title="function not covered" >getDeviceId(</span>): Promise&lt;string&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const existing = <span class="cstat-no" title="statement not covered" >await AsyncStorage.getItem(DEVICE_ID_KEY);</span>
-<span class="cstat-no" title="statement not covered" >    if (existing) <span class="cstat-no" title="statement not covered" >return existing;</span></span>
-&nbsp;
-    const generated = <span class="cstat-no" title="statement not covered" >`${Date.now()}-${Math.random().toString(16).slice(2)}`;</span>
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.setItem(DEVICE_ID_KEY, generated);</span>
-<span class="cstat-no" title="statement not covered" >    return generated;</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to get device id", error);</span>
-<span class="cstat-no" title="statement not covered" >    return "unknown";</span>
-  }
-}
-&nbsp;
-// User storage for managing multiple users
-export interface StoredUser extends User {
-  passwordHash: string;
-}
-&nbsp;
-export async function <span class="fstat-no" title="function not covered" >loadUsers(</span>): Promise&lt;StoredUser[]&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const json = <span class="cstat-no" title="statement not covered" >await AsyncStorage.getItem(USERS_KEY);</span>
-<span class="cstat-no" title="statement not covered" >    if (!json) <span class="cstat-no" title="statement not covered" >return [];</span></span>
-<span class="cstat-no" title="statement not covered" >    return JSON.parse(json) as StoredUser[];</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to load users", error);</span>
-<span class="cstat-no" title="statement not covered" >    return [];</span>
-  }
-}
-&nbsp;
-export async function <span class="fstat-no" title="function not covered" >saveUser(</span>user: StoredUser): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const users = <span class="cstat-no" title="statement not covered" >await loadUsers();</span>
-    const existingIndex = <span class="cstat-no" title="statement not covered" >users.findIndex(<span class="fstat-no" title="function not covered" >(u</span>) =&gt; <span class="cstat-no" title="statement not covered" >u.email === user.email)</span>;</span>
-<span class="cstat-no" title="statement not covered" >    if (existingIndex &gt;= 0) {</span>
-<span class="cstat-no" title="statement not covered" >      users[existingIndex] = user;</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      users.push(user);</span>
-    }
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.setItem(USERS_KEY, JSON.stringify(users));</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to save user", error);</span>
-  }
-}
-&nbsp;
-export async function <span class="fstat-no" title="function not covered" >findUserByEmail(</span>
-  email: string,
-): Promise&lt;StoredUser | undefined&gt; {
-  const users = <span class="cstat-no" title="statement not covered" >await loadUsers();</span>
-<span class="cstat-no" title="statement not covered" >  return users.find(<span class="fstat-no" title="function not covered" >(u</span>) =&gt; <span class="cstat-no" title="statement not covered" >u.email === email)</span>;</span>
-}
-&nbsp;
-export async function <span class="fstat-no" title="function not covered" >loadAuthState(</span>): Promise&lt;AuthState&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const json = <span class="cstat-no" title="statement not covered" >await AsyncStorage.getItem(AUTH_KEY);</span>
-<span class="cstat-no" title="statement not covered" >    if (!json) <span class="cstat-no" title="statement not covered" >return { user: null };</span></span>
-<span class="cstat-no" title="statement not covered" >    return JSON.parse(json) as AuthState;</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to load auth state", error);</span>
-<span class="cstat-no" title="statement not covered" >    return { user: null };</span>
-  }
-}
-&nbsp;
-export async function <span class="fstat-no" title="function not covered" >saveAuthState(</span>state: AuthState): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.setItem(AUTH_KEY, JSON.stringify(state));</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to save auth state", error);</span>
-  }
-}
-&nbsp;
-export async function <span class="fstat-no" title="function not covered" >clearAuthState(</span>): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.removeItem(AUTH_KEY);</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to clear auth state", error);</span>
-  }
-}
-&nbsp;
-export function <span class="fstat-no" title="function not covered" >useAppStorage(</span>) {
-  const clearAll = <span class="cstat-no" title="statement not covered" >React.useCallback(<span class="fstat-no" title="function not covered" >as</span>ync () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    await clearAppState();</span>
-  }, []);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return { clearAll };</span>
-}
-&nbsp;
-// Workout storage functions for Task 002
-export async function loadWorkouts(): Promise&lt;WorkoutEntry[]&gt; {
-  try {
-    const json = await AsyncStorage.getItem(WORKOUTS_KEY);
-    if (!json) return [];
-    return JSON.parse(json) as WorkoutEntry[];
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to load workouts", error);</span>
-<span class="cstat-no" title="statement not covered" >    return [];</span>
-  }
-}
-&nbsp;
-export async function saveWorkout(workout: WorkoutEntry): Promise&lt;void&gt; {
-  try {
-    const workouts = await loadWorkouts();
-    workouts.push(workout);
-    await AsyncStorage.setItem(WORKOUTS_KEY, JSON.stringify(workouts));
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to save workout", error);</span>
-<span class="cstat-no" title="statement not covered" >    throw error;</span>
-  }
-}
-&nbsp;
-export async function deleteWorkout(workoutId: string): Promise&lt;void&gt; {
-  try {
-    const workouts = await loadWorkouts();
-    const filtered = workouts.filter((w) =&gt; w.id !== workoutId);
-    await AsyncStorage.setItem(WORKOUTS_KEY, JSON.stringify(filtered));
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to delete workout", error);</span>
-<span class="cstat-no" title="statement not covered" >    throw error;</span>
-  }
-}
-&nbsp;
-export async function getWorkouts(): Promise&lt;WorkoutEntry[]&gt; {
-  return loadWorkouts();
-}
-&nbsp;
-export async function getLastWorkoutValues(
-  type: ActivityType,
-): Promise&lt;Partial&lt;WorkoutEntry["data"]&gt; | null&gt; {
-  try {
-    const workouts = await loadWorkouts();
-    const userWorkouts = workouts.filter((w) =&gt; w.type === type);
-&nbsp;
-    if (userWorkouts.length === 0) {
-      return getDefaultValues(type);
-    }
-&nbsp;
-    // Return most recent workout's data
-    const latest = userWorkouts.sort(
-      (a, b) =&gt;
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-    )[0];
-&nbsp;
-    return latest.data;
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to get last workout values", error);</span>
-<span class="cstat-no" title="statement not covered" >    return getDefaultValues(type);</span>
-  }
-}
-&nbsp;
-export function getDefaultValues(
-  type: ActivityType,
-): Partial&lt;WorkoutEntry["data"]&gt; {
+/**
+ * Map achievement type to activity type
+ */
+export function getActivityTypeForAchievement(
+  type: AchievementType,
+): ActivityType | null {
   switch (type) {
-    case "running":
-      return { distance: 5.0, duration: 30 };
-    case "squats":
-      return { reps: 20, sets: 3 };
-    case "pushups":
-      return { reps: 15, sets: 3 };
-    case "pullups":
-      return { reps: 10, sets: 3 };
-    default:
-      return {};
-  }
-}
-&nbsp;
-export async function updateWorkout(
-  workoutId: string,
-  updates: Partial&lt;WorkoutEntry&gt;,
-): Promise&lt;void&gt; {
-  try {
-    const workouts = await loadWorkouts();
-    const index = workouts.findIndex((w) =&gt; w.id === workoutId);
-    if (index === -1) {
-      throw new Error("Workout not found");
-    }
-    workouts[index] = {
-      ...workouts[index],
-      ...updates,
-      updatedAt: new Date().toISOString(),
-    };
-    await AsyncStorage.setItem(WORKOUTS_KEY, JSON.stringify(workouts));
-  } catch (error) {
-    console.warn("Failed to update workout", error);
-    throw error;
-  }
-}
-&nbsp;
-export async function clearWorkouts(): Promise&lt;void&gt; {
-  try {
-    await AsyncStorage.removeItem(WORKOUTS_KEY);
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to clear workouts", error);</span>
+    case "runs_10":
+      return "running";
+    case "squats_1000":
+      return "squats";
+    case "pushups_500":
+      return "pushups";
+    case "pullups_200":
+      return "pullups";
+<span class="branch-4 cbranch-no" title="branch not covered" >    default:</span>
+<span class="cstat-no" title="statement not covered" >      return null;</span>
   }
 }
 &nbsp;
 /**
- * Get workouts within a date range (inclusive)
- * @param startDate - ISO date string for start of range
- * @param endDate - ISO date string for end of range
- * @returns Array of workouts within the specified date range
+ * Calculate progress for an achievement
+ * Performance: &lt;10ms per achievement
  */
-export async function getWorkoutsByDateRange(
-  startDate: string,
-  endDate: string,
-): Promise&lt;WorkoutEntry[]&gt; {
-  try {
-    const workouts = await loadWorkouts();
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+export function calculateAchievementProgress(
+  achievement: AchievementDefinition,
+  workouts: WorkoutEntry[],
+  streak: StreakData,
+): number {
+  switch (achievement.category) {
+    case "consistency":
+      // Count total workouts
+      return workouts.length;
 &nbsp;
-    // Set end date to end of day
-    end.setHours(23, 59, 59, 999);
+    case "streak":
+      // Use current streak
+      return streak.currentStreak;
 &nbsp;
-    return workouts.filter((workout) =&gt; {
-      const workoutDate = new Date(workout.timestamp);
-      return workoutDate &gt;= start &amp;&amp; workoutDate &lt;= end;
-    });
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to get workouts by date range", error);</span>
-<span class="cstat-no" title="statement not covered" >    return [];</span>
-  }
-}
+    case "exercise": {
+      const activityType = getActivityTypeForAchievement(achievement.type);
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (!activityType) <span class="cstat-no" title="statement not covered" >return 0;</span>
 &nbsp;
-/**
- * Get all workouts grouped by date for history list display
- * @returns Array of workout entries sorted by date (newest first)
- */
-export async function getWorkoutsForHistory(): Promise&lt;WorkoutEntry[]&gt; {
-  try {
-    const workouts = await loadWorkouts();
-    // Sort by date descending (newest first)
-    return workouts.sort(
-      (a, b) =&gt;
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
-    );
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to get workouts for history", error);</span>
-<span class="cstat-no" title="statement not covered" >    return [];</span>
-  }
-}
+      const relevantWorkouts = workouts.filter((w) =&gt; w.type === activityType);
 &nbsp;
-// ==================== ACHIEVEMENT STORAGE ====================
-&nbsp;
-/**
- * Load user's unlocked achievements
- */
-export async function loadAchievements(): Promise&lt;Achievement[]&gt; {
-  try {
-    const json = await AsyncStorage.getItem(ACHIEVEMENTS_KEY);
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (!json) return [];
-<span class="cstat-no" title="statement not covered" >    return JSON.parse(json) as Achievement[];</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to load achievements", error);</span>
-<span class="cstat-no" title="statement not covered" >    return [];</span>
-  }
-}
-&nbsp;
-/**
- * Save a newly unlocked achievement
- */
-export async function <span class="fstat-no" title="function not covered" >saveAchievement(</span>achievement: Achievement): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const achievements = <span class="cstat-no" title="statement not covered" >await loadAchievements();</span>
-    // Check if already exists
-    const existingIndex = <span class="cstat-no" title="statement not covered" >achievements.findIndex(</span>
-<span class="fstat-no" title="function not covered" >      (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.id === achievement.id,</span>
-    );
-<span class="cstat-no" title="statement not covered" >    if (existingIndex &gt;= 0) {</span>
-      // Update existing
-<span class="cstat-no" title="statement not covered" >      achievements[existingIndex] = achievement;</span>
-    } else {
-      // Add new
-<span class="cstat-no" title="statement not covered" >      achievements.push(achievement);</span>
-    }
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(achievements));</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to save achievement", error);</span>
-  }
-}
-&nbsp;
-/**
- * Save multiple achievements at once
- */
-export async function saveAchievements(
-  achievements: Achievement[],
-): Promise&lt;void&gt; {
-  try {
-    const existing = await loadAchievements();
-    const updated = [...existing];
-&nbsp;
-    achievements.forEach((newAchievement) =&gt; {
-      const existingIndex = updated.findIndex(
-<span class="fstat-no" title="function not covered" >        (a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.id === newAchievement.id,</span>
-      );
-      <span class="missing-if-branch" title="if path not taken" >I</span>if (existingIndex &gt;= 0) {
-<span class="cstat-no" title="statement not covered" >        updated[existingIndex] = newAchievement;</span>
-      } else {
-        updated.push(newAchievement);
+      // For cumulative rep achievements, sum total reps
+      if (
+        achievement.type === "squats_1000" ||
+        achievement.type === "pushups_500" ||
+        achievement.type === "pullups_200"
+      ) {
+        return calculateTotalReps(workouts, activityType);
       }
-    });
 &nbsp;
-    await AsyncStorage.setItem(ACHIEVEMENTS_KEY, JSON.stringify(updated));
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to save achievements", error);</span>
-  }
-}
-&nbsp;
-/**
- * Get unlocked achievement IDs
- */
-export async function getUnlockedAchievementIds(): Promise&lt;string[]&gt; {
-  try {
-    const achievements = await loadAchievements();
-    return achievements.map(<span class="fstat-no" title="function not covered" >(a</span>) =&gt; <span class="cstat-no" title="statement not covered" >a.id)</span>;
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to get unlocked achievement ids", error);</span>
-<span class="cstat-no" title="statement not covered" >    return [];</span>
-  }
-}
-&nbsp;
-/**
- * Clear all achievements (for testing/debugging)
- */
-export async function <span class="fstat-no" title="function not covered" >clearAchievements(</span>): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.removeItem(ACHIEVEMENTS_KEY);</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to clear achievements", error);</span>
-  }
-}
-&nbsp;
-// ==================== PERSONAL RECORDS STORAGE ====================
-&nbsp;
-/**
- * Load user's personal records
- */
-export async function <span class="fstat-no" title="function not covered" >loadPersonalRecords(</span>): Promise&lt;PersonalRecord[]&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const json = <span class="cstat-no" title="statement not covered" >await AsyncStorage.getItem(PERSONAL_RECORDS_KEY);</span>
-<span class="cstat-no" title="statement not covered" >    if (!json) <span class="cstat-no" title="statement not covered" >return [];</span></span>
-<span class="cstat-no" title="statement not covered" >    return JSON.parse(json) as PersonalRecord[];</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to load personal records", error);</span>
-<span class="cstat-no" title="statement not covered" >    return [];</span>
-  }
-}
-&nbsp;
-/**
- * Save personal records
- */
-export async function <span class="fstat-no" title="function not covered" >savePersonalRecords(</span>
-  records: PersonalRecord[],
-): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.setItem(PERSONAL_RECORDS_KEY, JSON.stringify(records));</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to save personal records", error);</span>
-  }
-}
-&nbsp;
-/**
- * Update a single personal record
- */
-export async function <span class="fstat-no" title="function not covered" >updatePersonalRecord(</span>
-  record: PersonalRecord,
-): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const records = <span class="cstat-no" title="statement not covered" >await loadPersonalRecords();</span>
-    const existingIndex = <span class="cstat-no" title="statement not covered" >records.findIndex(<span class="fstat-no" title="function not covered" >(r</span>) =&gt; <span class="cstat-no" title="statement not covered" >r.type === record.type)</span>;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    if (existingIndex &gt;= 0) {</span>
-<span class="cstat-no" title="statement not covered" >      records[existingIndex] = record;</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      records.push(record);</span>
+      // For workout count achievements, count workouts
+      return relevantWorkouts.length;
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.setItem(PERSONAL_RECORDS_KEY, JSON.stringify(records));</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to update personal record", error);</span>
+<span class="branch-3 cbranch-no" title="branch not covered" >    default:</span>
+<span class="cstat-no" title="statement not covered" >      return 0;</span>
   }
 }
 &nbsp;
 /**
- * Clear personal records (for testing/debugging)
+ * Check and detect newly unlocked achievements
+ * Performance: &lt;200ms for all 15 achievements
+ *
+ * @param workouts - All user workouts
+ * @param streak - Current streak data
+ * @param unlockedAchievementIds - IDs of already unlocked achievements
+ * @returns Array of newly unlocked achievements
  */
-export async function <span class="fstat-no" title="function not covered" >clearPersonalRecords(</span>): Promise&lt;void&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-<span class="cstat-no" title="statement not covered" >    await AsyncStorage.removeItem(PERSONAL_RECORDS_KEY);</span>
-  } catch (error) {
-<span class="cstat-no" title="statement not covered" >    console.warn("Failed to clear personal records", error);</span>
+export function checkAchievements(
+  workouts: WorkoutEntry[],
+  streak: StreakData,
+  unlockedAchievementIds: string[] = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span>
+): Achievement[] {
+  const newlyUnlocked: Achievement[] = [];
+&nbsp;
+  for (const definition of ACHIEVEMENT_DEFINITIONS) {
+    // Skip if already unlocked
+    if (unlockedAchievementIds.includes(definition.id)) {
+      continue;
+    }
+&nbsp;
+    const progress = calculateAchievementProgress(definition, workouts, streak);
+    const isUnlocked = progress &gt;= definition.requirement;
+&nbsp;
+    if (isUnlocked) {
+      const newAchievement: Achievement = {
+        ...definition,
+        unlocked: true,
+        unlockedAt: new Date().toISOString(),
+        progress,
+      };
+&nbsp;
+      newlyUnlocked.push(newAchievement);
+    }
   }
+&nbsp;
+  return newlyUnlocked;
+}
+&nbsp;
+/**
+ * Calculate progress for all achievements
+ * Performance: &lt;150ms for all 15 achievements
+ */
+export function calculateAllAchievementProgress(
+  workouts: WorkoutEntry[],
+  streak: StreakData,
+  unlockedAchievementIds: string[] = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span>
+): Achievement[] {
+  return ACHIEVEMENT_DEFINITIONS.map((definition) =&gt; {
+    const progress = calculateAchievementProgress(definition, workouts, streak);
+    const isUnlocked =
+      progress &gt;= definition.requirement ||
+      unlockedAchievementIds.includes(definition.id);
+&nbsp;
+    return {
+      ...definition,
+      unlocked: isUnlocked,
+      unlockedAt: isUnlocked
+        ? unlockedAchievementIds.includes(definition.id)
+          ? <span class="branch-0 cbranch-no" title="branch not covered" >undefined </span>// Already unlocked, no date yet
+          : new Date().toISOString()
+        : undefined,
+      progress,
+    };
+  });
+}
+&nbsp;
+/**
+ * Get achievements by category
+ */
+export function getAchievementsByCategory(
+  achievements: Achievement[],
+  category: AchievementCategory,
+): Achievement[] {
+  return achievements.filter((a) =&gt; a.category === category);
+}
+&nbsp;
+/**
+ * Get unlocked achievements
+ */
+export function getUnlockedAchievements(
+  achievements: Achievement[],
+): Achievement[] {
+  return achievements.filter((a) =&gt; a.unlocked);
+}
+&nbsp;
+/**
+ * Get locked achievements
+ */
+export function getLockedAchievements(
+  achievements: Achievement[],
+): Achievement[] {
+  return achievements.filter((a) =&gt; !a.unlocked);
+}
+&nbsp;
+/**
+ * Get achievements sorted by tier (diamond first)
+ */
+export function sortAchievementsByTier(
+  achievements: Achievement[],
+): Achievement[] {
+  const tierOrder: Record&lt;AchievementTier, number&gt; = {
+    diamond: 0,
+    platinum: 1,
+    gold: 2,
+    silver: 3,
+    bronze: 4,
+  };
+&nbsp;
+  return [...achievements].sort(
+    (a, b) =&gt; tierOrder[a.tier] - tierOrder[b.tier],
+  );
+}
+&nbsp;
+/**
+ * Get next achievable achievement (highest progress locked achievement)
+ */
+export function getNextAchievement(
+  achievements: Achievement[],
+): Achievement | null {
+  const locked = getLockedAchievements(achievements);
+  if (locked.length === 0) return null;
+&nbsp;
+  return locked.reduce((highest, current) =&gt;
+    current.progress &gt; highest.progress ? <span class="branch-0 cbranch-no" title="branch not covered" >current </span>: highest,
+  );
+}
+&nbsp;
+/**
+ * Calculate achievement completion percentage
+ */
+export function calculateCompletionPercentage(
+  achievements: Achievement[],
+): number {
+  if (achievements.length === 0) return 0;
+&nbsp;
+  const unlocked = getUnlockedAchievements(achievements).length;
+  return Math.round((unlocked / achievements.length) * 100);
+}
+&nbsp;
+/**
+ * Get tier badge icon
+ */
+export function <span class="fstat-no" title="function not covered" >getTierBadgeIcon(</span>tier: AchievementTier): string {
+<span class="cstat-no" title="statement not covered" >  switch (tier) {</span>
+    case "bronze":
+<span class="cstat-no" title="statement not covered" >      return "medal";</span>
+    case "silver":
+<span class="cstat-no" title="statement not covered" >      return "medal-outline";</span>
+    case "gold":
+<span class="cstat-no" title="statement not covered" >      return "star";</span>
+    case "platinum":
+<span class="cstat-no" title="statement not covered" >      return "star-outline";</span>
+    case "diamond":
+<span class="cstat-no" title="statement not covered" >      return "diamond";</span>
+    default:
+<span class="cstat-no" title="statement not covered" >      return "medal";</span>
+  }
+}
+&nbsp;
+/**
+ * Format achievement progress for display
+ */
+export function formatAchievementProgress(achievement: Achievement): string {
+  if (achievement.unlocked) {
+    return "Completed";
+  }
+&nbsp;
+  const remaining = achievement.requirement - achievement.progress;
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (remaining &lt;= 0) {
+<span class="cstat-no" title="statement not covered" >    return "Ready to unlock!";</span>
+  }
+&nbsp;
+  return `${remaining} more to go`;
+}
+&nbsp;
+/**
+ * Get accessibility label for achievement
+ */
+export function getAchievementAccessibilityLabel(
+  achievement: Achievement,
+): string {
+  const status = achievement.unlocked
+    ? `Unlocked ${achievement.title}. ${achievement.description}`
+    : `${achievement.title}. ${achievement.description}. Progress: ${achievement.progress} out of ${achievement.requirement}`;
+&nbsp;
+  return status;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -1398,14 +1698,14 @@ export async function <span class="fstat-no" title="function not covered" >clear
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
                 at 2026-03-16T21:54:50.849Z
             </div>
-        <script src="../prettify.js"></script>
+        <script src="../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../sorter.js"></script>
-        <script src="../block-navigation.js"></script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
     </body>
 </html>
     
