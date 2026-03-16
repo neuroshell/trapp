@@ -434,12 +434,12 @@ Track architectural debt in `docs/technical-debt.md`:
 
 ## 11. References
 
-- [Product Vision](./product-vision.md)
-- [User Stories](./user-stories.md)
-- [Feature Specifications](./features.md)
-- [Development Roadmap](./roadmap.md)
-- [Architecture Decision Records](./technical-decisions.md)
-- [Architecture Significant Requirements](./asr.md)
+- [Product Vision](../reqs/product-vision.md)
+- [User Stories](../reqs/user-stories.md)
+- [Feature Specifications](../reqs/features.md)
+- [Development Roadmap](../reqs/roadmap.md)
+- [Architecture Decision Records](../tech/technical-decisions.md)
+- [Architecture Significant Requirements](../tech/asr.md)
 
 ---
 

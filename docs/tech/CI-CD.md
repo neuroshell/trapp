@@ -30,7 +30,7 @@ Trapp Tracker uses GitHub Actions for all CI/CD operations. The pipelines are de
 
 | Component    | Version |
 | ------------ | ------- |
-| Node.js      | 18+     |
+| Node.js      | 20+     |
 | npm          | Latest  |
 | Expo SDK     | 55.0.6  |
 | React Native | 0.81.5  |
