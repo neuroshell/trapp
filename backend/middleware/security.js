@@ -69,8 +69,8 @@ export function sanitizeForLog(str) {
   if (typeof str !== 'string') {
     str = String(str);
   }
-  // Remove newline characters to prevent log line injection
-  str = str.replace(/[\r\n]/g, ' ');
+  // Remove all ASCII control characters (including newlines) to prevent log injection
+  str = str.replace(/[\x00-\x1F\x7F]/g, ' ');
   str = str.replace(/\s+/g, ' ').trim();
   // Truncate to prevent log flooding
   const MAX_LOG_LEN = 1024;
