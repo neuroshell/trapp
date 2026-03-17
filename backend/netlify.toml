@@ -1,16 +1,16 @@
 [build]
   # Install dependencies
   install_command = "npm install"
-  
+
   # Build command (none needed for Node.js)
   command = "echo 'Backend build complete'"
-  
-  # Directory to deploy (functions folder)
-  publish = "netlify"
+
+  # Directory to deploy (current directory when deploying from netlify folder)
+  publish = "."
 
 [functions]
   # Directory containing Netlify functions
-  directory = "netlify/functions"
+  directory = "functions"
 
   # Node.js version
   node_bundler = "esbuild"
