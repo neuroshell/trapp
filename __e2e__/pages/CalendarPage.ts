@@ -1,5 +1,6 @@
-import { Page, Locator, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page, Locator, expect } from "@playwright/test";
+
+import { BasePage } from "./BasePage";
 
 /**
  * Calendar Page Object Model
@@ -25,83 +26,104 @@ export class CalendarPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.calendarScreen = page.getByText('Calendar', { exact: false }).or(
-      page.getByTestId('calendar-screen')
+    this.calendarScreen = page
+      .getByText("Calendar", { exact: false })
+      .or(page.getByTestId("calendar-screen"));
+    this.calendarGrid = page
+      .getByTestId("calendar-grid")
+      .or(page.getByRole("grid"));
+    this.calendarHeader = page
+      .getByTestId("calendar-header")
+      .or(this.calendarScreen.locator('[class*="header"]').first());
+    this.currentMonthLabel = page
+      .getByTestId("current-month")
+      .or(
+        this.calendarHeader
+          .locator('[class*="month"]')
+          .or(this.calendarHeader.getByText(/\w+ \d{4}/)),
+      );
+    this.previousMonthButton = page
+      .getByTestId("previous-month")
+      .or(
+        page
+          .getByRole("button", { name: /previous/i })
+          .or(
+            page
+              .getByText("‹", { exact: false })
+              .or(page.getByText("<", { exact: false })),
+          ),
+      );
+    this.nextMonthButton = page
+      .getByTestId("next-month")
+      .or(
+        page
+          .getByRole("button", { name: /next/i })
+          .or(
+            page
+              .getByText("›", { exact: false })
+              .or(page.getByText(">", { exact: false })),
+          ),
+      );
+    this.todayButton = page
+      .getByTestId("today-button")
+      .or(page.getByText("Today", { exact: false }));
+    this.dayCells = page
+      .getByTestId("calendar-day")
+      .or(
+        this.calendarGrid
+          .locator('[class*="day"]')
+          .or(this.calendarGrid.locator('[role="gridcell"]')),
+      );
+    this.workoutIndicators = page
+      .getByTestId("workout-indicator")
+      .or(
+        this.dayCells
+          .locator('[class*="indicator"]')
+          .or(this.dayCells.locator('[class*="dot"]')),
+      );
+    this.dayDetailModal = page.getByTestId("day-detail-modal").or(
+      page.getByRole("dialog").or(
+        page
+          .getByText(/workouts? for/i)
+          .locator("..")
+          .locator(".."),
+      ),
     );
-    this.calendarGrid = page.getByTestId('calendar-grid').or(
-      page.getByRole('grid')
-    );
-    this.calendarHeader = page.getByTestId('calendar-header').or(
-      this.calendarScreen.locator('[class*="header"]').first()
-    );
-    this.currentMonthLabel = page.getByTestId('current-month').or(
-      this.calendarHeader.locator('[class*="month"]').or(
-        this.calendarHeader.getByText(/\w+ \d{4}/)
-      )
-    );
-    this.previousMonthButton = page.getByTestId('previous-month').or(
-      page.getByRole('button', { name: /previous/i }).or(
-        page.getByText('‹', { exact: false }).or(
-          page.getByText('<', { exact: false })
-        )
-      )
-    );
-    this.nextMonthButton = page.getByTestId('next-month').or(
-      page.getByRole('button', { name: /next/i }).or(
-        page.getByText('›', { exact: false }).or(
-          page.getByText('>', { exact: false })
-        )
-      )
-    );
-    this.todayButton = page.getByTestId('today-button').or(
-      page.getByText('Today', { exact: false })
-    );
-    this.dayCells = page.getByTestId('calendar-day').or(
-      this.calendarGrid.locator('[class*="day"]').or(
-        this.calendarGrid.locator('[role="gridcell"]')
-      )
-    );
-    this.workoutIndicators = page.getByTestId('workout-indicator').or(
-      this.dayCells.locator('[class*="indicator"]').or(
-        this.dayCells.locator('[class*="dot"]')
-      )
-    );
-    this.dayDetailModal = page.getByTestId('day-detail-modal').or(
-      page.getByRole('dialog').or(
-        page.getByText(/workouts? for/i).locator('..').locator('..')
-      )
-    );
-    this.dayDetailDate = page.getByTestId('day-detail-date').or(
-      this.dayDetailModal.locator('[class*="date"]').first()
-    );
-    this.dayDetailWorkouts = page.getByTestId('day-detail-workouts').or(
-      this.dayDetailModal.locator('[class*="workout-list"]')
-    );
-    this.dayDetailCloseButton = page.getByTestId('day-detail-close').or(
-      this.dayDetailModal.getByText('Close', { exact: false }).or(
-        this.dayDetailModal.getByRole('button', { name: /close/i })
-      )
-    );
-    this.emptyStateMessage = page.getByText(/no workouts/i).or(
-      page.getByText(/nothing logged/i)
-    );
-    this.addWorkoutButton = page.getByTestId('add-workout-button').or(
-      page.getByText('Log Workout', { exact: false }).or(
-        page.getByText('Add Workout', { exact: false })
-      )
-    );
+    this.dayDetailDate = page
+      .getByTestId("day-detail-date")
+      .or(this.dayDetailModal.locator('[class*="date"]').first());
+    this.dayDetailWorkouts = page
+      .getByTestId("day-detail-workouts")
+      .or(this.dayDetailModal.locator('[class*="workout-list"]'));
+    this.dayDetailCloseButton = page
+      .getByTestId("day-detail-close")
+      .or(
+        this.dayDetailModal
+          .getByText("Close", { exact: false })
+          .or(this.dayDetailModal.getByRole("button", { name: /close/i })),
+      );
+    this.emptyStateMessage = page
+      .getByText(/no workouts/i)
+      .or(page.getByText(/nothing logged/i));
+    this.addWorkoutButton = page
+      .getByTestId("add-workout-button")
+      .or(
+        page
+          .getByText("Log Workout", { exact: false })
+          .or(page.getByText("Add Workout", { exact: false })),
+      );
   }
 
   /**
    * Navigate to calendar screen
    */
   async goto() {
-    await this.navigateTo('/');
-    const calendarTab = this.page.getByTestId('tab-calendar').or(
-      this.page.getByRole('tab', { name: /calendar/i })
-    );
+    await this.navigateTo("/");
+    const calendarTab = this.page
+      .getByTestId("tab-calendar")
+      .or(this.page.getByRole("tab", { name: /calendar/i }));
     await calendarTab.click();
-    await this.calendarScreen.waitFor({ state: 'visible', timeout: 10000 });
+    await this.calendarScreen.waitFor({ state: "visible", timeout: 10000 });
   }
 
   /**
@@ -116,7 +138,7 @@ export class CalendarPage extends BasePage {
    * Get current month text
    */
   async getCurrentMonth(): Promise<string> {
-    return await this.currentMonthLabel.textContent() || '';
+    return (await this.currentMonthLabel.textContent()) || "";
   }
 
   /**
@@ -156,7 +178,7 @@ export class CalendarPage extends BasePage {
   async clickDay(day: number) {
     const dayCell = this.getDayCell(day);
     await dayCell.click();
-    await this.dayDetailModal.waitFor({ state: 'visible', timeout: 5000 });
+    await this.dayDetailModal.waitFor({ state: "visible", timeout: 5000 });
   }
 
   /**
@@ -164,9 +186,9 @@ export class CalendarPage extends BasePage {
    */
   async expectDayHasWorkout(day: number) {
     const dayCell = this.getDayCell(day);
-    const indicator = dayCell.locator('[class*="indicator"]').or(
-      dayCell.locator('[class*="dot"]')
-    );
+    const indicator = dayCell
+      .locator('[class*="indicator"]')
+      .or(dayCell.locator('[class*="dot"]'));
     await expect(indicator.first()).toBeVisible();
   }
 
@@ -175,9 +197,9 @@ export class CalendarPage extends BasePage {
    */
   async expectDayNoWorkout(day: number) {
     const dayCell = this.getDayCell(day);
-    const indicator = dayCell.locator('[class*="indicator"]').or(
-      dayCell.locator('[class*="dot"]')
-    );
+    const indicator = dayCell
+      .locator('[class*="indicator"]')
+      .or(dayCell.locator('[class*="dot"]'));
     await expect(indicator).not.toBeVisible();
   }
 
@@ -220,7 +242,7 @@ export class CalendarPage extends BasePage {
    */
   async closeDayDetail() {
     await this.dayDetailCloseButton.click();
-    await this.dayDetailModal.waitFor({ state: 'hidden', timeout: 5000 });
+    await this.dayDetailModal.waitFor({ state: "hidden", timeout: 5000 });
   }
 
   /**
@@ -236,16 +258,16 @@ export class CalendarPage extends BasePage {
   async expectTodayHighlighted() {
     const today = new Date().getDate();
     const dayCell = this.getDayCell(today);
-    await expect(dayCell).toHaveCSS('background-color', /rgb/).or(
-      expect(dayCell).toHaveAttribute('aria-current', 'date')
-    );
+    await expect(dayCell)
+      .toHaveCSS("background-color", /rgb/)
+      .or(expect(dayCell).toHaveAttribute("aria-current", "date"));
   }
 
   /**
    * Verify weekday headers
    */
   async expectWeekdayHeaders() {
-    const headers = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const headers = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     for (const header of headers) {
       const headerElement = this.page.getByText(header, { exact: false });
       await expect(headerElement.first()).toBeVisible();

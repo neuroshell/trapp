@@ -1,10 +1,11 @@
-import { test as base, expect } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { RegisterPage } from '../pages/RegisterPage';
-import { HomePage } from '../pages/HomePage';
-import { LogPage } from '../pages/LogPage';
-import { CalendarPage } from '../pages/CalendarPage';
-import { SettingsPage } from '../pages/SettingsPage';
+import { test as base, expect } from "@playwright/test";
+
+import { CalendarPage } from "../pages/CalendarPage";
+import { HomePage } from "../pages/HomePage";
+import { LogPage } from "../pages/LogPage";
+import { LoginPage } from "../pages/LoginPage";
+import { RegisterPage } from "../pages/RegisterPage";
+import { SettingsPage } from "../pages/SettingsPage";
 
 /**
  * Test fixtures for E2E tests
@@ -38,7 +39,7 @@ export const test = base.extend<Fixtures>({
     const timestamp = Date.now();
     await use({
       email: `testuser+e2e${timestamp}@example.com`,
-      password: 'TestPass123',
+      password: "TestPass123",
     });
   },
 
@@ -68,7 +69,18 @@ export const test = base.extend<Fixtures>({
   },
 
   // Authenticated page objects (automatically logs in before test)
-  authenticatedPage: async ({ page, testUser, loginPage, homePage, logPage, calendarPage, settingsPage }, use) => {
+  authenticatedPage: async (
+    {
+      page,
+      testUser,
+      loginPage,
+      homePage,
+      logPage,
+      calendarPage,
+      settingsPage,
+    },
+    use,
+  ) => {
     // Setup: Login before test
     await loginPage.goto();
     await loginPage.loginAndNavigate(testUser.email, testUser.password);

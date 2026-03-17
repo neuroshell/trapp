@@ -9,7 +9,8 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 
 import { apiService, SyncStatus } from "../services/apiService";
-import { syncService, useNetworkStatus } from "../services/syncService";
+import { syncService } from "../services/syncService";
+import { useNetworkStatus } from "../utils/network";
 
 /**
  * Hook to access sync status and operations

@@ -1,5 +1,6 @@
-import { Page, Locator, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page, Locator, expect } from "@playwright/test";
+
+import { BasePage } from "./BasePage";
 
 /**
  * Home/Dashboard Page Object Model
@@ -27,36 +28,54 @@ export class HomePage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.dashboard = page.getByTestId('dashboard').or(page.getByText('FitTrack Pro', { exact: false }).first());
-    this.streakTracker = page.getByTestId('home-streak-tracker');
-    this.weeklySummary = page.getByTestId('home-weekly-summary');
+    this.dashboard = page
+      .getByTestId("dashboard")
+      .or(page.getByText("FitTrack Pro", { exact: false }).first());
+    this.streakTracker = page.getByTestId("home-streak-tracker");
+    this.weeklySummary = page.getByTestId("home-weekly-summary");
     this.quickLogButtons = page.getByTestId(/quick-log-/);
-    this.recentActivitySection = page.getByText('Recent Activity', { exact: false });
-    this.recentActivityList = page.getByTestId('recent-activity-list').or(
-      this.recentActivitySection.locator('..').locator('[data-testid]')
-    );
-    this.emptyStateMessage = page.getByText(/no workouts/i).or(
-      page.getByText(/start logging/i)
-    );
-    this.loadingIndicator = page.getByText('Loading...', { exact: false });
-    this.syncStatus = page.getByTestId('sync-status').or(
-      page.getByText('Online', { exact: false }).or(page.getByText('Offline', { exact: false }))
-    );
-    this.headerTitle = page.getByText('FitTrack Pro', { exact: false }).first();
+    this.recentActivitySection = page.getByText("Recent Activity", {
+      exact: false,
+    });
+    this.recentActivityList = page
+      .getByTestId("recent-activity-list")
+      .or(this.recentActivitySection.locator("..").locator("[data-testid]"));
+    this.emptyStateMessage = page
+      .getByText(/no workouts/i)
+      .or(page.getByText(/start logging/i));
+    this.loadingIndicator = page.getByText("Loading...", { exact: false });
+    this.syncStatus = page
+      .getByTestId("sync-status")
+      .or(
+        page
+          .getByText("Online", { exact: false })
+          .or(page.getByText("Offline", { exact: false })),
+      );
+    this.headerTitle = page.getByText("FitTrack Pro", { exact: false }).first();
 
     // Tab navigation
-    this.homeTab = page.getByTestId('tab-home').or(page.getByRole('tab', { name: /home/i }));
-    this.logTab = page.getByTestId('tab-log').or(page.getByRole('tab', { name: /log/i }));
-    this.calendarTab = page.getByTestId('tab-calendar').or(page.getByRole('tab', { name: /calendar/i }));
-    this.achievementsTab = page.getByTestId('tab-achievements').or(page.getByRole('tab', { name: /achievement/i }));
-    this.settingsTab = page.getByTestId('tab-settings').or(page.getByRole('tab', { name: /setting/i }));
+    this.homeTab = page
+      .getByTestId("tab-home")
+      .or(page.getByRole("tab", { name: /home/i }));
+    this.logTab = page
+      .getByTestId("tab-log")
+      .or(page.getByRole("tab", { name: /log/i }));
+    this.calendarTab = page
+      .getByTestId("tab-calendar")
+      .or(page.getByRole("tab", { name: /calendar/i }));
+    this.achievementsTab = page
+      .getByTestId("tab-achievements")
+      .or(page.getByRole("tab", { name: /achievement/i }));
+    this.settingsTab = page
+      .getByTestId("tab-settings")
+      .or(page.getByRole("tab", { name: /setting/i }));
   }
 
   /**
    * Wait for home page to load
    */
   async waitForLoad() {
-    await this.dashboard.waitFor({ state: 'visible', timeout: 10000 });
+    await this.dashboard.waitFor({ state: "visible", timeout: 10000 });
   }
 
   /**
@@ -84,14 +103,14 @@ export class HomePage extends BasePage {
   /**
    * Get quick log button by type
    */
-  getQuickLogButton(type: 'running' | 'squats' | 'pushups' | 'pullups') {
+  getQuickLogButton(type: "running" | "squats" | "pushups" | "pullups") {
     return this.page.getByTestId(`quick-log-${type}`);
   }
 
   /**
    * Click quick log button
    */
-  async clickQuickLog(type: 'running' | 'squats' | 'pushups' | 'pullups') {
+  async clickQuickLog(type: "running" | "squats" | "pushups" | "pullups") {
     const button = this.getQuickLogButton(type);
     await button.click();
   }
@@ -121,14 +140,16 @@ export class HomePage extends BasePage {
    * Get workout item from recent activity
    */
   getWorkoutItem(index: number = 0) {
-    return this.page.getByTestId('workout-item').nth(index);
+    return this.page.getByTestId("workout-item").nth(index);
   }
 
   /**
    * Verify workout appears in recent activity
    */
   async expectWorkoutInList(workoutType: string) {
-    const workoutItem = this.page.getByText(workoutType, { exact: false }).first();
+    const workoutItem = this.page
+      .getByText(workoutType, { exact: false })
+      .first();
     await expect(workoutItem).toBeVisible();
   }
 
@@ -163,18 +184,20 @@ export class HomePage extends BasePage {
   /**
    * Verify active tab
    */
-  async expectActiveTab(tabName: 'home' | 'log' | 'calendar' | 'achievements' | 'settings') {
+  async expectActiveTab(
+    tabName: "home" | "log" | "calendar" | "achievements" | "settings",
+  ) {
     const tab = this[`${tabName}Tab` as keyof typeof this] as Locator;
-    await expect(tab).toHaveAttribute('aria-selected', 'true').or(
-      expect(tab).toHaveCSS('font-weight', '700')
-    );
+    await expect(tab)
+      .toHaveAttribute("aria-selected", "true")
+      .or(expect(tab).toHaveCSS("font-weight", "700"));
   }
 
   /**
    * Get streak count
    */
   async getStreakCount(): Promise<number> {
-    const streakText = await this.streakTracker.textContent() || '0';
+    const streakText = (await this.streakTracker.textContent()) || "0";
     const match = streakText.match(/\d+/);
     return match ? parseInt(match[0], 10) : 0;
   }

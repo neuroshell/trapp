@@ -101,9 +101,17 @@ class ApiService {
 
     if (includeAuth && this.token) {
       headers["Authorization"] = `Bearer ${this.token}`;
-      console.log("[ApiService] Authorization header set:", `Bearer ${this.token.substring(0, 30)}...`);
+      console.log(
+        "[ApiService] Authorization header set:",
+        `Bearer ${this.token.substring(0, 30)}...`,
+      );
     } else {
-      console.log("[ApiService] No Authorization header - includeAuth:", includeAuth, "hasToken:", !!this.token);
+      console.log(
+        "[ApiService] No Authorization header - includeAuth:",
+        includeAuth,
+        "hasToken:",
+        !!this.token,
+      );
     }
 
     return headers;

@@ -1,5 +1,6 @@
-import { Page, Locator, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page, Locator, expect } from "@playwright/test";
+
+import { BasePage } from "./BasePage";
 
 /**
  * Register Page Object Model
@@ -20,44 +21,53 @@ export class RegisterPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.emailInput = page.getByLabel('Email address input', { exact: true }).or(
-      page.getByPlaceholder('Enter your email')
-    );
-    this.passwordInput = page.getByLabel('Password input', { exact: false }).or(
-      page.getByPlaceholder('Enter your password')
-    );
-    this.confirmPasswordInput = page.getByPlaceholder('Confirm password').or(
-      page.getByLabel('Confirm password', { exact: false })
-    );
-    this.termsCheckbox = page.getByRole('checkbox').or(
-      page.getByText('Terms', { exact: false }).locator('..').getByRole('checkbox')
-    );
-    this.registerButton = page.getByTestId('register-button').or(
-      page.getByText('Register', { exact: false }).or(
-        page.getByText('Create Account', { exact: false })
-      )
-    );
-    this.emailError = page.getByText('valid email', { exact: false });
-    this.passwordError = page.getByText('Password must be', { exact: false });
-    this.termsError = page.getByText('must accept', { exact: false }).or(
-      page.getByText('terms', { exact: false })
-    );
-    this.loadingIndicator = this.registerButton.getByRole('progressbar');
-    this.passwordStrengthIndicator = page.getByText('Password strength', { exact: false });
+    this.emailInput = page
+      .getByLabel("Email address input", { exact: true })
+      .or(page.getByPlaceholder("Enter your email"));
+    this.passwordInput = page
+      .getByLabel("Password input", { exact: false })
+      .or(page.getByPlaceholder("Enter your password"));
+    this.confirmPasswordInput = page
+      .getByPlaceholder("Confirm password")
+      .or(page.getByLabel("Confirm password", { exact: false }));
+    this.termsCheckbox = page
+      .getByRole("checkbox")
+      .or(
+        page
+          .getByText("Terms", { exact: false })
+          .locator("..")
+          .getByRole("checkbox"),
+      );
+    this.registerButton = page
+      .getByTestId("register-button")
+      .or(
+        page
+          .getByText("Register", { exact: false })
+          .or(page.getByText("Create Account", { exact: false })),
+      );
+    this.emailError = page.getByText("valid email", { exact: false });
+    this.passwordError = page.getByText("Password must be", { exact: false });
+    this.termsError = page
+      .getByText("must accept", { exact: false })
+      .or(page.getByText("terms", { exact: false }));
+    this.loadingIndicator = this.registerButton.getByRole("progressbar");
+    this.passwordStrengthIndicator = page.getByText("Password strength", {
+      exact: false,
+    });
   }
 
   /**
    * Navigate to register page
    */
   async goto() {
-    await this.navigateTo('/');
+    await this.navigateTo("/");
     // Wait for login screen, then navigate to register
-    const createAccountLink = this.page.getByText('Create Account');
-    await createAccountLink.waitFor({ state: 'visible', timeout: 10000 });
+    const createAccountLink = this.page.getByText("Create Account");
+    await createAccountLink.waitFor({ state: "visible", timeout: 10000 });
     await createAccountLink.click();
-    
+
     // Wait for register screen
-    await this.emailInput.waitFor({ state: 'visible', timeout: 10000 });
+    await this.emailInput.waitFor({ state: "visible", timeout: 10000 });
   }
 
   /**
@@ -66,15 +76,15 @@ export class RegisterPage extends BasePage {
   async register(email: string, password: string, acceptTerms: boolean = true) {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
-    
+
     if (this.confirmPasswordInput.isVisible()) {
       await this.confirmPasswordInput.fill(password);
     }
-    
-    if (acceptTerms && await this.isElementVisible(this.termsCheckbox)) {
+
+    if (acceptTerms && (await this.isElementVisible(this.termsCheckbox))) {
       await this.termsCheckbox.check();
     }
-    
+
     await this.registerButton.click();
   }
 
@@ -130,8 +140,8 @@ export class RegisterPage extends BasePage {
    * Fill form with invalid data
    */
   async fillInvalidData() {
-    await this.emailInput.fill('invalid-email');
-    await this.passwordInput.fill('short');
+    await this.emailInput.fill("invalid-email");
+    await this.passwordInput.fill("short");
   }
 
   /**

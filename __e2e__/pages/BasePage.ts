@@ -1,4 +1,4 @@
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator, expect } from "@playwright/test";
 
 /**
  * Base Page Object Model
@@ -10,13 +10,13 @@ export class BasePage {
 
   constructor(page: Page) {
     this.page = page;
-    this.baseURL = process.env.WEB_URL || 'http://localhost:8081';
+    this.baseURL = process.env.WEB_URL || "http://localhost:8081";
   }
 
   /**
    * Navigate to a relative path
    */
-  async navigateTo(path: string = '/') {
+  async navigateTo(path: string = "/") {
     await this.page.goto(`${this.baseURL}${path}`);
   }
 
@@ -31,7 +31,7 @@ export class BasePage {
    * Wait for network to be idle
    */
   async waitForNetworkIdle() {
-    await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState("networkidle");
   }
 
   /**
@@ -55,7 +55,7 @@ export class BasePage {
    * Get text content of a locator
    */
   async getLocatorText(locator: Locator): Promise<string> {
-    return await locator.textContent() || '';
+    return (await locator.textContent()) || "";
   }
 
   /**
@@ -63,7 +63,7 @@ export class BasePage {
    */
   async isElementVisible(locator: Locator): Promise<boolean> {
     try {
-      await locator.waitFor({ state: 'visible', timeout: 5000 });
+      await locator.waitFor({ state: "visible", timeout: 5000 });
       return true;
     } catch {
       return false;
@@ -74,7 +74,7 @@ export class BasePage {
    * Wait for element to be enabled
    */
   async waitForEnabled(locator: Locator, timeout: number = 5000) {
-    await locator.waitFor({ state: 'enabled', timeout });
+    await locator.waitFor({ state: "enabled", timeout });
   }
 
   /**

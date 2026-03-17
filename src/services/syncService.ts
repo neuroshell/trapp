@@ -240,14 +240,17 @@ class SyncService {
       clearTimeout(this.syncDebounceTimer);
       this.syncDebounceTimer = null;
     }
-    
+
     return await this.executeQuickSync();
   }
 
   /**
    * Quick sync: upload pending items and download recent changes
    */
-  private async executeQuickSync(): Promise<{ downloaded: number; uploaded: number }> {
+  private async executeQuickSync(): Promise<{
+    downloaded: number;
+    uploaded: number;
+  }> {
     this.isSyncing = true;
     this.updateStatus({ isSyncing: true, error: undefined });
 
@@ -263,24 +266,33 @@ class SyncService {
       // Step 1: Download recent changes from backend
       const lastSyncJson = await AsyncStorage.getItem(LAST_SYNC_KEY);
       const lastSyncAt = lastSyncJson || undefined;
-      console.log("[SyncService] Downloading recent changes since:", lastSyncAt);
+      console.log(
+        "[SyncService] Downloading recent changes since:",
+        lastSyncAt,
+      );
       const downloadResponse = await apiService.downloadData(lastSyncAt);
-      console.log("[SyncService] Downloaded workouts:", downloadResponse.data.workouts?.length || 0);
-      
+      console.log(
+        "[SyncService] Downloaded workouts:",
+        downloadResponse.data.workouts?.length || 0,
+      );
+
       if (downloadResponse.data.workouts) {
         downloaded = downloadResponse.data.workouts.length;
         // Merge with local workouts
         const localWorkouts = await loadWorkouts();
         const workoutMap = new Map<string, WorkoutEntry>();
-        
+
         localWorkouts.forEach((w) => workoutMap.set(w.id, w));
         downloadResponse.data.workouts.forEach((remote: WorkoutEntry) => {
           const local = workoutMap.get(remote.id);
-          if (!local || new Date(remote.updatedAt) > new Date(local.updatedAt)) {
+          if (
+            !local ||
+            new Date(remote.updatedAt) > new Date(local.updatedAt)
+          ) {
             workoutMap.set(remote.id, remote);
           }
         });
-        
+
         await AsyncStorage.setItem(
           "TRAPP_TRACKER_WORKOUTS_V1",
           JSON.stringify(Array.from(workoutMap.values())),
@@ -289,7 +301,11 @@ class SyncService {
 
       // Step 2: Upload pending items
       if (this.syncQueue.length > 0) {
-        console.log("[SyncService] Uploading", this.syncQueue.length, "pending items");
+        console.log(
+          "[SyncService] Uploading",
+          this.syncQueue.length,
+          "pending items",
+        );
         uploaded = await this.processQueue();
       }
 
@@ -301,7 +317,10 @@ class SyncService {
         isSyncing: false,
       });
 
-      console.log("[SyncService] Quick sync complete:", { downloaded, uploaded });
+      console.log("[SyncService] Quick sync complete:", {
+        downloaded,
+        uploaded,
+      });
       return { downloaded, uploaded };
     } catch (error) {
       this.updateStatus({
@@ -464,12 +483,19 @@ class SyncService {
       try {
         console.log("[SyncService] Syncing workout immediately:", workout.id);
         const response = await apiService.syncWorkout(workout);
-        // Use backend's timestamp to ensure consistency
-        const backendTimestamp = response.timestamp || new Date().toISOString();
+        // Use backend's timestamp from response or current time
+        const backendTimestamp =
+          (response as any).timestamp || new Date().toISOString();
         await AsyncStorage.setItem(LAST_SYNC_KEY, backendTimestamp);
-        console.log("[SyncService] Workout synced, lastSyncAt updated to:", backendTimestamp);
+        console.log(
+          "[SyncService] Workout synced, lastSyncAt updated to:",
+          backendTimestamp,
+        );
       } catch (error) {
-        console.warn("[SyncService] Immediate sync failed, queuing workout", error);
+        console.warn(
+          "[SyncService] Immediate sync failed, queuing workout",
+          error,
+        );
         // If sync fails, queue it
         await this.queueOperation("CREATE_WORKOUT", workout);
       }
@@ -551,9 +577,14 @@ class SyncService {
       let conflicts = 0;
 
       // Download ALL data from backend (no since parameter = full sync)
-      console.log("[SyncService] Performing FULL sync - downloading all data...");
+      console.log(
+        "[SyncService] Performing FULL sync - downloading all data...",
+      );
       const downloadResponse = await apiService.downloadData(undefined);
-      console.log("[SyncService] Downloaded workouts:", downloadResponse.data.workouts?.length || 0);
+      console.log(
+        "[SyncService] Downloaded workouts:",
+        downloadResponse.data.workouts?.length || 0,
+      );
 
       if (downloadResponse.data.workouts) {
         downloaded = downloadResponse.data.workouts.length;

@@ -1,5 +1,6 @@
-import { Page, Locator, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page, Locator, expect } from "@playwright/test";
+
+import { BasePage } from "./BasePage";
 
 /**
  * Settings Page Object Model
@@ -19,47 +20,49 @@ export class SettingsPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.settingsScreen = page.getByText('Settings', { exact: false }).or(
-      page.getByTestId('settings-screen')
-    );
-    this.logoutButton = page.getByTestId('logout-button').or(
-      page.getByText('Logout', { exact: false }).or(
-        page.getByText('Sign Out', { exact: false })
-      )
-    );
-    this.logoutConfirmationDialog = page.getByTestId('logout-confirmation-dialog').or(
-      page.getByText(/are you sure/i).or(page.getByText(/logout/i))
-    );
-    this.confirmLogoutButton = page.getByTestId('confirm-logout-button').or(
-      page.getByText('Logout', { exact: false }).last()
-    );
-    this.cancelLogoutButton = page.getByTestId('cancel-logout-button').or(
-      page.getByText('Cancel', { exact: false }).last()
-    );
-    this.userSection = page.getByTestId('user-section').or(
-      this.settingsScreen.locator('[class*="user"]').first()
-    );
-    this.userEmail = page.getByTestId('user-email').or(
-      this.userSection.locator('[class*="email"]')
-    );
-    this.syncSettings = page.getByTestId('sync-settings').or(
-      page.getByText('Sync', { exact: false })
-    );
-    this.appVersion = page.getByTestId('app-version').or(
-      page.getByText(/version/i)
-    );
+    this.settingsScreen = page
+      .getByText("Settings", { exact: false })
+      .or(page.getByTestId("settings-screen"));
+    this.logoutButton = page
+      .getByTestId("logout-button")
+      .or(
+        page
+          .getByText("Logout", { exact: false })
+          .or(page.getByText("Sign Out", { exact: false })),
+      );
+    this.logoutConfirmationDialog = page
+      .getByTestId("logout-confirmation-dialog")
+      .or(page.getByText(/are you sure/i).or(page.getByText(/logout/i)));
+    this.confirmLogoutButton = page
+      .getByTestId("confirm-logout-button")
+      .or(page.getByText("Logout", { exact: false }).last());
+    this.cancelLogoutButton = page
+      .getByTestId("cancel-logout-button")
+      .or(page.getByText("Cancel", { exact: false }).last());
+    this.userSection = page
+      .getByTestId("user-section")
+      .or(this.settingsScreen.locator('[class*="user"]').first());
+    this.userEmail = page
+      .getByTestId("user-email")
+      .or(this.userSection.locator('[class*="email"]'));
+    this.syncSettings = page
+      .getByTestId("sync-settings")
+      .or(page.getByText("Sync", { exact: false }));
+    this.appVersion = page
+      .getByTestId("app-version")
+      .or(page.getByText(/version/i));
   }
 
   /**
    * Navigate to settings screen
    */
   async goto() {
-    await this.navigateTo('/');
-    const settingsTab = this.page.getByTestId('tab-settings').or(
-      this.page.getByRole('tab', { name: /settings/i })
-    );
+    await this.navigateTo("/");
+    const settingsTab = this.page
+      .getByTestId("tab-settings")
+      .or(this.page.getByRole("tab", { name: /settings/i }));
     await settingsTab.click();
-    await this.settingsScreen.waitFor({ state: 'visible', timeout: 10000 });
+    await this.settingsScreen.waitFor({ state: "visible", timeout: 10000 });
   }
 
   /**
@@ -74,7 +77,10 @@ export class SettingsPage extends BasePage {
    */
   async clickLogout() {
     await this.logoutButton.click();
-    await this.logoutConfirmationDialog.waitFor({ state: 'visible', timeout: 5000 });
+    await this.logoutConfirmationDialog.waitFor({
+      state: "visible",
+      timeout: 5000,
+    });
   }
 
   /**
@@ -89,7 +95,10 @@ export class SettingsPage extends BasePage {
    */
   async cancelLogout() {
     await this.cancelLogoutButton.click();
-    await this.logoutConfirmationDialog.waitFor({ state: 'hidden', timeout: 5000 });
+    await this.logoutConfirmationDialog.waitFor({
+      state: "hidden",
+      timeout: 5000,
+    });
   }
 
   /**
@@ -120,7 +129,7 @@ export class SettingsPage extends BasePage {
    * Get user email text
    */
   async getUserEmail(): Promise<string> {
-    return await this.userEmail.textContent() || '';
+    return (await this.userEmail.textContent()) || "";
   }
 
   /**

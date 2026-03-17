@@ -1835,3 +1835,11 @@
 [2026-03-17T18:05:29.516Z] [INFO] req.user: {"userId":"pWlPoHrjE8Be-H34YjiMW","email":"chad@chad.chad","iat":1773770457,"exp":1776362457}
 [2026-03-17T18:05:29.518Z] [INFO] User data retrieved: 18 workouts
 [2026-03-17T18:05:29.519Z] [INFO] Sync download complete for user pWlPoHrjE8Be-H34YjiMW: 18 workouts
+[2026-03-17T18:11:54.838Z] [INFO] Sync download requested - userId: pWlPoHrjE8Be-H34YjiMW, since: undefined
+[2026-03-17T18:11:54.839Z] [INFO] req.user: {"userId":"pWlPoHrjE8Be-H34YjiMW","email":"chad@chad.chad","iat":1773770457,"exp":1776362457}
+[2026-03-17T18:11:54.839Z] [INFO] User data retrieved: 18 workouts
+[2026-03-17T18:11:54.839Z] [INFO] Sync download complete for user pWlPoHrjE8Be-H34YjiMW: 18 workouts
+[2026-03-17T18:12:34.716Z] [INFO] Sync download requested - userId: pWlPoHrjE8Be-H34YjiMW, since: undefined
+[2026-03-17T18:12:34.716Z] [INFO] req.user: {"userId":"pWlPoHrjE8Be-H34YjiMW","email":"chad@chad.chad","iat":1773770457,"exp":1776362457}
+[2026-03-17T18:12:34.716Z] [INFO] User data retrieved: 18 workouts
+[2026-03-17T18:12:34.717Z] [INFO] Sync download complete for user pWlPoHrjE8Be-H34YjiMW: 18 workouts

@@ -84,7 +84,7 @@ function AppContent() {
   React.useEffect(() => {
     if (user && !loading) {
       syncService.initialize().catch((err) => {
-        console.warn('Failed to initialize sync service', err);
+        console.warn("Failed to initialize sync service", err);
       });
     }
   }, [user, loading]);

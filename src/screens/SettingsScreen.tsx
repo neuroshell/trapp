@@ -65,7 +65,9 @@ export function SettingsScreen() {
     try {
       setSyncStatus("Syncing...");
       const result = await syncNow();
-      setSyncStatus(`Sync complete: ${result.downloaded} downloaded, ${result.uploaded} uploaded`);
+      setSyncStatus(
+        `Sync complete: ${result.downloaded} downloaded, ${result.uploaded} uploaded`,
+      );
       Alert.alert(
         "Sync complete",
         `Downloaded: ${result.downloaded}, Uploaded: ${result.uploaded}`,

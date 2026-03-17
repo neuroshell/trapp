@@ -1,5 +1,6 @@
-import { Page, Locator, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { Page, Locator, expect } from "@playwright/test";
+
+import { BasePage } from "./BasePage";
 
 /**
  * Login Page Object Model
@@ -18,29 +19,29 @@ export class LoginPage extends BasePage {
 
   constructor(page: Page) {
     super(page);
-    this.emailInput = page.getByLabel('Email address input', { exact: false });
-    this.passwordInput = page.getByLabel('Password input', { exact: false });
-    this.signInButton = page.getByTestId('signin-button');
-    this.createAccountLink = page.getByText('Create Account');
-    this.emailError = page.getByText('Email is required', { exact: false }).or(
-      page.getByText('valid email', { exact: false })
-    );
-    this.passwordError = page.getByText('Password is required', { exact: false }).or(
-      page.getByText('Password must be', { exact: false })
-    );
-    this.generalError = page.getByText('Invalid email or password', { exact: false }).or(
-      page.getByText('Login failed', { exact: false })
-    );
-    this.loadingIndicator = this.signInButton.getByRole('progressbar');
+    this.emailInput = page.getByLabel("Email address input", { exact: false });
+    this.passwordInput = page.getByLabel("Password input", { exact: false });
+    this.signInButton = page.getByTestId("signin-button");
+    this.createAccountLink = page.getByText("Create Account");
+    this.emailError = page
+      .getByText("Email is required", { exact: false })
+      .or(page.getByText("valid email", { exact: false }));
+    this.passwordError = page
+      .getByText("Password is required", { exact: false })
+      .or(page.getByText("Password must be", { exact: false }));
+    this.generalError = page
+      .getByText("Invalid email or password", { exact: false })
+      .or(page.getByText("Login failed", { exact: false }));
+    this.loadingIndicator = this.signInButton.getByRole("progressbar");
   }
 
   /**
    * Navigate to login page
    */
   async goto() {
-    await this.navigateTo('/');
+    await this.navigateTo("/");
     // Wait for login screen to appear
-    await this.emailInput.waitFor({ state: 'visible', timeout: 10000 });
+    await this.emailInput.waitFor({ state: "visible", timeout: 10000 });
   }
 
   /**
@@ -59,9 +60,11 @@ export class LoginPage extends BasePage {
     await this.login(email, password);
     // Wait for navigation to home screen
     await this.page.waitForURL(/.*\/.*/, { timeout: 10000 });
-    await this.page.waitForSelector('[data-testid="dashboard"]', { timeout: 10000 }).catch(() => {
-      // Fallback: wait for home screen content
-    });
+    await this.page
+      .waitForSelector('[data-testid="dashboard"]', { timeout: 10000 })
+      .catch(() => {
+        // Fallback: wait for home screen content
+      });
   }
 
   /**
@@ -69,7 +72,7 @@ export class LoginPage extends BasePage {
    */
   async attemptInvalidLogin(email: string, password: string) {
     await this.login(email, password);
-    await this.generalError.waitFor({ state: 'visible', timeout: 5000 });
+    await this.generalError.waitFor({ state: "visible", timeout: 5000 });
   }
 
   /**

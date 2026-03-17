@@ -5,7 +5,7 @@
 /**
  * Generate a unique email address for testing
  */
-export function generateTestEmail(prefix: string = 'testuser'): string {
+export function generateTestEmail(prefix: string = "testuser"): string {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substring(2, 7);
   return `${prefix}+e2e${timestamp}${random}@example.com`;
@@ -22,14 +22,14 @@ export function generateTestPassword(): string {
  * Wait for a specific duration
  */
 export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
  * Format date for comparison
  */
 export function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split("T")[0];
 }
 
 /**
@@ -63,10 +63,10 @@ export function generateStrengthWorkout() {
 export async function retry<T>(
   fn: () => Promise<T>,
   retries: number = 3,
-  delay: number = 1000
+  delay: number = 1000,
 ): Promise<T> {
   let lastError: Error;
-  
+
   for (let i = 0; i < retries; i++) {
     try {
       return await fn();
@@ -77,14 +77,16 @@ export async function retry<T>(
       }
     }
   }
-  
+
   throw lastError!;
 }
 
 /**
  * Measure execution time of a function
  */
-export async function measureTime<T>(fn: () => Promise<T>): Promise<{ result: T; duration: number }> {
+export async function measureTime<T>(
+  fn: () => Promise<T>,
+): Promise<{ result: T; duration: number }> {
   const start = performance.now();
   const result = await fn();
   const end = performance.now();
@@ -98,14 +100,14 @@ export async function measureTime<T>(fn: () => Promise<T>): Promise<{ result: T;
  * Check if running in CI environment
  */
 export function isCI(): boolean {
-  return process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
+  return process.env.CI === "true" || process.env.GITHUB_ACTIONS === "true";
 }
 
 /**
  * Get base URL for tests
  */
 export function getBaseURL(): string {
-  return process.env.WEB_URL || 'http://localhost:8081';
+  return process.env.WEB_URL || "http://localhost:8081";
 }
 
 /**
@@ -113,7 +115,7 @@ export function getBaseURL(): string {
  */
 export interface TestReport {
   testName: string;
-  status: 'passed' | 'failed' | 'skipped';
+  status: "passed" | "failed" | "skipped";
   duration: number;
   screenshot?: string;
   video?: string;
@@ -125,9 +127,9 @@ export interface TestReport {
  */
 export function generateTestReport(
   testName: string,
-  status: 'passed' | 'failed' | 'skipped',
+  status: "passed" | "failed" | "skipped",
   duration: number,
-  error?: string
+  error?: string,
 ): TestReport {
   return {
     testName,
