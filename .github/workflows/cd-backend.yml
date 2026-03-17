@@ -141,7 +141,7 @@ jobs:
           netlify env:set JWT_EXPIRY 30d
           
           # Deploy
-          DEPLOY_OUTPUT=$(netlify deploy --prod --dir=netlify --json 2>&1)
+          DEPLOY_OUTPUT=$(netlify deploy --prod --dir=dist --functions=netlify/functions --json > deploy_output.json)
           
           # Extract URLs from output
           DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -o '"deploy_url":"[^"]*"' | cut -d'"' -f4 || echo "")
