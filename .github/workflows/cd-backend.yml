@@ -124,13 +124,6 @@ jobs:
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
 
-      - name: Link to Netlify site
-        run: |
-          cd backend
-          netlify link --site ${{ secrets.NETLIFY_SITE_ID }}
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-
       - name: Deploy to Netlify
         id: deploy
         env:
@@ -143,7 +136,7 @@ jobs:
           # Deploy using netlify.toml configuration
           # The publish directory is set to 'netlify' in netlify.toml
           # Netlify will automatically run npm install and deploy functions
-          DEPLOY_OUTPUT=$(netlify deploy --prod --dir=netlify --functions=netlify/functions --json 2>&1 | tee deploy_output.json)
+          DEPLOY_OUTPUT=$(netlify deploy --prod --dir=netlify --functions=netlify/functions --site $NETLIFY_SITE_ID --json 2>&1 | tee deploy_output.json)
           
           echo "Raw deploy output:"
           cat deploy_output.json
