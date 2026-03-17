@@ -23,10 +23,31 @@ const levels = {
 
 const shouldLog = (level) => levels[level] <= levels[logLevel];
 
+// Remove line breaks from log messages to prevent log injection via user-controlled input
+const sanitizeLogValue = (value) => {
+  if (typeof value === 'string') {
+    return value.replace(/[\r\n]/g, '');
+  }
+  return value;
+};
+
 const formatMessage = (level, message, meta = {}) => {
   const timestamp = new Date().toISOString();
-  const metaStr = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : '';
-  return `[${timestamp}] [${level.toUpperCase()}] ${message}${metaStr}`;
+  const safeMessage = sanitizeLogValue(message);
+  const safeMeta =
+    meta && typeof meta === 'object'
+      ? Object.fromEntries(
+          Object.entries(meta).map(([key, val]) => [
+            key,
+            sanitizeLogValue(val),
+          ]),
+        )
+      : meta;
+  const metaStr =
+    safeMeta && Object.keys(safeMeta).length
+      ? ` ${JSON.stringify(safeMeta)}`
+      : '';
+  return `[${timestamp}] [${level.toUpperCase()}] ${safeMessage}${metaStr}`;
 };
 
 const writeLog = (level, message, meta = {}) => {
