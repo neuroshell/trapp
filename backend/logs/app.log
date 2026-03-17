@@ -1847,3 +1847,30 @@
 [2026-03-17T18:21:36.556Z] [INFO] req.user: {"userId":"pWlPoHrjE8Be-H34YjiMW","email":"chad@chad.chad","iat":1773770457,"exp":1776362457}
 [2026-03-17T18:21:36.560Z] [INFO] Workout data: "{\n  \"userId\": \"1773594078427-faea661bcf6a28\",\n  \"type\": \"running\",\n  \"timestamp\": \"2026-03-02T05:00:00.000Z\",\n  \"data\": {\n    \"distance\": 15,\n    \"duration\": 45\n  },\n  \"id\": \"1773771696493-67ca595c56b508\",\n  \"createdAt\": \"2026-03-17T18:21:36.493Z\",\n  \"updatedAt\": \"2026-03-17T18:21:36.493Z\"\n}"
 [2026-03-17T18:21:36.565Z] [INFO] Workout saved successfully: 1773771696493-67ca595c56b508 for user pWlPoHrjE8Be-H34YjiMW
+[2026-03-17T19:24:47.464Z] [INFO] SIGINT received, shutting down gracefully
+[2026-03-17T19:24:47.468Z] [INFO] Server closed
+[2026-03-17T19:24:49.131Z] [INFO] Starting Trapp Tracker Backend Server...
+[2026-03-17T19:24:49.132Z] [INFO] Server running on port 3000
+[2026-03-17T19:24:49.132Z] [INFO] Environment: development
+[2026-03-17T19:24:49.133Z] [INFO] Allowed origins: http://localhost:8081, http://localhost:8082, exp://localhost:8083
+[2026-03-17T19:24:54.614Z] [INFO] Sync download requested - userId: pWlPoHrjE8Be-H34YjiMW, since: undefined
+[2026-03-17T19:24:54.615Z] [INFO] req.user: {"userId":"pWlPoHrjE8Be-H34YjiMW","email":"chad@chad.chad","iat":1773770457,"exp":1776362457}
+[2026-03-17T19:24:54.616Z] [INFO] User data retrieved: 19 workouts
+[2026-03-17T19:24:54.616Z] [INFO] Sync download complete for user pWlPoHrjE8Be-H34YjiMW: 19 workouts
+[2026-03-17T19:25:17.236Z] [INFO] Login attempt for email: chad@chad.chad
+[2026-03-17T19:25:17.363Z] [INFO] User logged in successfully: chad@chad.chad
+[2026-03-17T19:25:17.410Z] [INFO] Sync download requested - userId: pWlPoHrjE8Be-H34YjiMW, since: undefined
+[2026-03-17T19:25:17.410Z] [INFO] req.user: {"userId":"pWlPoHrjE8Be-H34YjiMW","email":"chad@chad.chad","iat":1773775517,"exp":1776367517}
+[2026-03-17T19:25:17.411Z] [INFO] User data retrieved: 19 workouts
+[2026-03-17T19:25:17.414Z] [INFO] Sync download complete for user pWlPoHrjE8Be-H34YjiMW: 19 workouts
+[2026-03-17T19:25:32.965Z] [INFO] Sync download requested - userId: pWlPoHrjE8Be-H34YjiMW, since: 2026-03-17T19:25:17.447Z
+[2026-03-17T19:25:32.966Z] [INFO] req.user: {"userId":"pWlPoHrjE8Be-H34YjiMW","email":"chad@chad.chad","iat":1773775517,"exp":1776367517}
+[2026-03-17T19:25:32.967Z] [INFO] User data retrieved: 19 workouts
+[2026-03-17T19:25:32.968Z] [INFO] Filtering workouts since: 2026-03-17T19:25:17.447Z
+[2026-03-17T19:25:32.969Z] [INFO] Before filter: 19 workouts
+[2026-03-17T19:25:32.970Z] [INFO] After filter: 0 workouts
+[2026-03-17T19:25:32.971Z] [INFO] Sync download complete for user pWlPoHrjE8Be-H34YjiMW: 0 workouts
+[2026-03-17T19:25:35.699Z] [INFO] Sync download requested - userId: pWlPoHrjE8Be-H34YjiMW, since: undefined
+[2026-03-17T19:25:35.700Z] [INFO] req.user: {"userId":"pWlPoHrjE8Be-H34YjiMW","email":"chad@chad.chad","iat":1773775517,"exp":1776367517}
+[2026-03-17T19:25:35.701Z] [INFO] User data retrieved: 19 workouts
+[2026-03-17T19:25:35.702Z] [INFO] Sync download complete for user pWlPoHrjE8Be-H34YjiMW: 19 workouts

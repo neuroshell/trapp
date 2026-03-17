@@ -1,0 +1,253 @@
+# Trapp Tracker - Backend Deploy to Netlify
+# Deploys Express backend as Netlify Functions (serverless)
+
+name: CD - Backend Deploy
+
+on:
+  # Deploy on push to main
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/**'
+      - '.github/workflows/cd-backend.yml'
+
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deployment Environment"
+        required: true
+        type: choice
+        options:
+          - production
+          - staging
+        default: "production"
+
+env:
+  NODE_VERSION: "20"
+  CACHE_VERSION: "v1"
+
+# Cancel in-progress runs for same commit
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ===========================================
+  # BUILD & TEST BACKEND
+  # ===========================================
+  build-and-test:
+    name: Build & Test Backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: ./backend
+
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      build-hash: ${{ steps.build.outputs.hash }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: cache-node-modules
+        with:
+          path: backend/node_modules
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ env.CACHE_VERSION }}-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ env.CACHE_VERSION }}-
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Run tests
+        run: npm run test:ci
+
+      - name: Build for Netlify
+        id: build
+        run: |
+          npm run build:netlify
+          BUILD_HASH=$(git rev-parse --short HEAD)
+          echo "hash=${BUILD_HASH}" >> $GITHUB_OUTPUT
+
+      - name: Upload backend build
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-build
+          path: backend/netlify/
+          retention-days: 7
+
+  # ===========================================
+  # DEPLOY TO NETLIFY
+  # ===========================================
+  deploy-netlify:
+    name: Deploy to Netlify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+
+    environment:
+      name: ${{ github.event.inputs.environment || 'production' }}
+      url: ${{ steps.deploy.outputs.deploy-url }}
+
+    outputs:
+      deploy-url: ${{ steps.deploy.outputs.deploy-url }}
+      live-url: ${{ steps.deploy.outputs.live-url }}
+
+    steps:
+      - name: Download backend build
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-build
+          path: ./backend/netlify/
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy to Netlify
+        id: deploy
+        env:
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          # Deploy to Netlify
+          cd backend
+          
+          # Set environment variables in Netlify
+          netlify env:set JWT_SECRET ${{ secrets.JWT_SECRET }}
+          netlify env:set NODE_ENV production
+          netlify env:set ALLOWED_ORIGINS ${{ secrets.ALLOWED_ORIGINS }}
+          netlify env:set BCRYPT_ROUNDS 12
+          netlify env:set JWT_EXPIRY 30d
+          
+          # Deploy
+          DEPLOY_OUTPUT=$(netlify deploy --prod --dir=netlify --json 2>&1)
+          
+          # Extract URLs from output
+          DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -o '"deploy_url":"[^"]*"' | cut -d'"' -f4 || echo "")
+          LIVE_URL=$(echo "$DEPLOY_OUTPUT" | grep -o '"url":"[^"]*"' | cut -d'"' -f4 || echo "")
+          
+          echo "deploy-url=${DEPLOY_URL:-https://unknown.netlify.app}" >> $GITHUB_OUTPUT
+          echo "live-url=${LIVE_URL:-https://unknown.netlify.app}" >> $GITHUB_OUTPUT
+          
+          echo "✅ Deployment successful!"
+          echo "Deploy URL: ${DEPLOY_URL:-N/A}"
+          echo "Live URL: ${LIVE_URL:-N/A}"
+
+      - name: Wait for deployment propagation
+        run: sleep 30
+
+      - name: Health check
+        id: health
+        run: |
+          HEALTH_URL="${{ steps.deploy.outputs.deploy-url }}/api/health"
+          echo "Checking health at: $HEALTH_URL"
+          
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$HEALTH_URL" || echo "000")
+            
+            if [ "$RESPONSE" = "200" ]; then
+              echo "✅ Health check passed (HTTP $RESPONSE)"
+              echo "status=success" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+            
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            echo "⚠️ Health check failed (HTTP $RESPONSE), retry $RETRY_COUNT/$MAX_RETRIES"
+            sleep 10
+          done
+          
+          echo "❌ Health check failed after $MAX_RETRIES retries"
+          echo "status=failure" >> $GITHUB_OUTPUT
+          exit 1
+
+      - name: Notify deployment success
+        if: success()
+        run: |
+          echo "## ✅ Backend Deployment Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Status** | ✅ Deployed |" >> $GITHUB_STEP_SUMMARY
+          echo "| **URL** | ${{ steps.deploy.outputs.live-url }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Version** | ${{ needs.build-and-test.outputs.version }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Commit** | ${{ github.sha }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Environment** | ${{ github.event.inputs.environment || 'production' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### API Endpoints" >> $GITHUB_STEP_SUMMARY
+          echo "- Health: ${{ steps.deploy.outputs.live-url }}/api/health" >> $GITHUB_STEP_SUMMARY
+          echo "- Auth: ${{ steps.deploy.outputs.live-url }}/api/auth" >> $GITHUB_STEP_SUMMARY
+          echo "- Sync: ${{ steps.deploy.outputs.live-url }}/api/sync" >> $GITHUB_STEP_SUMMARY
+
+      - name: Notify deployment failure
+        if: failure()
+        run: |
+          echo "## ❌ Backend Deployment Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Version**: ${{ needs.build-and-test.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Check the [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details." >> $GITHUB_STEP_SUMMARY
+
+  # ===========================================
+  # UPDATE FRONTEND CONFIG
+  # ===========================================
+  update-frontend-config:
+    name: Update Frontend API URL
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: deploy-netlify
+    if: success()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create .env file with new API URL
+        run: |
+          API_URL="${{ needs.deploy-netlify.outputs.live-url }}/api"
+          echo "EXPO_PUBLIC_API_URL=$API_URL" > .env
+          echo "Created .env with API URL: $API_URL"
+          cat .env
+
+      - name: Commit and push .env update
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update backend API URL to ${{ needs.deploy-netlify.outputs.live-url }}"
+          file_pattern: .env
+          branch: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify about frontend update
+        run: |
+          echo "## 🔄 Frontend Configuration Updated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The frontend `.env` file has been updated with the new backend URL." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**New API URL**: ${{ needs.deploy-netlify.outputs.live-url }}/api" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ **Note**: You may need to rebuild the frontend and mobile apps to pick up this change." >> $GITHUB_STEP_SUMMARY
