@@ -1843,3 +1843,7 @@
 [2026-03-17T18:12:34.716Z] [INFO] req.user: {"userId":"pWlPoHrjE8Be-H34YjiMW","email":"chad@chad.chad","iat":1773770457,"exp":1776362457}
 [2026-03-17T18:12:34.716Z] [INFO] User data retrieved: 18 workouts
 [2026-03-17T18:12:34.717Z] [INFO] Sync download complete for user pWlPoHrjE8Be-H34YjiMW: 18 workouts
+[2026-03-17T18:21:36.555Z] [INFO] Single workout sync - userId: pWlPoHrjE8Be-H34YjiMW
+[2026-03-17T18:21:36.556Z] [INFO] req.user: {"userId":"pWlPoHrjE8Be-H34YjiMW","email":"chad@chad.chad","iat":1773770457,"exp":1776362457}
+[2026-03-17T18:21:36.560Z] [INFO] Workout data: "{\n  \"userId\": \"1773594078427-faea661bcf6a28\",\n  \"type\": \"running\",\n  \"timestamp\": \"2026-03-02T05:00:00.000Z\",\n  \"data\": {\n    \"distance\": 15,\n    \"duration\": 45\n  },\n  \"id\": \"1773771696493-67ca595c56b508\",\n  \"createdAt\": \"2026-03-17T18:21:36.493Z\",\n  \"updatedAt\": \"2026-03-17T18:21:36.493Z\"\n}"
+[2026-03-17T18:21:36.565Z] [INFO] Workout saved successfully: 1773771696493-67ca595c56b508 for user pWlPoHrjE8Be-H34YjiMW

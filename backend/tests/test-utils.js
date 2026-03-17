@@ -1,7 +1,8 @@
-import { mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { pbkdf2Sync } from 'node:crypto';
+import { pbkdf2Sync } from "node:crypto";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { URL } from "node:url";
 
 /**
  * Test utilities for backend tests
@@ -12,7 +13,7 @@ import { pbkdf2Sync } from 'node:crypto';
  */
 export async function closeServer(server) {
   return new Promise((resolve) => {
-    if (server && typeof server.close === 'function') {
+    if (server && typeof server.close === "function") {
       server.close(resolve);
     } else {
       resolve();
@@ -24,8 +25,8 @@ export async function closeServer(server) {
  * Create temporary database file path
  */
 export async function createTempDb() {
-  const tmpDir = await mkdtemp(join(tmpdir(), 'trapp-test-'));
-  const dbFile = join(tmpDir, 'db.json');
+  const tmpDir = await mkdtemp(join(tmpdir(), "trapp-test-"));
+  const dbFile = join(tmpDir, "db.json");
   return { tmpDir, dbFile };
 }
 
@@ -39,11 +40,13 @@ export async function cleanupTemp(tmpDir) {
 /**
  * Hash password for testing (PBKDF2)
  */
-export function hashPassword(password, salt = 'trapp-test-salt-2026') {
+export function hashPassword(password, salt = "trapp-test-salt-2026") {
   const iterations = 1000; // Reduced for test speed
   const keyLength = 32;
-  const digest = 'sha256';
-  return pbkdf2Sync(password, salt, iterations, keyLength, digest).toString('hex');
+  const digest = "sha256";
+  return pbkdf2Sync(password, salt, iterations, keyLength, digest).toString(
+    "hex",
+  );
 }
 
 /**
@@ -51,8 +54,8 @@ export function hashPassword(password, salt = 'trapp-test-salt-2026') {
  */
 export async function postSync(base, data) {
   return fetch(`${base}/sync`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
 }
@@ -73,11 +76,22 @@ export async function getSync(base, params) {
 /**
  * Make authenticated request with JWT token
  */
-export async function authenticatedRequest(base, endpoint, token, options = {}) {
+export function authHeader(token) {
+  return {
+    Authorization: `Bearer ${token}`,
+  };
+}
+
+export async function authenticatedRequest(
+  base,
+  endpoint,
+  token,
+  options = {},
+) {
   return fetch(`${base}${endpoint}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
       ...options.headers,
     },
@@ -99,6 +113,6 @@ export function mapToObject(map) {
 /**
  * Generate unique test identifier
  */
-export function testId(prefix = 'test') {
+export function testId(prefix = "test") {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }

@@ -78,7 +78,7 @@ export async function retry<T>(
     }
   }
 
-  throw lastError!;
+  throw lastError || new Error("Retry failed");
 }
 
 /**

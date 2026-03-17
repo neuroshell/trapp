@@ -1,9 +1,10 @@
-import { Low } from 'lowdb';
-import { JSONFile } from 'lowdb/node';
-import path from 'path';
-import fs from 'fs';
-import { fileURLToPath } from 'url';
-import logger from '../utils/logger.js';
+import fs from "fs";
+import { Low } from "lowdb";
+import { JSONFile } from "lowdb/node";
+import path from "path";
+import { fileURLToPath } from "url";
+
+import logger from "../utils/logger.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,7 +17,7 @@ let adapterInstance = null;
  * Get or create database file path
  */
 function getDbFilePath() {
-  return process.env.DB_FILE || path.join(__dirname, '..', 'data', 'db.json');
+  return process.env.DB_FILE || path.join(__dirname, "..", "data", "db.json");
 }
 
 /**
@@ -25,7 +26,7 @@ function getDbFilePath() {
  */
 export async function initDatabase() {
   const DB_FILE = getDbFilePath();
-  
+
   // Ensure data directory exists
   const dataDir = path.dirname(DB_FILE);
   if (!fs.existsSync(dataDir)) {
@@ -64,7 +65,7 @@ export async function initDatabase() {
  */
 function getDb() {
   if (!dbInstance) {
-    throw new Error('Database not initialized. Call initDatabase() first.');
+    throw new Error("Database not initialized. Call initDatabase() first.");
   }
   return dbInstance;
 }
@@ -84,7 +85,7 @@ export async function createUser(userId, userData) {
   const user = {
     id: userId,
     email: userData.email.toLowerCase().trim(),
-    username: userData.username || userData.email.split('@')[0],
+    username: userData.username || userData.email.split("@")[0],
     passwordHash: userData.passwordHash,
     displayName: userData.displayName || null,
     profile: userData.profile || null,
@@ -114,9 +115,11 @@ export function getUserById(userId) {
 export function getUserByEmail(email) {
   const db = getDb();
   const normalizedEmail = email.toLowerCase().trim();
-  return Object.values(db.data.users).find(
-    (user) => user.email.toLowerCase() === normalizedEmail
-  ) || null;
+  return (
+    Object.values(db.data.users).find(
+      (user) => user.email.toLowerCase() === normalizedEmail,
+    ) || null
+  );
 }
 
 /**
@@ -124,9 +127,11 @@ export function getUserByEmail(email) {
  */
 export function getUserByDeviceId(deviceId) {
   const db = getDb();
-  return Object.values(db.data.users).find(
-    (user) => user.devices && user.devices.includes(deviceId)
-  ) || null;
+  return (
+    Object.values(db.data.users).find(
+      (user) => user.devices && user.devices.includes(deviceId),
+    ) || null
+  );
 }
 
 /**
@@ -178,7 +183,7 @@ export async function registerDevice(userId, deviceId) {
 export function getUserWorkouts(userId) {
   const db = getDb();
   return Object.values(db.data.workouts).filter(
-    (workout) => workout.userId === userId
+    (workout) => workout.userId === userId,
   );
 }
 
@@ -235,7 +240,7 @@ export async function deleteWorkout(userId, workoutId) {
 export function getUserAchievements(userId) {
   const db = getDb();
   return Object.values(db.data.achievements).filter(
-    (achievement) => achievement.userId === userId
+    (achievement) => achievement.userId === userId,
   );
 }
 
@@ -302,7 +307,7 @@ export async function syncUserData(userId, data) {
 
   // Add existing workouts
   currentUser.workouts.forEach((w) => {
-    workoutMap.set(w.id, { ...w, source: 'server' });
+    workoutMap.set(w.id, { ...w, source: "server" });
   });
 
   // Merge new workouts
@@ -318,25 +323,27 @@ export async function syncUserData(userId, data) {
         if (newTime > existingTime) {
           conflicts.push({
             id: w.id,
-            type: 'workout',
-            resolution: 'client_wins',
+            type: "workout",
+            resolution: "client_wins",
           });
           resolved.push(w.id);
-          workoutMap.set(w.id, { ...w, source: 'client' });
+          workoutMap.set(w.id, { ...w, source: "client" });
         } else {
           conflicts.push({
             id: w.id,
-            type: 'workout',
-            resolution: 'server_wins',
+            type: "workout",
+            resolution: "server_wins",
           });
         }
       } else {
-        workoutMap.set(w.id, { ...w, source: 'client' });
+        workoutMap.set(w.id, { ...w, source: "client" });
       }
     });
   }
 
-  const mergedWorkouts = Array.from(workoutMap.values()).map(({ source, ...w }) => w);
+  const mergedWorkouts = Array.from(workoutMap.values()).map(
+    ({ source, ...w }) => w,
+  );
 
   // Merge achievements (union of unlocked achievements)
   const achievementMap = new Map();

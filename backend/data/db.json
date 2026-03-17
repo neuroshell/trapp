@@ -250,6 +250,18 @@
       "id": "1773770721497-76eeddf7aa68c8",
       "createdAt": "2026-03-17T18:05:21.497Z",
       "updatedAt": "2026-03-17T18:05:21.596Z"
+    },
+    "1773771696493-67ca595c56b508": {
+      "userId": "pWlPoHrjE8Be-H34YjiMW",
+      "type": "running",
+      "timestamp": "2026-03-02T05:00:00.000Z",
+      "data": {
+        "distance": 15,
+        "duration": 45
+      },
+      "id": "1773771696493-67ca595c56b508",
+      "createdAt": "2026-03-17T18:21:36.493Z",
+      "updatedAt": "2026-03-17T18:21:36.560Z"
     }
   },
   "achievements": {},

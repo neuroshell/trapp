@@ -171,7 +171,7 @@ export function SettingsScreen() {
             <>
               <Text style={styles.cardSubtitle}>
                 Signed in as {user.username}{" "}
-                {useBackendAuth ? "(Backend)" : "(Local)"}
+                {/* {useBackendAuth ? "(online)" : "(offline)"} */}
               </Text>
               <Text style={styles.link} onPress={signOut}>
                 Sign out

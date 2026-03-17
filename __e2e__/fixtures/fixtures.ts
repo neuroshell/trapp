@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { test as base, expect } from "@playwright/test";
 
 import { CalendarPage } from "../pages/CalendarPage";
@@ -35,7 +36,7 @@ interface Fixtures {
 // Extend Playwright test with our fixtures
 export const test = base.extend<Fixtures>({
   // Test user credentials
-  testUser: async ({}, use) => {
+  testUser: async ({ ...rest }, use) => {
     const timestamp = Date.now();
     await use({
       email: `testuser+e2e${timestamp}@example.com`,
