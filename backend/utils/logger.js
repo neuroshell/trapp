@@ -23,10 +23,36 @@ const levels = {
 
 const shouldLog = (level) => levels[level] <= levels[logLevel];
 
+// Sanitize potentially user-controlled values before logging to prevent
+// log injection via newlines or other control characters.
+const sanitizeLogValue = (value) => {
+  if (value == null) {
+    return value;
+  }
+  if (typeof value === 'string') {
+    // Replace CR/LF sequences with a single space to keep log lines single-line.
+    return value.replace(/[\r\n]+/g, ' ');
+  }
+  return value;
+};
+
 // Remove line breaks from log messages to prevent log injection via user-controlled input
 const sanitizeLogValue = (value) => {
-  if (typeof value === 'string') {
-    return value.replace(/[\r\n]/g, '');
+  const safeMessage = sanitizeLogValue(message);
+
+  let safeMeta = meta;
+  if (meta && typeof meta === 'object' && !Array.isArray(meta)) {
+    safeMeta = {};
+    for (const key of Object.keys(meta)) {
+      const val = meta[key];
+      safeMeta[key] = typeof val === 'string' ? sanitizeLogValue(val) : val;
+    }
+  }
+
+  const metaStr =
+    safeMeta && Object.keys(safeMeta).length ? ` ${JSON.stringify(safeMeta)}` : '';
+
+  return `[${timestamp}] [${level.toUpperCase()}] ${safeMessage}${metaStr}`;
   }
   return value;
 };
