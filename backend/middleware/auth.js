@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 
+import { sanitizeForLog } from "./security.js";
 import { getUserById } from "../db/index.js";
 import { errors } from "../utils/errors.js";
-import { sanitizeForLog } from "./security.js";
 
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-secret-key-change-in-production-min-32-chars";
@@ -49,7 +49,9 @@ export const authenticate = (req, res, next) => {
     // SECURITY: Validate token has minimum JWT length (header.payload.signature)
     // Minimum valid JWT is ~20 chars (e.g., "eyJhbGciOiJIUzI1NiJ9.e30.signature")
     if (token.length < 20) {
-      console.log("[AuthMiddleware] Token too short: " + token.length + " chars");
+      console.log(
+        "[AuthMiddleware] Token too short: " + token.length + " chars",
+      );
       throw errors.unauthorized("Invalid token format");
     }
 
@@ -114,7 +116,7 @@ export const optionalAuth = (req, res, next) => {
 
     const decoded = verifyToken(token);
     req.user = decoded;
-  } catch (error) {
+  } catch (_error) {
     // Silent fail - user remains unauthenticated
   }
   next();
