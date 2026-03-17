@@ -133,6 +133,19 @@ jobs:
           # Deploy to Netlify
           cd backend
 
+          # Check if secrets are set
+          if [ -z "$NETLIFY_SITE_ID" ]; then
+            echo "❌ NETLIFY_SITE_ID secret is not set!"
+            echo "Please add it in GitHub Settings → Secrets and variables → Actions"
+            exit 1
+          fi
+
+          if [ -z "$NETLIFY_AUTH_TOKEN" ]; then
+            echo "❌ NETLIFY_AUTH_TOKEN secret is not set!"
+            echo "Please add it in GitHub Settings → Secrets and variables → Actions"
+            exit 1
+          fi
+
           # Copy backend files to netlify folder for deployment
           echo "Setting up Netlify deployment structure..."
           mkdir -p netlify/functions
