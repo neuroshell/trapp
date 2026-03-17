@@ -1,4 +1,4 @@
-# Trapp - Backend Deploy to Netlify
+# Trapp Tracker - Backend Deploy to Netlify
 # Deploys Express backend as Netlify Functions (serverless)
 
 name: CD - Backend Deploy

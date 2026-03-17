@@ -297,7 +297,7 @@ jobs:
         if: steps.netlify-check.outputs.has-token == 'true'
         uses: nwtgck/actions-netlify@v3
         with:
-          publish_dir: ./web-build
+          publish_dir: ./dist
           production_branch: main
           github_token: ${{ secrets.GITHUB_TOKEN }}
           deploy_message: "Deploy web app ${{ needs.build-web.outputs.version }}"
