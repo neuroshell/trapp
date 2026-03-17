@@ -93,7 +93,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: backend-build
-          path: backend/netlify/
+          path: backend/
           retention-days: 7
 
   # ===========================================
@@ -119,10 +119,17 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: backend-build
-          path: ./backend/netlify/
+          path: ./backend
 
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
+
+      - name: Link to Netlify site
+        run: |
+          cd backend
+          netlify link --site ${{ secrets.NETLIFY_SITE_ID }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
 
       - name: Deploy to Netlify
         id: deploy
@@ -132,26 +139,33 @@ jobs:
         run: |
           # Deploy to Netlify
           cd backend
+
+          # Deploy using netlify.toml configuration
+          # The publish directory is set to 'netlify' in netlify.toml
+          # Netlify will automatically run npm install and deploy functions
+          DEPLOY_OUTPUT=$(netlify deploy --prod --dir=netlify --functions=netlify/functions --json 2>&1 | tee deploy_output.json)
           
-          # Set environment variables in Netlify
-          netlify env:set JWT_SECRET ${{ secrets.JWT_SECRET }}
-          netlify env:set NODE_ENV production
-          netlify env:set ALLOWED_ORIGINS ${{ secrets.ALLOWED_ORIGINS }}
-          netlify env:set BCRYPT_ROUNDS 12
-          netlify env:set JWT_EXPIRY 30d
-          
-          # Deploy
-          DEPLOY_OUTPUT=$(netlify deploy --prod --dir=dist --functions=netlify/functions --json > deploy_output.json)
-          
+          echo "Raw deploy output:"
+          cat deploy_output.json
+
           # Extract URLs safely using jq (standard in GitHub runners)
-          DEPLOY_URL=$(jq -r '.deploy_url' deploy_output.json)
-          LIVE_URL=$(jq -r '.url' deploy_output.json)
-          
+          DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | jq -r '.deploy_url' 2>/dev/null || echo "")
+          LIVE_URL=$(echo "$DEPLOY_OUTPUT" | jq -r '.url' 2>/dev/null || echo "")
+
+          # Validate URLs
+          if [ -z "$DEPLOY_URL" ] || [ "$DEPLOY_URL" = "null" ] || [ -z "$LIVE_URL" ] || [ "$LIVE_URL" = "null" ]; then
+            echo "❌ Failed to extract deployment URLs"
+            echo "Deploy output was:"
+            cat deploy_output.json
+            exit 1
+          fi
+
           echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
           echo "live-url=$LIVE_URL" >> $GITHUB_OUTPUT
-          
+
           echo "✅ Deployment successful!"
           echo "Live URL: $LIVE_URL"
+          echo "Deploy URL: $DEPLOY_URL"
 
       - name: Wait for deployment propagation
         run: sleep 30
