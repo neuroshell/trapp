@@ -12,7 +12,7 @@
     "test:stable": "node --test tests/database.test.js tests/test-utils.js",
     "test:ci": "node test-ci.js",
     "test:coverage": "node --test --experimental-test-coverage",
-    "build:netlify": "npm install --omit=dev && node -e \"require('fs').mkdirSync('netlify/functions', {recursive:true})\" && echo Netlify functions ready",
+    "build:netlify": "npm install --omit=dev && echo Netlify build ready",
     "deploy:netlify": "netlify deploy --prod --dir=netlify"
   },
   "keywords": [
