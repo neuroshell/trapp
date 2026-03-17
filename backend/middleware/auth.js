@@ -30,10 +30,11 @@ export const authenticate = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
-    console.log(
-      "[AuthMiddleware] Auth header:",
-      authHeader ? authHeader.substring(0, 30) + "..." : "none",
-    );
+    const safeAuthHeaderSnippet = authHeader
+      ? authHeader.replace(/[\r\n]/g, "").substring(0, 30) + "..."
+      : "none";
+
+    console.log("[AuthMiddleware] Auth header:", safeAuthHeaderSnippet);
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       console.log("[AuthMiddleware] No Bearer token found");
