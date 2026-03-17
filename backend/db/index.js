@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import logger from "../utils/logger.js";
+import { sanitizeKey } from "../middleware/security.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -200,16 +201,24 @@ export function getWorkoutById(workoutId) {
  */
 export async function saveWorkout(userId, workoutData) {
   const db = getDb();
+
+  // SECURITY: Validate workout ID to prevent prototype pollution
+  const sanitizedId = sanitizeKey(workoutData.id);
+  if (!sanitizedId) {
+    logger.error(`Invalid workout ID attempted: ${workoutData.id}`);
+    throw new Error("Invalid workout ID format");
+  }
+
   const workout = {
     ...workoutData,
     userId,
     updatedAt: new Date().toISOString(),
   };
 
-  db.data.workouts[workout.id] = workout;
+  db.data.workouts[sanitizedId] = workout;
   await db.write();
 
-  logger.debug(`Workout saved: ${workout.id} for user ${userId}`);
+  logger.debug(`Workout saved: ${sanitizedId} for user ${userId}`);
   return workout;
 }
 
@@ -218,15 +227,23 @@ export async function saveWorkout(userId, workoutData) {
  */
 export async function deleteWorkout(userId, workoutId) {
   const db = getDb();
-  const workout = db.data.workouts[workoutId];
+
+  // SECURITY: Validate workout ID to prevent prototype pollution
+  const sanitizedId = sanitizeKey(workoutId);
+  if (!sanitizedId) {
+    logger.error(`Invalid workout ID deletion attempted: ${workoutId}`);
+    throw new Error("Invalid workout ID format");
+  }
+
+  const workout = db.data.workouts[sanitizedId];
   if (!workout || workout.userId !== userId) {
     return false;
   }
 
-  delete db.data.workouts[workoutId];
+  delete db.data.workouts[sanitizedId];
   await db.write();
 
-  logger.debug(`Workout deleted: ${workoutId} for user ${userId}`);
+  logger.debug(`Workout deleted: ${sanitizedId} for user ${userId}`);
   return true;
 }
 
@@ -249,15 +266,23 @@ export function getUserAchievements(userId) {
  */
 export async function saveAchievement(userId, achievementData) {
   const db = getDb();
+
+  // SECURITY: Validate achievement ID to prevent prototype pollution
+  const sanitizedId = sanitizeKey(achievementData.id);
+  if (!sanitizedId) {
+    logger.error(`Invalid achievement ID attempted: ${achievementData.id}`);
+    throw new Error("Invalid achievement ID format");
+  }
+
   const achievement = {
     ...achievementData,
     userId,
   };
 
-  db.data.achievements[achievement.id] = achievement;
+  db.data.achievements[sanitizedId] = achievement;
   await db.write();
 
-  logger.debug(`Achievement saved: ${achievement.id} for user ${userId}`);
+  logger.debug(`Achievement saved: ${sanitizedId} for user ${userId}`);
   return achievement;
 }
 

@@ -23,10 +23,14 @@ const levels = {
 
 const shouldLog = (level) => levels[level] <= levels[logLevel];
 
+// Sanitize potentially user-controlled values before logging to prevent
+// log injection via newlines or other control characters.
 const sanitizeLogValue = (value) => {
-  const str = String(value);
-  // Remove newline and carriage return characters to prevent log injection
-  return str.replace(/[\r\n]/g, '');
+  if (!value || typeof value !== 'string') {
+    return value;
+  }
+  // Replace CR/LF sequences with a single space to keep log lines single-line.
+  return value.replace(/[\r\n]+/g, ' ');
 };
 
 const sanitizeMeta = (meta) => {
@@ -47,57 +51,10 @@ const sanitizeMeta = (meta) => {
   return sanitized;
 };
 
-// Sanitize potentially user-controlled values before logging to prevent
-// log injection via newlines or other control characters.
-  const safeMessage = sanitizeLogValue(message);
-  const safeMeta = sanitizeMeta(meta);
-  const metaStr =
-    safeMeta && Object.keys(safeMeta).length
-      ? ` ${JSON.stringify(safeMeta)}`
-      : '';
-  return `[${timestamp}] [${level.toUpperCase()}] ${safeMessage}${metaStr}`;
-    return value;
-  }
-  if (typeof value === 'string') {
-    // Replace CR/LF sequences with a single space to keep log lines single-line.
-    return value.replace(/[\r\n]+/g, ' ');
-  }
-  return value;
-};
-
-// Remove line breaks from log messages to prevent log injection via user-controlled input
-const sanitizeLogValue = (value) => {
-  const safeMessage = sanitizeLogValue(message);
-
-  let safeMeta = meta;
-  if (meta && typeof meta === 'object' && !Array.isArray(meta)) {
-    safeMeta = {};
-    for (const key of Object.keys(meta)) {
-      const val = meta[key];
-      safeMeta[key] = typeof val === 'string' ? sanitizeLogValue(val) : val;
-    }
-  }
-
-  const metaStr =
-    safeMeta && Object.keys(safeMeta).length ? ` ${JSON.stringify(safeMeta)}` : '';
-
-  return `[${timestamp}] [${level.toUpperCase()}] ${safeMessage}${metaStr}`;
-  }
-  return value;
-};
-
 const formatMessage = (level, message, meta = {}) => {
   const timestamp = new Date().toISOString();
   const safeMessage = sanitizeLogValue(message);
-  const safeMeta =
-    meta && typeof meta === 'object'
-      ? Object.fromEntries(
-          Object.entries(meta).map(([key, val]) => [
-            key,
-            sanitizeLogValue(val),
-          ]),
-        )
-      : meta;
+  const safeMeta = sanitizeMeta(meta);
   const metaStr =
     safeMeta && Object.keys(safeMeta).length
       ? ` ${JSON.stringify(safeMeta)}`
@@ -109,7 +66,7 @@ const writeLog = (level, message, meta = {}) => {
   if (!shouldLog(level)) return;
 
   const formattedMessage = formatMessage(level, message, meta);
-  
+
   // Console output
   if (level === 'error') {
     console.error(formattedMessage);
