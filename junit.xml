@@ -1,329 +1,499 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="157" failures="0" errors="0" time="1.979">
-  <testsuite name="storage" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.391" tests="34">
-    <testcase classname="storage loadAppState" name="returns empty state when no data exists" time="0.006" file="__tests__\storage.test.ts">
+<testsuites name="jest tests" tests="233" failures="0" errors="0" time="3.452">
+  <testsuite name="Storage - Date Range Queries" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="0.707" tests="7">
+    <testcase classname="Storage - Date Range Queries getWorkoutsByDateRange" name="returns workouts within date range" time="0.005" file="__tests__\storage-date-range.test.ts">
     </testcase>
-    <testcase classname="storage loadAppState" name="loads saved app state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="Storage - Date Range Queries getWorkoutsByDateRange" name="returns empty array when no workouts in range" time="0.001" file="__tests__\storage-date-range.test.ts">
     </testcase>
-    <testcase classname="storage loadAppState" name="returns empty state on JSON parse error" time="0.008" file="__tests__\storage.test.ts">
+    <testcase classname="Storage - Date Range Queries getWorkoutsByDateRange" name="returns empty array when no workouts exist" time="0" file="__tests__\storage-date-range.test.ts">
     </testcase>
-    <testcase classname="storage loadAppState" name="returns empty state on AsyncStorage error" time="0.004" file="__tests__\storage.test.ts">
+    <testcase classname="Storage - Date Range Queries getWorkoutsByDateRange" name="includes workouts on end date" time="0" file="__tests__\storage-date-range.test.ts">
     </testcase>
-    <testcase classname="storage loadAppState" name="handles partial state data" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="Storage - Date Range Queries getWorkoutsForHistory" name="returns all workouts sorted by date descending" time="0.001" file="__tests__\storage-date-range.test.ts">
     </testcase>
-    <testcase classname="storage loadAppState" name="handles state with multiple entries" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="Storage - Date Range Queries getWorkoutsForHistory" name="returns empty array when no workouts exist" time="0" file="__tests__\storage-date-range.test.ts">
     </testcase>
-    <testcase classname="storage saveAppState" name="saves app state to AsyncStorage" time="0.001" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage saveAppState" name="saves empty state" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage saveAppState" name="handles save errors gracefully" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage saveAppState" name="saves state with complex entries" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage clearAppState" name="removes app state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage clearAppState" name="handles clear errors gracefully" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage getDeviceId" name="returns existing device id from AsyncStorage" time="0.001" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage getDeviceId" name="generates new device id if none exists" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage getDeviceId" name="returns unknown on error" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage getDeviceId" name="generates unique ids on subsequent calls" time="0.001" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage loadAuthState" name="returns empty object when no auth data exists" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage loadAuthState" name="loads saved auth state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage loadAuthState" name="returns empty object on JSON parse error" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage loadAuthState" name="returns empty object on AsyncStorage error" time="0.001" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage loadAuthState" name="handles partial auth state" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage saveAuthState" name="saves auth state to AsyncStorage" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage saveAuthState" name="saves empty auth state" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage saveAuthState" name="handles save errors gracefully" time="0.001" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage saveAuthState" name="saves auth state with only user" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage saveAuthState" name="saves auth state with only passwordHash" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage clearAuthState" name="removes auth state from AsyncStorage" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage clearAuthState" name="handles clear errors gracefully" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage storage keys" name="uses correct storage key for app state" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage storage keys" name="uses correct storage key for device id" time="0.001" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage storage keys" name="uses correct storage key for auth state" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage edge cases" name="handles very large state objects" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage edge cases" name="handles unicode characters in data" time="0" file="__tests__\storage.test.ts">
-    </testcase>
-    <testcase classname="storage edge cases" name="handles empty strings in data" time="0" file="__tests__\storage.test.ts">
+    <testcase classname="Storage - Date Range Queries getWorkoutsForHistory" name="handles storage errors gracefully" time="0" file="__tests__\storage-date-range.test.ts">
     </testcase>
   </testsuite>
-  <testsuite name="SplashScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.804" tests="13">
-    <testcase classname="SplashScreen" name="renders title" time="0.292" file="__tests__\SplashScreen.test.tsx">
+  <testsuite name="Statistics Utils" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="0.706" tests="22">
+    <testcase classname="Statistics Utils getWeekStart" name="returns Sunday of the current week" time="0.005" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="renders loading subtitle" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils getWeekStart" name="returns the same day if already Sunday" time="0" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="renders SafeAreaView wrapper" time="0.002" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils getWeekEnd" name="returns Saturday of the current week" time="0.001" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="renders title with proper styling" time="0.002" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils calculateWeeklyStats" name="returns zero stats for empty workouts" time="0" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="renders subtitle with proper styling" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils calculateWeeklyStats" name="calculates weekly stats correctly" time="0" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="has no interactive elements" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils calculateWeeklyStats" name="only counts workouts from current week" time="0" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="is a static loading screen" time="0.006" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils calculatePersonalRecords" name="returns empty array for no workouts" time="0" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="displays app branding" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils calculatePersonalRecords" name="finds PR for running (distance)" time="0" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="indicates loading state to user" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils calculatePersonalRecords" name="finds PR for strength exercises (volume)" time="0" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="does not crash during render" time="0" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils calculateStreak" name="returns zero streak for no workouts" time="0" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="maintains consistent UI across renders" time="0.002" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils calculateStreak" name="calculates current streak correctly" time="0" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="renders with proper structure" time="0.001" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils calculateStreak" name="resets streak when day is missed" time="0" file="__tests__\statistics.test.ts">
     </testcase>
-    <testcase classname="SplashScreen" name="renders ActivityIndicator" time="0" file="__tests__\SplashScreen.test.tsx">
+    <testcase classname="Statistics Utils calculateStreak" name="counts streak as active if worked out yesterday" time="0" file="__tests__\statistics.test.ts">
+    </testcase>
+    <testcase classname="Statistics Utils calculateStreak" name="calculates longest streak correctly" time="0" file="__tests__\statistics.test.ts">
+    </testcase>
+    <testcase classname="Statistics Utils calculateLongestStreak" name="returns 0 for empty dates" time="0.001" file="__tests__\statistics.test.ts">
+    </testcase>
+    <testcase classname="Statistics Utils calculateLongestStreak" name="returns 1 for single date" time="0" file="__tests__\statistics.test.ts">
+    </testcase>
+    <testcase classname="Statistics Utils calculateLongestStreak" name="calculates longest streak from dates" time="0" file="__tests__\statistics.test.ts">
+    </testcase>
+    <testcase classname="Statistics Utils calculateTotalReps" name="calculates total reps for specific exercise type" time="0" file="__tests__\statistics.test.ts">
+    </testcase>
+    <testcase classname="Statistics Utils calculateTotalDistance" name="calculates total distance for running workouts" time="0" file="__tests__\statistics.test.ts">
+    </testcase>
+    <testcase classname="Statistics Utils calculateTotalDuration" name="calculates total duration for running workouts" time="0" file="__tests__\statistics.test.ts">
+    </testcase>
+    <testcase classname="Statistics Utils hasWorkoutOnDate" name="returns true if workout exists on date" time="0" file="__tests__\statistics.test.ts">
+    </testcase>
+    <testcase classname="Statistics Utils hasWorkoutOnDate" name="returns false if no workout on date" time="0" file="__tests__\statistics.test.ts">
     </testcase>
   </testsuite>
-  <testsuite name="DashboardScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.802" tests="16">
-    <testcase classname="DashboardScreen" name="renders title" time="0.292" file="__tests__\DashboardScreen.test.tsx">
+  <testsuite name="Achievement Utils" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="0.729" tests="32">
+    <testcase classname="Achievement Utils ACHIEVEMENT_DEFINITIONS" name="has 15 achievements" time="0.004" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils ACHIEVEMENT_DEFINITIONS" name="has all consistency achievements" time="0.001" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils ACHIEVEMENT_DEFINITIONS" name="has all streak achievements" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils ACHIEVEMENT_DEFINITIONS" name="has all exercise achievements" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils ACHIEVEMENT_DEFINITIONS" name="has unique IDs" time="0.001" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils getTierColor" name="returns correct color for each tier" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils getTierBackgroundColor" name="returns correct background color for each tier" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils calculateAchievementProgress" name="calculates consistency progress (total workouts)" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils calculateAchievementProgress" name="calculates streak progress" time="0.001" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils calculateAchievementProgress" name="calculates runs achievement progress" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils calculateAchievementProgress" name="calculates cumulative reps achievement (squats)" time="0.001" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils calculateAchievementProgress" name="calculates cumulative reps achievement (pushups)" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils calculateAchievementProgress" name="calculates cumulative reps achievement (pullups)" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils checkAchievements" name="detects first workout achievement" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils checkAchievements" name="skips already unlocked achievements" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils checkAchievements" name="detects multiple achievements at once" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils checkAchievements" name="detects streak achievements" time="0.001" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils checkAchievements" name="only returns achievements that meet requirements" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils calculateAllAchievementProgress" name="returns progress for all achievements" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils getAchievementsByCategory" name="filters achievements by category" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils getUnlockedAchievements" name="returns only unlocked achievements" time="0.001" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils getLockedAchievements" name="returns only locked achievements" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils sortAchievementsByTier" name="sorts achievements by tier (diamond first)" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils getNextAchievement" name="returns locked achievement with highest progress" time="0.001" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils getNextAchievement" name="returns null if all achievements are unlocked" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils calculateCompletionPercentage" name="calculates correct percentage" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils calculateCompletionPercentage" name="returns 0 for empty array" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils calculateCompletionPercentage" name="returns 100 when all unlocked" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils formatAchievementProgress" name="returns &apos;Completed&apos; for unlocked achievements" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils formatAchievementProgress" name="returns remaining count for locked achievements" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils getAchievementAccessibilityLabel" name="returns correct label for unlocked achievement" time="0.001" file="__tests__\achievements.test.ts">
+    </testcase>
+    <testcase classname="Achievement Utils getAchievementAccessibilityLabel" name="returns correct label for locked achievement" time="0" file="__tests__\achievements.test.ts">
+    </testcase>
+  </testsuite>
+  <testsuite name="Storage Functions" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="0.748" tests="19">
+    <testcase classname="Storage Functions loadWorkouts" name="should return empty array when no workouts exist" time="0.005" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions loadWorkouts" name="should return workouts after saving" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions saveWorkout" name="should save a workout to storage" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions saveWorkout" name="should append multiple workouts" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions deleteWorkout" name="should delete a workout by id" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions deleteWorkout" name="should only delete the specified workout" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions getWorkouts" name="should return all workouts" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions getLastWorkoutValues" name="should return default values when no workouts exist" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions getLastWorkoutValues" name="should return most recent workout values" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions getLastWorkoutValues" name="should filter by workout type" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions getDefaultValues" name="should return running defaults" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions getDefaultValues" name="should return squats defaults" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions getDefaultValues" name="should return pushups defaults" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions getDefaultValues" name="should return pullups defaults" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions getDefaultValues" name="should return empty object for other type" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions updateWorkout" name="should update an existing workout" time="0.001" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions updateWorkout" name="should throw error if workout not found" time="0.025" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions updateWorkout" name="should update updatedAt timestamp" time="0.013" file="__tests__\storage.test.ts">
+    </testcase>
+    <testcase classname="Storage Functions clearWorkouts" name="should remove all workouts" time="0" file="__tests__\storage.test.ts">
+    </testcase>
+  </testsuite>
+  <testsuite name="Validation Functions" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="0.704" tests="28">
+    <testcase classname="Validation Functions validateRunningForm" name="should return valid for proper running data" time="0.006" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateRunningForm" name="should reject empty distance" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateRunningForm" name="should reject negative distance" time="0.001" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateRunningForm" name="should reject distance over 100km" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateRunningForm" name="should reject empty duration" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateRunningForm" name="should reject duration over 1440 minutes" time="0.001" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateRunningForm" name="should accept decimal distances" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateStrengthForm" name="should return valid for proper strength data" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject empty reps" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject reps over 1000" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject empty sets" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject sets over 100" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateStrengthForm" name="should accept optional weight" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject negative weight" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateStrengthForm" name="should reject weight over 500kg" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateTimestamp" name="should return valid for past dates" time="0.001" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateTimestamp" name="should return valid for current time" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions validateTimestamp" name="should reject future dates" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions calculatePace" name="should calculate correct pace" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions calculatePace" name="should return 0 for invalid distance" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions calculatePace" name="should return 0 for invalid duration" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions formatPace" name="should format pace as MM:SS min/km" time="0.001" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions formatPace" name="should return placeholder for invalid pace" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions isOutlier" name="should detect unusual distance" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions isOutlier" name="should detect unusual duration" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions isOutlier" name="should detect unusual reps" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions isOutlier" name="should detect unusual sets" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+    <testcase classname="Validation Functions isOutlier" name="should detect unusual weight" time="0" file="__tests__\validation.test.ts">
+    </testcase>
+  </testsuite>
+  <testsuite name="AuthContext" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="0.866" tests="5">
+    <testcase classname="AuthContext validation functions validateEmail" name="returns true for valid emails" time="0.004" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext validation functions validateEmail" name="returns false for invalid emails" time="0" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext validation functions validatePassword" name="rejects passwords shorter than 8 characters" time="0" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext validation functions validatePassword" name="rejects passwords without numbers" time="0.001" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+    <testcase classname="AuthContext validation functions validatePassword" name="accepts valid passwords" time="0" file="__tests__\AuthContext.test.tsx">
+    </testcase>
+  </testsuite>
+  <testsuite name="DeleteConfirmationDialog" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="1.294" tests="9">
+    <testcase classname="DeleteConfirmationDialog" name="should render when visible" time="0.399" file="__tests__\DeleteConfirmationDialog.test.tsx">
+    </testcase>
+    <testcase classname="DeleteConfirmationDialog" name="should not render when not visible" time="0.002" file="__tests__\DeleteConfirmationDialog.test.tsx">
+    </testcase>
+    <testcase classname="DeleteConfirmationDialog" name="should display workout type and date in message" time="0.002" file="__tests__\DeleteConfirmationDialog.test.tsx">
+    </testcase>
+    <testcase classname="DeleteConfirmationDialog" name="should call onCancel when cancel button pressed" time="0.002" file="__tests__\DeleteConfirmationDialog.test.tsx">
+    </testcase>
+    <testcase classname="DeleteConfirmationDialog" name="should call onConfirm when delete button pressed" time="0.009" file="__tests__\DeleteConfirmationDialog.test.tsx">
+    </testcase>
+    <testcase classname="DeleteConfirmationDialog" name="should have proper accessibility labels" time="0.002" file="__tests__\DeleteConfirmationDialog.test.tsx">
+    </testcase>
+    <testcase classname="DeleteConfirmationDialog" name="should have proper accessibility hints" time="0.002" file="__tests__\DeleteConfirmationDialog.test.tsx">
+    </testcase>
+    <testcase classname="DeleteConfirmationDialog" name="should use destructive styling for delete button" time="0.002" file="__tests__\DeleteConfirmationDialog.test.tsx">
+    </testcase>
+    <testcase classname="DeleteConfirmationDialog" name="should have warning icon" time="0.001" file="__tests__\DeleteConfirmationDialog.test.tsx">
+    </testcase>
+  </testsuite>
+  <testsuite name="DashboardScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="1.314" tests="16">
+    <testcase classname="DashboardScreen" name="renders title" time="0.379" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
     <testcase classname="DashboardScreen" name="renders subtitle" time="0.002" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
     <testcase classname="DashboardScreen" name="renders coming soon card" time="0.001" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="renders card text about logged workouts" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="DashboardScreen" name="renders card text about logged workouts" time="0.002" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
     <testcase classname="DashboardScreen" name="renders SafeAreaView wrapper" time="0.002" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="renders title with proper styling" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="DashboardScreen" name="renders title with proper styling" time="0.007" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
     <testcase classname="DashboardScreen" name="renders subtitle with secondary color" time="0.001" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="renders card title with bold font" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="DashboardScreen" name="renders card title with bold font" time="0" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="renders card text with proper styling" time="0" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="DashboardScreen" name="renders card text with proper styling" time="0.002" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="is a static informational screen" time="0.002" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="DashboardScreen" name="is a static informational screen" time="0.001" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="has no interactive elements" time="0.004" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="DashboardScreen" name="has no interactive elements" time="0.001" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="renders content in correct order" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="DashboardScreen" name="renders content in correct order" time="0" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="displays placeholder content" time="0.001" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="DashboardScreen" name="displays placeholder content" time="0" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="renders without crashing" time="0" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="DashboardScreen" name="renders without crashing" time="0.001" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
     <testcase classname="DashboardScreen" name="maintains consistent UI across renders" time="0.002" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
-    <testcase classname="DashboardScreen" name="renders with proper structure" time="0" file="__tests__\DashboardScreen.test.tsx">
+    <testcase classname="DashboardScreen" name="renders with proper structure" time="0.001" file="__tests__\DashboardScreen.test.tsx">
     </testcase>
   </testsuite>
-  <testsuite name="HomeScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="0.884" tests="31">
-    <testcase classname="HomeScreen" name="renders title" time="0.301" file="__tests__\HomeScreen.test.tsx">
+  <testsuite name="SplashScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="1.328" tests="13">
+    <testcase classname="SplashScreen" name="renders title" time="0.384" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="renders subtitle" time="0.004" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="renders loading subtitle" time="0.002" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="renders Quick Actions section" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="renders SafeAreaView wrapper" time="0.001" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="renders Latest Activity section" time="0.008" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="renders title with proper styling" time="0.001" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="renders stats card with streak" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="renders subtitle with proper styling" time="0.001" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="renders stats card with weekly goal" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="has no interactive elements" time="0.001" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="renders Run button" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="is a static loading screen" time="0.001" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="renders Push-up button" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="displays app branding" time="0.001" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="renders Squats button" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="indicates loading state to user" time="0.001" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="renders Pull-up button" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="does not crash during render" time="0.001" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="navigates to Log screen when Run is pressed" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="maintains consistent UI across renders" time="0.002" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="navigates to Log screen when Push-up is pressed" time="0.002" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="renders with proper structure" time="0.001" file="__tests__\SplashScreen.test.tsx">
     </testcase>
-    <testcase classname="HomeScreen" name="navigates to Log screen when Squats is pressed" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="navigates to Log screen when Pull-up is pressed" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders placeholder message for empty activity list" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders SafeAreaView wrapper" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="has proper layout structure" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders stat blocks in row layout" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders quick action buttons in rows" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders title with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders subtitle with secondary color" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders section titles with proper styling" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders placeholder card with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders stat values with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders stat labels with proper styling" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="handles multiple navigation calls" time="0.004" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders consistently across multiple renders" time="0.007" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="does not crash with undefined navigation" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="has accessible stat display" time="0.003" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders empty state for activity list" time="0.002" file="__tests__\HomeScreen.test.tsx">
-    </testcase>
-    <testcase classname="HomeScreen" name="renders with proper structure" time="0.003" file="__tests__\HomeScreen.test.tsx">
+    <testcase classname="SplashScreen" name="renders ActivityIndicator" time="0.001" file="__tests__\SplashScreen.test.tsx">
     </testcase>
   </testsuite>
-  <testsuite name="LogScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="1.34" tests="37">
-    <testcase classname="LogScreen" name="renders title" time="0.317" file="__tests__\LogScreen.test.tsx">
+  <testsuite name="CalendarDay" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="1.33" tests="10">
+    <testcase classname="CalendarDay" name="renders day number correctly" time="0.414" file="__tests__\CalendarDay.test.tsx">
     </testcase>
-    <testcase classname="LogScreen" name="renders activity type buttons" time="0.01" file="__tests__\LogScreen.test.tsx">
+    <testcase classname="CalendarDay" name="renders empty cell for null day" time="0.001" file="__tests__\CalendarDay.test.tsx">
     </testcase>
-    <testcase classname="LogScreen" name="renders date and time field" time="0.006" file="__tests__\LogScreen.test.tsx">
+    <testcase classname="CalendarDay" name="calls onPress when day is pressed" time="0.003" file="__tests__\CalendarDay.test.tsx">
     </testcase>
-    <testcase classname="LogScreen" name="renders quantity input" time="0.006" file="__tests__\LogScreen.test.tsx">
+    <testcase classname="CalendarDay" name="does not call onPress for null day" time="0" file="__tests__\CalendarDay.test.tsx">
     </testcase>
-    <testcase classname="LogScreen" name="renders notes input" time="0.006" file="__tests__\LogScreen.test.tsx">
+    <testcase classname="CalendarDay" name="shows single workout indicator" time="0.001" file="__tests__\CalendarDay.test.tsx">
     </testcase>
-    <testcase classname="LogScreen" name="renders save button" time="0.006" file="__tests__\LogScreen.test.tsx">
+    <testcase classname="CalendarDay" name="shows multiple workout indicators" time="0.002" file="__tests__\CalendarDay.test.tsx">
     </testcase>
-    <testcase classname="LogScreen" name="renders Recent entries section" time="0.006" file="__tests__\LogScreen.test.tsx">
+    <testcase classname="CalendarDay" name="highlights today" time="0.001" file="__tests__\CalendarDay.test.tsx">
     </testcase>
-    <testcase classname="LogScreen" name="shows empty state when no entries exist" time="0.006" file="__tests__\LogScreen.test.tsx">
+    <testcase classname="CalendarDay" name="has proper accessibility label" time="0.002" file="__tests__\CalendarDay.test.tsx">
     </testcase>
-    <testcase classname="LogScreen" name="allows selecting activity type" time="0.009" file="__tests__\LogScreen.test.tsx">
+    <testcase classname="CalendarDay" name="has accessibility hint with workout count" time="0.001" file="__tests__\CalendarDay.test.tsx">
     </testcase>
-    <testcase classname="LogScreen" name="allows entering quantity" time="0.008" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="allows entering notes" time="0.008" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="saves entry with valid data" time="0.012" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="clears form after saving entry" time="0.015" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="displays saved entries in the list" time="0.058" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="formats entry date correctly" time="0.057" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="displays entry quantity" time="0.073" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="displays entry notes when present" time="0.055" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="loads entries from AsyncStorage on mount" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="saves entries to AsyncStorage when adding new entry" time="0.012" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders form card" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders quantity input with numeric keyboard" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders notes input as multiline" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="has proper label for activity type" time="0.008" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="has proper label for quantity" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="has proper label for notes" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="allows adding multiple entries" time="0.016" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="handles entries with notes" time="0.013" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="trims notes before saving" time="0.013" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders entries list with FlatList" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders SafeAreaView container" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="has proper input styling" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="has proper save button styling" time="0.005" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="handles decimal quantity values" time="0.01" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="handles large quantity values" time="0.013" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="preserves selected activity type" time="0.008" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="renders all activity type options" time="0.006" file="__tests__\LogScreen.test.tsx">
-    </testcase>
-    <testcase classname="LogScreen" name="displays current date in date field" time="0.003" file="__tests__\LogScreen.test.tsx">
+    <testcase classname="CalendarDay" name="disables press for other month days" time="0.002" file="__tests__\CalendarDay.test.tsx">
     </testcase>
   </testsuite>
-  <testsuite name="AuthContext" errors="0" failures="0" skipped="0" timestamp="2026-03-16T01:19:57" time="1.548" tests="26">
-    <testcase classname="AuthContext" name="provides initial auth state with loading true" time="0.331" file="__tests__\AuthContext.test.tsx">
+  <testsuite name="LogRunningForm" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="1.354" tests="14">
+    <testcase classname="LogRunningForm" name="should render distance and duration inputs" time="0.408" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="provides user as undefined when not signed in" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogRunningForm" name="should display validation errors" time="0.003" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="provides passwordHash as undefined when not signed in" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogRunningForm" name="should calculate and display pace when valid values entered" time="0.005" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="sets loading to false after initialization" time="0.056" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogRunningForm" name="should call onDistanceChange when distance input changes" time="0.003" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="loads auth state from AsyncStorage on mount" time="0.063" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogRunningForm" name="should call onDurationChange when duration input changes" time="0.004" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="signs in with username and password" time="0.006" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogRunningForm" name="should have proper accessibility labels" time="0.002" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="hashes password during sign in" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogStrengthForm" name="should render reps, sets, and weight inputs" time="0.001" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="saves auth state to AsyncStorage after sign in" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogStrengthForm" name="should display validation errors" time="0.002" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="updates user state after sign in" time="0.053" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogStrengthForm" name="should calculate and display total volume" time="0.002" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="signs out and clears state" time="0.061" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogStrengthForm" name="should display volume with weight when provided" time="0.002" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="clears AsyncStorage on sign out" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogStrengthForm" name="should call onRepsChange when reps input changes" time="0.001" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="clears user state after sign out" time="0.109" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogStrengthForm" name="should call onSetsChange when sets input changes" time="0.001" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="clears passwordHash after sign out" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogStrengthForm" name="should call onWeightChange when weight input changes" time="0.001" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="throws error when useAuth used outside AuthProvider" time="0.015" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="LogStrengthForm" name="should show exercise-specific labels" time="0.002" file="__tests__\components.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="handles empty auth state from AsyncStorage" time="0.054" file="__tests__\AuthContext.test.tsx">
+  </testsuite>
+  <testsuite name="WorkoutHistoryItem" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="1.361" tests="11">
+    <testcase classname="WorkoutHistoryItem" name="renders workout type correctly" time="0.436" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="handles invalid auth state from AsyncStorage" time="0.061" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="WorkoutHistoryItem" name="renders workout summary" time="0.005" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="trims username during sign in" time="0.054" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="WorkoutHistoryItem" name="calls onPress when pressed" time="0.006" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="provides signIn function" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="WorkoutHistoryItem" name="calls onLongPress when long pressed" time="0.006" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="provides signOut function" time="0" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="WorkoutHistoryItem" name="displays workout icon" time="0.002" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="provides loading state" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="WorkoutHistoryItem" name="has proper accessibility label" time="0.002" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="provides user object with username" time="0.062" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="WorkoutHistoryItem" name="has accessibility hint" time="0.002" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="provides passwordHash for sync functionality" time="0.064" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="WorkoutHistoryItem" name="renders strength workout correctly" time="0.002" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="memoizes context value properly" time="0.055" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="WorkoutHistoryItem" name="renders workout with notes" time="0.002" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="handles sign in with empty password" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="WorkoutHistoryItem" name="displays date correctly for today" time="0.002" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="handles sign in with special characters in password" time="0.001" file="__tests__\AuthContext.test.tsx">
+    <testcase classname="WorkoutHistoryItem" name="displays date correctly for yesterday" time="0.001" file="__tests__\WorkoutHistoryItem.test.tsx">
     </testcase>
-    <testcase classname="AuthContext" name="persists auth state across component re-renders" time="0.057" file="__tests__\AuthContext.test.tsx">
+  </testsuite>
+  <testsuite name="Accessibility Tests" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="1.42" tests="20">
+    <testcase classname="Accessibility Tests LogRunningForm Accessibility" name="should have accessible labels on all inputs" time="0.371" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests LogRunningForm Accessibility" name="should have accessibility hints on all inputs" time="0.002" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests LogRunningForm Accessibility" name="should mark invalid inputs with aria-invalid" time="0.002" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests LogRunningForm Accessibility" name="should use alert role for error messages" time="0.002" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests LogRunningForm Accessibility" name="should have form role on container" time="0.002" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests LogRunningForm Accessibility" name="should announce pace changes to screen readers" time="0.13" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests LogStrengthForm Accessibility" name="should have accessible labels on all inputs" time="0.002" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests LogStrengthForm Accessibility" name="should have exercise-specific accessibility hints" time="0.001" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests LogStrengthForm Accessibility" name="should mark invalid inputs with aria-invalid" time="0.001" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests LogStrengthForm Accessibility" name="should use alert role for error messages" time="0" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests DeleteConfirmationDialog Accessibility" name="should have alertdialog role" time="0.006" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests DeleteConfirmationDialog Accessibility" name="should have accessible labels on buttons" time="0.001" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests DeleteConfirmationDialog Accessibility" name="should have accessibility hints on buttons" time="0.001" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests DeleteConfirmationDialog Accessibility" name="should have header role on title" time="0.001" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests QuickLogButton Accessibility" name="should have button role" time="0.001" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests QuickLogButton Accessibility" name="should have accessible label" time="0" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests QuickLogButton Accessibility" name="should have accessibility hint" time="0.001" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests QuickLogButton Accessibility" name="should have minimum touch target of 44x44" time="0.001" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests Touch Target Sizes" name="should have 48px minimum height for inputs" time="0" file="__tests__\accessibility.test.tsx">
+    </testcase>
+    <testcase classname="Accessibility Tests Touch Target Sizes" name="should have proper touch targets for buttons" time="0.002" file="__tests__\accessibility.test.tsx">
+    </testcase>
+  </testsuite>
+  <testsuite name="CalendarScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="1.701" tests="12">
+    <testcase classname="CalendarScreen" name="renders calendar title" time="0.382" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="renders month label" time="0.015" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="renders weekday headers" time="0.02" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="renders today button" time="0.013" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="navigates to previous month" time="0.026" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="navigates to next month" time="0.024" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="jumps to today" time="0.024" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="has proper accessibility for navigation buttons" time="0.014" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="renders workout history section" time="0.017" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="shows empty state when no workouts" time="0.012" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="has calendar day cells" time="0.013" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+    <testcase classname="CalendarScreen" name="highlights today" time="0.014" file="__tests__\CalendarScreen.test.tsx">
+    </testcase>
+  </testsuite>
+  <testsuite name="LogScreen" errors="0" failures="0" skipped="0" timestamp="2026-03-17T20:37:34" time="2.826" tests="15">
+    <testcase classname="LogScreen" name="renders Log Workout title" time="0.404" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders workout type selector" time="0.062" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders all workout type options" time="0.065" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders Date &amp; Time field" time="0.071" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders notes input" time="0.079" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders save button" time="0.083" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="shows empty state when no workouts exist" time="0.074" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="allows selecting workout type" time="0.153" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="allows entering reps for strength workout" time="0.153" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="allows entering distance for running workout" time="0.146" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="allows entering notes" time="0.083" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="has proper label for workout type" time="0.069" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="has proper label for Date &amp; Time" time="0.069" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="renders notes input as multiline" time="0.08" file="__tests__\LogScreen.test.tsx">
+    </testcase>
+    <testcase classname="LogScreen" name="displays current date in Date &amp; Time field" time="0.078" file="__tests__\LogScreen.test.tsx">
     </testcase>
   </testsuite>
 </testsuites>

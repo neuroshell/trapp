@@ -1,0 +1,269 @@
+{
+  "users": {
+    "mqOXagaplxei3fvEB1hWo": {
+      "id": "mqOXagaplxei3fvEB1hWo",
+      "email": "ydhwuduh@dhquwd.com",
+      "username": "ydhwuduh",
+      "passwordHash": "$2a$10$gHdGHReeFdte9tXudBfZpeZ7jCKHFeVLSS.51uB3ngxoZ6L/AvTaS",
+      "displayName": null,
+      "profile": null,
+      "devices": [],
+      "createdAt": "2026-03-17T16:56:25.349Z",
+      "updatedAt": "2026-03-17T16:56:25.349Z"
+    },
+    "qxoS6ce8hhYxszLm-a2e7": {
+      "id": "qxoS6ce8hhYxszLm-a2e7",
+      "email": "test@example.com",
+      "username": "test",
+      "passwordHash": "$2a$10$eXAL87V9JlgnkwSgMh9EnOPNz3vxyujzJ7/clBw9BqYYDvAi9FiZe",
+      "displayName": null,
+      "profile": null,
+      "devices": [],
+      "createdAt": "2026-03-17T17:20:24.274Z",
+      "updatedAt": "2026-03-17T17:20:24.274Z"
+    },
+    "pWlPoHrjE8Be-H34YjiMW": {
+      "id": "pWlPoHrjE8Be-H34YjiMW",
+      "email": "chad@chad.chad",
+      "username": "chad",
+      "passwordHash": "$2a$10$kz7reBoXoLogFSI3eFLQceATjxzbAwogWguh.V9ptxOFfSaiunOb2",
+      "displayName": null,
+      "profile": null,
+      "devices": [],
+      "createdAt": "2026-03-17T17:55:46.985Z",
+      "updatedAt": "2026-03-17T17:55:46.985Z"
+    }
+  },
+  "workouts": {
+    "1773739377182-a57da38651bf08": {
+      "type": "running",
+      "timestamp": "2026-03-17T09:22:56.199Z",
+      "data": {
+        "distance": 5,
+        "duration": 30
+      },
+      "id": "1773739377182-a57da38651bf08",
+      "createdAt": "2026-03-17T09:22:57.182Z",
+      "updatedAt": "2026-03-17T16:56:25.432Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773739381061-cac4eda21fd308": {
+      "type": "squats",
+      "timestamp": "2026-03-17T09:22:57.199Z",
+      "data": {
+        "reps": 20,
+        "sets": 3
+      },
+      "id": "1773739381061-cac4eda21fd308",
+      "createdAt": "2026-03-17T09:23:01.061Z",
+      "updatedAt": "2026-03-17T16:56:25.433Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773739382596-baa949835face": {
+      "type": "pushups",
+      "timestamp": "2026-03-17T09:23:01.084Z",
+      "data": {
+        "reps": 15,
+        "sets": 3
+      },
+      "id": "1773739382596-baa949835face",
+      "createdAt": "2026-03-17T09:23:02.596Z",
+      "updatedAt": "2026-03-17T16:56:25.440Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773739383818-33c64e8e35bdd": {
+      "type": "pullups",
+      "timestamp": "2026-03-17T09:23:02.627Z",
+      "data": {
+        "reps": 10,
+        "sets": 3
+      },
+      "id": "1773739383818-33c64e8e35bdd",
+      "createdAt": "2026-03-17T09:23:03.818Z",
+      "updatedAt": "2026-03-17T16:56:25.444Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773739850167-c4a17eee9561c8": {
+      "type": "running",
+      "timestamp": "2026-03-17T09:30:42.443Z",
+      "data": {
+        "distance": 5,
+        "duration": 30
+      },
+      "id": "1773739850167-c4a17eee9561c8",
+      "createdAt": "2026-03-17T09:30:50.167Z",
+      "updatedAt": "2026-03-17T16:56:25.447Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773739952124-32a7cc59d8f56": {
+      "type": "pushups",
+      "timestamp": "2026-03-17T09:30:50.201Z",
+      "data": {
+        "reps": 15,
+        "sets": 3
+      },
+      "id": "1773739952124-32a7cc59d8f56",
+      "createdAt": "2026-03-17T09:32:32.124Z",
+      "updatedAt": "2026-03-17T16:56:25.450Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773765644299-4261bcb4c4c44": {
+      "type": "running",
+      "timestamp": "2026-03-17T16:40:43.167Z",
+      "data": {
+        "distance": 5,
+        "duration": 30
+      },
+      "id": "1773765644299-4261bcb4c4c44",
+      "createdAt": "2026-03-17T16:40:44.299Z",
+      "updatedAt": "2026-03-17T16:56:25.453Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773766897916-d02c2ff90fcf08": {
+      "type": "running",
+      "timestamp": "2026-03-17T17:01:34.545Z",
+      "data": {
+        "distance": 5,
+        "duration": 30
+      },
+      "id": "1773766897916-d02c2ff90fcf08",
+      "createdAt": "2026-03-17T17:01:37.916Z",
+      "updatedAt": "2026-03-17T17:01:37.973Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773766899615-b626ed70d23d48": {
+      "type": "squats",
+      "timestamp": "2026-03-17T17:01:37.969Z",
+      "data": {
+        "reps": 20,
+        "sets": 3
+      },
+      "id": "1773766899615-b626ed70d23d48",
+      "createdAt": "2026-03-17T17:01:39.615Z",
+      "updatedAt": "2026-03-17T17:01:39.669Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773766900796-590b5057a98838": {
+      "type": "pushups",
+      "timestamp": "2026-03-17T17:01:39.665Z",
+      "data": {
+        "reps": 15,
+        "sets": 3
+      },
+      "id": "1773766900796-590b5057a98838",
+      "createdAt": "2026-03-17T17:01:40.796Z",
+      "updatedAt": "2026-03-17T17:01:40.839Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773768154572-e6a465e911f52": {
+      "type": "running",
+      "timestamp": "2026-03-17T17:22:33.785Z",
+      "data": {
+        "distance": 5,
+        "duration": 30
+      },
+      "id": "1773768154572-e6a465e911f52",
+      "createdAt": "2026-03-17T17:22:34.572Z",
+      "updatedAt": "2026-03-17T17:22:34.636Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773768205597-0fe4adffddd81": {
+      "type": "squats",
+      "timestamp": "2026-03-17T17:22:34.615Z",
+      "data": {
+        "reps": 20,
+        "sets": 3
+      },
+      "id": "1773768205597-0fe4adffddd81",
+      "createdAt": "2026-03-17T17:23:25.597Z",
+      "updatedAt": "2026-03-17T17:23:25.645Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773768423695-5523a84dc53c78": {
+      "type": "squats",
+      "timestamp": "2026-03-17T17:26:36.019Z",
+      "data": {
+        "reps": 20,
+        "sets": 3
+      },
+      "id": "1773768423695-5523a84dc53c78",
+      "createdAt": "2026-03-17T17:27:03.695Z",
+      "updatedAt": "2026-03-17T17:27:03.752Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773768425663-2780504526cae8": {
+      "type": "running",
+      "timestamp": "2026-03-17T17:27:03.740Z",
+      "data": {
+        "distance": 5,
+        "duration": 30
+      },
+      "id": "1773768425663-2780504526cae8",
+      "createdAt": "2026-03-17T17:27:05.663Z",
+      "updatedAt": "2026-03-17T17:27:05.706Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773768447596-b3dfbcc755fdf8": {
+      "type": "running",
+      "timestamp": "2026-03-17T17:27:05.708Z",
+      "data": {
+        "distance": 15,
+        "duration": 45
+      },
+      "id": "1773768447596-b3dfbcc755fdf8",
+      "createdAt": "2026-03-17T17:27:27.596Z",
+      "updatedAt": "2026-03-17T17:27:27.648Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773768759669-e1fcc27ad1a2d8": {
+      "type": "running",
+      "timestamp": "2026-03-17T17:32:37.776Z",
+      "data": {
+        "distance": 15,
+        "duration": 45
+      },
+      "id": "1773768759669-e1fcc27ad1a2d8",
+      "createdAt": "2026-03-17T17:32:39.669Z",
+      "updatedAt": "2026-03-17T17:32:39.744Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773768976762-877aa662a108b8": {
+      "type": "running",
+      "timestamp": "2026-03-17T17:36:15.714Z",
+      "data": {
+        "distance": 15,
+        "duration": 45
+      },
+      "id": "1773768976762-877aa662a108b8",
+      "createdAt": "2026-03-17T17:36:16.762Z",
+      "updatedAt": "2026-03-17T17:36:16.831Z",
+      "userId": "pWlPoHrjE8Be-H34YjiMW"
+    },
+    "1773770721497-76eeddf7aa68c8": {
+      "userId": "pWlPoHrjE8Be-H34YjiMW",
+      "type": "running",
+      "timestamp": "2026-03-17T18:05:12.701Z",
+      "data": {
+        "distance": 15,
+        "duration": 45
+      },
+      "id": "1773770721497-76eeddf7aa68c8",
+      "createdAt": "2026-03-17T18:05:21.497Z",
+      "updatedAt": "2026-03-17T18:05:21.596Z"
+    },
+    "1773771696493-67ca595c56b508": {
+      "userId": "pWlPoHrjE8Be-H34YjiMW",
+      "type": "running",
+      "timestamp": "2026-03-02T05:00:00.000Z",
+      "data": {
+        "distance": 15,
+        "duration": 45
+      },
+      "id": "1773771696493-67ca595c56b508",
+      "createdAt": "2026-03-17T18:21:36.493Z",
+      "updatedAt": "2026-03-17T18:21:36.560Z"
+    }
+  },
+  "achievements": {},
+  "devices": {}
+}

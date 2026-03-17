@@ -1,66 +1,212 @@
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useMemo, useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAuth } from "../auth/AuthContext";
 import { Card } from "../components/Card";
 import { PrimaryButton } from "../components/PrimaryButton";
+import { AuthStackParamList } from "../navigation/types";
 import { colors, spacing, typography } from "../theme";
 
+type LoginScreenNavigationProp = NativeStackNavigationProp<
+  AuthStackParamList,
+  "Login"
+>;
+
 export function LoginScreen() {
-  const { signIn } = useAuth();
-  const [username, setUsername] = useState("");
+  const navigation = useNavigation<LoginScreenNavigationProp>();
+  const { signIn, error: authError } = useAuth();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{
+    email?: string;
+    password?: string;
+    general?: string;
+  }>({});
 
   const supportText = useMemo(
     () =>
-      "Enter a username and password to sign in. This is stored locally for the demo app.",
+      "Enter your email and password to sign in. Your data is stored securely on your device.",
     [],
   );
 
+  const validateForm = (): boolean => {
+    const errors: typeof fieldErrors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email.trim()) {
+      errors.email = "Email is required";
+    } else if (!emailRegex.test(email)) {
+      errors.email = "Please enter a valid email address";
+    }
+
+    if (!password) {
+      errors.password = "Password is required";
+    }
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleSignIn = async () => {
-    if (!username.trim() || !password) {
-      setError("Please enter both a username and password.");
+    setFieldErrors({});
+
+    if (!validateForm()) {
       return;
     }
 
-    setError(null);
-    await signIn(username.trim(), password);
+    setIsSubmitting(true);
+    try {
+      await signIn(email, password);
+    } catch {
+      setFieldErrors({
+        general: authError || "Login failed. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <SafeAreaView style={styles.page}>
-      <View style={styles.wrapper}>
-        <Text style={styles.title}>FitTrack Pro</Text>
-        <Text style={styles.subtitle}>{supportText}</Text>
+      <KeyboardAvoidingView
+        style={styles.keyboardView}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.wrapper}>
+            <Text style={styles.title}>FitTrack Pro</Text>
+            <Text style={styles.subtitle}>{supportText}</Text>
 
-        <Card style={styles.card}>
-          <Text style={styles.label}>Username</Text>
-          <TextInput
-            style={styles.input}
-            value={username}
-            onChangeText={setUsername}
-            placeholder="Enter username"
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
+            <Card style={styles.card}>
+              {/* Email Input */}
+              <View style={styles.inputGroup}>
+                <Text style={styles.label} accessibilityLabel="Email address">
+                  Email
+                </Text>
+                <TextInput
+                  style={[styles.input, fieldErrors.email && styles.inputError]}
+                  value={email}
+                  onChangeText={(text) => {
+                    setEmail(text);
+                    if (fieldErrors.email) {
+                      setFieldErrors({ ...fieldErrors, email: undefined });
+                    }
+                  }}
+                  placeholder="Enter your email"
+                  placeholderTextColor={colors.textSecondary}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  accessibilityLabel="Email address input"
+                  accessibilityHint="Enter your email address"
+                />
+                {fieldErrors.email && (
+                  <Text
+                    style={styles.errorText}
+                    accessibilityRole="alert"
+                    accessibilityLabel={fieldErrors.email}
+                  >
+                    {fieldErrors.email}
+                  </Text>
+                )}
+              </View>
 
-          <Text style={styles.label}>Password</Text>
-          <TextInput
-            style={styles.input}
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Enter password"
-            secureTextEntry
-          />
+              {/* Password Input */}
+              <View style={styles.inputGroup}>
+                <Text style={styles.label} accessibilityLabel="Password">
+                  Password
+                </Text>
+                <TextInput
+                  style={[
+                    styles.input,
+                    fieldErrors.password && styles.inputError,
+                  ]}
+                  value={password}
+                  onChangeText={(text) => {
+                    setPassword(text);
+                    if (fieldErrors.password) {
+                      setFieldErrors({ ...fieldErrors, password: undefined });
+                    }
+                  }}
+                  placeholder="Enter your password"
+                  placeholderTextColor={colors.textSecondary}
+                  secureTextEntry
+                  accessibilityLabel="Password input"
+                  accessibilityHint="Enter your password"
+                />
+                {fieldErrors.password && (
+                  <Text
+                    style={styles.errorText}
+                    accessibilityRole="alert"
+                    accessibilityLabel={fieldErrors.password}
+                  >
+                    {fieldErrors.password}
+                  </Text>
+                )}
+              </View>
 
-          {error ? <Text style={styles.error}>{error}</Text> : null}
+              {/* General Error */}
+              {(fieldErrors.general || authError) && (
+                <Text
+                  style={styles.errorText}
+                  accessibilityRole="alert"
+                  accessibilityLabel={
+                    fieldErrors.general || authError || undefined
+                  }
+                >
+                  {fieldErrors.general || authError}
+                </Text>
+              )}
 
-          <PrimaryButton onPress={handleSignIn} style={styles.button}>
-            Sign in
-          </PrimaryButton>
-        </Card>
-      </View>
+              {/* Login Button */}
+              <PrimaryButton
+                onPress={handleSignIn}
+                disabled={isSubmitting}
+                style={styles.button}
+                testID="signin-button"
+              >
+                {isSubmitting ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  "Sign In"
+                )}
+              </PrimaryButton>
+
+              {/* Register Link */}
+              <View style={styles.registerContainer}>
+                <Text style={styles.registerText}>Don't have an account? </Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate("Register")}
+                  accessibilityRole="link"
+                  accessibilityLabel="Go to registration screen"
+                  accessibilityHint="Navigates to the account creation screen"
+                  hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
+                >
+                  <Text style={styles.registerLink}>Create Account</Text>
+                </TouchableOpacity>
+              </View>
+            </Card>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -70,10 +216,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
+  keyboardView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
   wrapper: {
     flex: 1,
     justifyContent: "center",
     padding: spacing.lg,
+    paddingTop: spacing.xl,
+    paddingBottom: spacing.xl,
   },
   title: {
     fontSize: typography.sectionTitle,
@@ -86,14 +240,19 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     textAlign: "center",
     marginBottom: spacing.lg,
+    fontSize: typography.body,
   },
   card: {
     padding: spacing.lg,
   },
+  inputGroup: {
+    marginBottom: spacing.md,
+  },
   label: {
     fontWeight: "600",
-    marginBottom: 8,
+    marginBottom: spacing.xs,
     color: colors.textSecondary,
+    fontSize: typography.small,
   },
   input: {
     borderWidth: 1,
@@ -102,14 +261,37 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     fontSize: typography.body,
     backgroundColor: colors.surface,
-    marginBottom: spacing.md,
+    minHeight: 48,
+    color: colors.text,
+  },
+  inputError: {
+    borderColor: colors.error,
+    borderWidth: 2,
+  },
+  errorText: {
+    color: colors.error,
+    fontSize: typography.small,
+    marginBottom: spacing.sm,
+    textAlign: "center",
   },
   button: {
     marginTop: spacing.sm,
+    minHeight: 48,
   },
-  error: {
-    color: colors.error,
-    marginBottom: spacing.sm,
-    textAlign: "center",
+  registerContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: spacing.md,
+    minHeight: 44,
+  },
+  registerText: {
+    fontSize: typography.body,
+    color: colors.textSecondary,
+  },
+  registerLink: {
+    fontSize: typography.body,
+    color: colors.primary,
+    fontWeight: "600",
   },
 });

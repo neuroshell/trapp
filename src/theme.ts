@@ -10,6 +10,17 @@ export const colors = {
   shadow: "rgba(0, 0, 0, 0.08)",
   error: "#E53935",
   success: "#28A745",
+
+  // Sync status colors
+  syncOnline: "#28A745",
+  syncOffline: "#5C5C67",
+  syncSyncing: "#2E7DFF",
+  syncPending: "#FF8C42",
+  syncError: "#E53935",
+
+  // Additional UI colors
+  warning: "#FFC107",
+  info: "#17A2B8",
 };
 
 export const spacing = {

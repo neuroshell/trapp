@@ -7,11 +7,15 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   children: ReactNode;
   borderless?: boolean;
+  testID?: string;
 };
 
-export function Card({ children, style, borderless }: Props) {
+export function Card({ children, style, borderless, testID }: Props) {
   return (
-    <View style={[styles.container, borderless && styles.borderless, style]}>
+    <View
+      style={[styles.container, borderless && styles.borderless, style]}
+      testID={testID}
+    >
       {children}
     </View>
   );

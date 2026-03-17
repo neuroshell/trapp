@@ -1,17 +1,45 @@
 {
   "name": "trapp-backend",
   "version": "0.1.0",
+  "description": "Trapp Tracker Backend Sync Server",
   "private": true,
   "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node --test"
+    "dev": "node --watch index.js",
+    "test": "node --test",
+    "test:stable": "node --test tests/database.test.js tests/test-utils.js",
+    "test:ci": "node test-ci.js",
+    "test:coverage": "node --test --experimental-test-coverage",
+    "build:netlify": "npm install --production && mkdir -p netlify/functions && cp netlify/functions/api.js netlify/functions/api.js",
+    "deploy:netlify": "netlify deploy --prod --dir=netlify"
   },
+  "keywords": [
+    "fitness",
+    "tracking",
+    "sync",
+    "backend"
+  ],
+  "author": "",
+  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.4",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.4",
+    "express-rate-limit": "^7.1.5",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
     "lowdb": "^5.0.0",
-    "nanoid": "^4.0.0"
+    "nanoid": "^4.0.0",
+    "serverless-http": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

@@ -4,27 +4,35 @@
 
 **Trapp Tracker** (also branded as **FitTrack Pro**) is a cross-platform fitness tracking application built with **React Native + Expo**. The app enables users to log workout activities (running, squats, pushups, pullups), track progress over time, view calendar history, and earn achievements through gamification.
 
+### Vision Statement
+
+> **"Empower everyday athletes to build consistent fitness habits through intuitive tracking, meaningful achievements, and data-driven insights."**
+
+### Core Value Proposition
+
+> **"The simplest way to build unbreakable fitness habits"** - Log any workout in under 10 seconds.
+
 ### Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| **Frontend** | React Native 0.81.5, Expo SDK 54.0.0 |
-| **Language** | TypeScript 5.9.2 |
-| **Navigation** | React Navigation 7.x (Bottom Tabs) |
-| **State Management** | React Context API (AuthContext) |
-| **Storage** | AsyncStorage (local persistence) |
-| **Backend** | Express.js + lowdb (optional sync server) |
-| **Testing** | Jest + jest-expo + React Native Testing Library |
-| **CI/CD** | GitHub Actions (lint, test, build, deploy) |
+| Layer | Technology | Version |
+|-------|------------|---------|
+| **Frontend** | React Native, Expo SDK | 0.81.5, ~55.0.6 |
+| **Language** | TypeScript | ~5.9.2 |
+| **Navigation** | React Navigation | ^7.1.33 |
+| **State Management** | React Context API | Built-in |
+| **Storage** | AsyncStorage | 2.2.0 |
+| **Backend** | Express.js + lowdb | ^4.18.4, ^5.0.0 (Phase 3) |
+| **Testing** | Jest + jest-expo + RNTL | ^29.6.0 |
+| **CI/CD** | GitHub Actions | - |
 
 ### Key Features
 
-- **Authentication**: Simple username/password login with SHA-256 hashing (via `expo-crypto`)
-- **Activity Logging**: Track running, squats, pushups, pullups, and custom activities
+- **Authentication**: Email/password login with SHA-256 hashing (expo-crypto)
+- **Workout Logging**: Track running, squats, pushups, pullups with form validation
 - **Progress Tracking**: View workout history with timestamps and notes
-- **Calendar View**: Visual calendar of workout history
-- **Achievements**: Gamification system for motivation
-- **Offline-First**: AsyncStorage for local persistence with optional backend sync
+- **Calendar View**: Visual calendar of workout history with indicators
+- **Achievements**: Gamification system with streak tracking and personal records
+- **Offline-First**: AsyncStorage for local persistence with optional backend sync (Phase 3)
 
 ---
 
@@ -57,7 +65,7 @@ npm install
 | `npm run test:backend` | Run backend tests |
 | `npm test` | Run all tests |
 
-### Backend Server (Optional)
+### Backend Server (Optional - Phase 3)
 
 ```bash
 cd backend
@@ -89,25 +97,83 @@ APPROVAL_TIMEOUT=86400000   # 24 hours for approval
 
 ## Architecture
 
+### Architecture Style
+
+**Pattern:** Modular Monolith (Offline-First)
+
+| Characteristic | Decision | Rationale |
+|----------------|----------|-----------|
+| **Architecture Style** | Modular Monolith | Small team, single codebase, clear module boundaries |
+| **Deployment Model** | Mobile-first, backend optional | MVP works offline; backend added in Phase 3 |
+| **Data Flow** | Unidirectional (React patterns) | Predictable state updates, easier debugging |
+| **Sync Strategy** | Optimistic local-first | Immediate UX, background sync when online |
+
 ### Project Structure
 
 ```
 trapp/
-├── App.tsx              # Main entry point, navigation setup
+├── App.tsx                  # Main entry point, navigation setup
 ├── src/
-│   ├── auth/            # Authentication context (AuthProvider, useAuth)
-│   ├── components/      # Reusable UI components (Card, IconButton, etc.)
-│   ├── navigation/      # Navigation types and configuration
-│   ├── screens/         # Screen components (Home, Log, Calendar, etc.)
-│   ├── models.ts        # TypeScript types (ActivityEntry, AppState)
-│   ├── storage.ts       # AsyncStorage wrappers for app/auth state
-│   └── theme.ts         # Design tokens (colors, spacing, typography)
-├── backend/             # Optional Express.js sync server
-├── __tests__/           # App-level tests
-├── __mocks__/           # Jest mocks for Expo modules
-├── scripts/             # Utility scripts including AI agent pipeline
-├── .github/             # GitHub Actions workflows
-└── assets/              # App icons and splash images
+│   ├── auth/                # Authentication context (AuthProvider, useAuth)
+│   ├── components/          # Reusable UI components (Card, IconButton, etc.)
+│   ├── navigation/          # Navigation types and configuration
+│   ├── screens/             # Screen components (Home, Log, Calendar, etc.)
+│   ├── domain/              # Business logic and models (proposed)
+│   ├── models.ts            # TypeScript types (ActivityEntry, AppState)
+│   ├── storage.ts           # AsyncStorage wrappers for app/auth state
+│   ├── theme.ts             # Design tokens (colors, spacing, typography)
+│   └── validation.ts        # Form validation utilities
+├── backend/                 # Optional Express.js sync server (Phase 3)
+├── __tests__/               # App-level tests
+├── __mocks__/               # Jest mocks for Expo modules
+├── scripts/                 # Utility scripts including AI agent pipeline
+├── docs/                    # Comprehensive documentation
+│   ├── reqs/                # Product requirements
+│   ├── tech/                # Technical documentation
+│   ├── tasks/               # Task specifications
+│   ├── comms/               # Handoff documents
+│   ├── adr/                 # Architecture Decision Records
+│   └── reports/             # Test reports
+├── .github/                 # GitHub Actions workflows
+└── assets/                  # App icons and splash images
+```
+
+### Module Responsibilities
+
+| Module | Responsibility | Dependencies |
+|--------|----------------|--------------|
+| **auth** | User authentication, session management | expo-crypto, AsyncStorage |
+| **components** | Reusable UI primitives | React Native, expo-vector-icons |
+| **screens** | Screen-level UI and user interactions | All lower modules |
+| **navigation** | App routing and tab configuration | @react-navigation/* |
+| **domain** | Business logic, models, validators | None (pure TypeScript) |
+| **storage** | Local data persistence, migrations | AsyncStorage |
+| **services** | External integrations (sync, export) | domain, storage, fetch API |
+
+### Dependency Direction
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                      Screens                            │
+│                         ↑                               │
+│                         │ uses                          │
+│                         ↓                               │
+│         ┌───────────────┼───────────────┐               │
+│         │               │               │               │
+│    Components       Navigation       Domain             │
+│         ↑               ↑               ↑               │
+│         │               │               │               │
+│         └───────────────┼───────────────┘               │
+│                         │                               │
+│                         ↓                               │
+│                      Storage                            │
+│                         ↑                               │
+│                         │                               │
+│                      Services                           │
+└─────────────────────────────────────────────────────────┘
+
+Rule: Dependencies point inward. Higher layers depend on lower layers.
+      Domain and Storage have no dependencies on UI layers.
 ```
 
 ### Data Models
@@ -115,18 +181,34 @@ trapp/
 ```typescript
 type ActivityType = "running" | "squats" | "pushups" | "pullups" | "other";
 
-interface ActivityEntry {
+interface WorkoutEntry {
   id: string;
+  userId: string;
   type: ActivityType;
-  date: string; // ISO date string
-  quantity: number; // reps, minutes, etc.
-  notes?: string;
+  timestamp: string; // ISO 8601
+  data: {
+    distance?: number; // km, for running
+    duration?: number; // minutes, for running
+    reps?: number; // for strength exercises
+    sets?: number; // for strength exercises
+    weight?: number; // kg, optional for strength
+    notes?: string;
+  };
   createdAt: string;
   updatedAt: string;
 }
 
-interface AppState {
-  entries: ActivityEntry[];
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  displayName?: string;
+  createdAt: string;
+}
+
+interface AuthState {
+  user: User | null;
+  passwordHash?: string;
 }
 ```
 
@@ -136,6 +218,7 @@ interface AppState {
 |--------|-------|-------------|
 | `SplashScreen` | - | Loading screen during auth check |
 | `LoginScreen` | - | User authentication |
+| `RegisterScreen` | - | User registration |
 | `HomeScreen` | `Home` | Dashboard with stats, quick actions, recent activity |
 | `LogScreen` | `Log` | Activity logging form with workout history |
 | `CalendarScreen` | `Calendar` | Calendar view of workouts |
@@ -207,8 +290,8 @@ Icons: Material Community Icons via `@expo/vector-icons`
 | Workflow | Trigger | Purpose |
 |----------|---------|---------|
 | `ci.yml` | PR, push to main/develop | Lint, type-check, test, build |
-| `cd-mobile.yml` | Push to main | Build and deploy mobile apps |
-| `cd-web.yml` | Push to main | Deploy web version |
+| `cd-mobile.yml` | Push to main, tags v* | Build and deploy mobile apps |
+| `cd-web.yml` | Push to main | Deploy web version to GitHub Pages |
 | `agents-pipeline.yml` | Issue labeled, schedule, manual | AI agent SDLC automation |
 | `security-scan.yml` | Schedule, PR | Security vulnerability scanning |
 
@@ -221,6 +304,21 @@ Icons: Material Community Icons via `@expo/vector-icons`
 5. **Build**: Web build artifact generation
 6. **Coverage Summary**: Generate coverage reports
 7. **Status Check**: Aggregate all job results
+
+### Required Secrets
+
+Configure in **GitHub Repository Settings → Secrets and variables → Actions**:
+
+| Secret Name | Description |
+|-------------|-------------|
+| `EXPO_TOKEN` | Expo EAS authentication token |
+| `APPLE_ID` | Apple ID for App Store Connect |
+| `APPLE_PASSWORD` | App-specific password |
+| `APPLE_TEAM_ID` | Apple Developer Team ID |
+| `GOOGLE_SERVICE_ACCOUNT_KEY_JSON` | Google Play Service Account |
+| `EAS_PROJECT_ID` | Expo project ID |
+
+See `docs/tech/CI-CD.md` for complete CI/CD documentation.
 
 ---
 
@@ -310,7 +408,7 @@ typography.small     // 13px
 
 AsyncStorage wrappers in `src/storage.ts`:
 
-- `loadAppState()` / `saveAppState()` / `clearAppState()` - App data persistence
+- `loadAppState()` / `saveAppState()` / `clearAppState()` - App state persistence
 - `loadAuthState()` / `saveAuthState()` / `clearAuthState()` - Auth persistence
 - `getDeviceId()` - Unique device identifier generation
 - `useAppStorage()` - React hook for storage operations
@@ -319,43 +417,449 @@ Storage keys:
 - `TRAPP_TRACKER_STATE_V1` - App state
 - `TRAPP_TRACKER_AUTH_V1` - Auth state
 - `TRAPP_TRACKER_DEVICE_ID` - Device ID
+- `TRAPP_TRACKER_USERS_V1` - User database
+- `TRAPP_TRACKER_WORKOUTS_V1` - Workout entries
+
+### Validation Rules
+
+| Field | Type | Rules | Error Message |
+|-------|------|-------|---------------|
+| Distance | Number | Required for running, > 0, max 100 | "Please enter a valid distance (0-100 km)" |
+| Duration | Number | Required for running, > 0, max 1440 | "Please enter a valid duration (0-1440 min)" |
+| Reps | Integer | Required for strength, > 0, max 1000 | "Please enter valid reps (1-1000)" |
+| Sets | Integer | Required for strength, > 0, max 100 | "Please enter valid sets (1-100)" |
+| Weight | Number | Optional for strength, >= 0, max 500 | "Please enter a valid weight (0-500 kg)" |
 
 ---
 
-## Backend API (Optional Sync Server)
+## Backend API (Express.js Sync Server)
 
-Express.js server with lowdb for JSON file storage.
+Full-featured Express.js REST API with JWT authentication, lowdb for JSON file storage, and comprehensive security features.
+
+### Backend Structure
+
+```
+backend/
+├── index.js              # Main server entry point
+├── routes/
+│   ├── sync.js           # Sync endpoints (GET/POST /api/sync, CRUD workouts)
+│   ├── auth.js           # Authentication (register, login, verify)
+│   └── health.js         # Health check endpoints
+├── middleware/
+│   ├── auth.js           # JWT authentication middleware
+│   ├── rateLimit.js      # Rate limiting (100 req/min)
+│   ├── validate.js       # Input validation with express-validator
+│   └── security.js       # Prototype pollution prevention, log sanitization
+├── db/
+│   ├── index.js          # Database layer with lowdb
+│   └── schema.js         # Data schema definitions
+├── utils/
+│   ├── logger.js         # Logging utility
+│   └── errors.js         # Error handling
+├── tests/
+│   ├── auth.test.js      # Auth endpoint tests
+│   ├── sync.test.js      # Sync endpoint tests
+│   ├── health.test.js    # Health endpoint tests
+│   ├── security.test.js  # Security tests
+│   └── database.test.js  # Database operation tests
+├── data/                 # Database files (gitignored)
+├── .env.example          # Environment template
+├── package.json
+└── index.js
+```
 
 ### Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/health` | Health check |
-| `POST` | `/sync` | Upload sync payload |
-| `GET` | `/sync` | Download sync payload |
+#### Authentication
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/api/auth/register` | Register new user (email, password) | No |
+| `POST` | `/api/auth/login` | Login and get JWT token | No |
+| `POST` | `/api/auth/verify` | Verify JWT token validity | Yes |
+
+#### Sync
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/api/sync` | Download user's synced data | Yes |
+| `POST` | `/api/sync` | Upload workout data for sync | Yes |
+| `POST` | `/api/sync/workout` | Sync single workout | Yes |
+| `PUT` | `/api/sync/workout/:id` | Update existing workout | Yes |
+| `DELETE` | `/api/sync/workout/:id` | Delete workout | Yes |
+| `POST` | `/api/sync/achievement` | Unlock/save achievement | Yes |
+
+#### Health
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/api/health` | Health check with server status | No |
+| `GET` | `/api/health/ready` | Readiness check | No |
+| `GET` | `/health` | Legacy health endpoint | No |
 
 ### Security Features
 
-- SHA-256 password hashing
-- Prototype pollution prevention (Map-based storage)
-- Input sanitization for usernames and device IDs
-- Log injection prevention
-- CORS enabled
+- **JWT Authentication**: Bearer token-based auth with configurable expiry (default 30 days)
+- **Password Hashing**: bcrypt with configurable rounds (default 10)
+- **Prototype Pollution Prevention**: Blocks `__proto__`, `constructor`, `prototype` keys
+- **Input Validation**: express-validator schemas for all endpoints
+- **Rate Limiting**: 100 requests/minute per IP (configurable)
+- **Helmet Security Headers**: HSTS, CSP, X-Frame-Options, etc.
+- **CORS Configuration**: Whitelist-based origin control
+- **Log Sanitization**: Prevents log injection attacks
+- **Input Sanitization**: `sanitizeKey()` and `sanitizeForLog()` utilities
+
+### Data Models
+
+```javascript
+// User
+{
+  id: string,                    // nanoid
+  email: string,                 // normalized lowercase
+  username: string,
+  passwordHash: string,          // bcrypt
+  displayName: string | null,
+  profile: { avatar, bio, timezone, units } | null,
+  devices: string[],
+  createdAt: string,             // ISO 8601
+  updatedAt: string,             // ISO 8601
+  lastSync: string | null        // ISO 8601
+}
+
+// Workout
+{
+  id: string,                    // nanoid
+  userId: string,                // indexed
+  type: 'running'|'squats'|'pushups'|'pullups'|'other',
+  timestamp: string,             // ISO 8601
+  data: {
+    distance?: number,           // 0-100 km
+    duration?: number,           // 0-1440 min
+    reps?: number,               // 0-1000
+    sets?: number,               // 0-100
+    weight?: number,             // 0-500 kg
+    notes?: string
+  },
+  createdAt: string,             // ISO 8601
+  updatedAt: string              // ISO 8601
+}
+
+// Achievement
+{
+  id: string,
+  userId: string,
+  name: string,
+  description: string,
+  category: 'streak'|'personal_record'|'milestone'|'consistency',
+  unlockedAt: string,            // ISO 8601
+  progress: { current, target },
+  icon: string,
+  points: number
+}
+```
+
+### Conflict Resolution
+
+- **Last-Write-Wins**: Based on `updatedAt` timestamp comparison
+- **Client Timestamp Wins**: When client's `updatedAt` is newer than server's
+- **Server Timestamp Wins**: When server's `updatedAt` is newer or equal
+- **Achievements**: Union merge (no conflicts, combines all achievements)
+
+### Running the Backend
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+Server runs on `http://localhost:3000` by default.
+
+### Environment Variables
+
+```env
+PORT=3000
+NODE_ENV=development
+JWT_SECRET=your-secret-key-min-32-chars
+JWT_EXPIRY=30d
+ALLOWED_ORIGINS=http://localhost:8081,http://localhost:8082,http://localhost:8083
+RATE_LIMIT_WINDOW_MS=60000
+RATE_LIMIT_MAX_REQUESTS=100
+BCRYPT_ROUNDS=10
+DB_FILE=data/db.json
+LOG_LEVEL=info
+```
+
+### Testing
+
+```bash
+cd backend
+npm test
+```
+
+Test coverage includes:
+- Database operations (CRUD for users, workouts, achievements)
+- Authentication endpoints (register, login, verify)
+- Sync endpoints (upload, download, conflict resolution)
+- Security tests (prototype pollution, rate limiting, headers)
+- Health endpoint tests
+
+See `docs/adr/ADR-006-backend-security.md` for complete security documentation.
+
+---
+
+## Product Documentation
+
+### Target Users
+
+**Primary Persona: "Casual Chris"**
+- 25-40 years old, working professional
+- Beginner to intermediate fitness level
+- Needs: Simple tracking, visual progress, encouragement
+
+**Secondary Persona: "Dedicated Dana"**
+- 30-50 years old, fitness enthusiast
+- Intermediate to advanced fitness level
+- Needs: Comprehensive stats, export capabilities, detailed history
+
+### Success Metrics (KPIs)
+
+| Metric | Target | Measurement |
+|--------|--------|-------------|
+| Daily Active Users (DAU) | 2,000+ | Unique users per day |
+| Weekly Active Users (WAU) | 5,000+ | Unique users per week |
+| Session Frequency | 3+ sessions/week | Average workouts logged |
+| Day-7 Retention | 60% | Users returning after 7 days |
+| Day-30 Retention | 40% | Users returning after 30 days |
+| Time to Log Workout | <10 seconds | Average logging time |
+
+### Product Principles
+
+1. **Simplicity First**: Every feature must justify its complexity
+2. **Celebrate Progress**: Make every achievement feel meaningful
+3. **Respect Time**: Minimize friction in every interaction
+4. **Data Empowerment**: Users own and control their data
+5. **Inclusive Design**: Accessible to all fitness levels
+6. **Offline-First**: App works fully without network; sync is transparent
+
+---
+
+## Development Roadmap
+
+### Phase 1: MVP (Weeks 5-12) - Current
+
+**Goal:** Launch minimum viable product with core functionality
+
+- ✅ Authentication (email/password, session persistence)
+- ✅ Workout logging (running, squats, pushups, pullups)
+- ✅ Form validation with inline errors
+- ✅ Quick log functionality
+- ✅ Delete workout with confirmation
+- 🚧 Calendar view (basic implementation)
+- 🚧 Statistics & achievements (basic implementation)
+
+### Phase 2: Enhancement (Weeks 13-20)
+
+- Progress trend charts
+- Achievement expansion with gallery
+- Onboarding flow
+- Dark mode support
+- Data export functionality
+
+### Phase 3: Sync & Scale (Weeks 21-28)
+
+- Express.js backend deployment
+- Cloud sync implementation
+- Multi-device support
+- Conflict resolution
+
+### Phase 4: Growth (Weeks 29+)
+
+- Social features
+- Wearable integration
+- Personalization
+- Advanced analytics
+
+---
+
+## Architecture Decision Records (ADRs)
+
+| ADR | Title | Status |
+|-----|-------|--------|
+| ADR-001 | React Native + Expo for Cross-Platform Mobile | Accepted |
+| ADR-002 | AsyncStorage for Local Persistence | Accepted |
+| ADR-003 | Context API for State Management | Accepted |
+| ADR-004 | Express.js + lowdb for Backend | Accepted (Phase 3) |
+| ADR-005 | TypeScript for Type Safety | Accepted |
+| ADR-006 | Backend Security Hardening | Accepted |
+
+See `docs/tech/technical-decisions.md` and `docs/adr/` for complete ADR documentation.
+
+---
+
+## Architecture Significant Requirements (ASRs)
+
+### Performance
+
+| ASR | Requirement | Target |
+|-----|-------------|--------|
+| ASR-PERF-01 | Fast Workout Logging | < 10 seconds (95th percentile) |
+| ASR-PERF-02 | Fast App Launch | < 3 seconds on mid-range devices |
+| ASR-PERF-03 | Smooth Scroll Performance | 60 FPS with 100+ entries |
+
+### Security
+
+| ASR | Requirement | Target |
+|-----|-------------|--------|
+| ASR-SEC-01 | Password Protection | SHA-256 (MVP), bcrypt (Phase 3) |
+| ASR-SEC-02 | Session Persistence Security | Encrypted at rest (Phase 2) |
+| ASR-SEC-03 | Input Validation | 100% of required fields validated |
+
+### Availability
+
+| ASR | Requirement | Target |
+|-----|-------------|--------|
+| ASR-AVA-01 | Offline Operation | 100% of core features functional offline |
+| ASR-AVA-02 | Graceful Error Handling | No full app crashes; > 90% recovery rate |
+| ASR-AVA-03 | Data Recovery | Corruption detected and handled |
+
+See `docs/tech/asr.md` for complete ASR documentation.
+
+---
+
+## Task Specifications
+
+### Task 001: Authentication System
+
+**Priority:** Must Have (MVP)
+**Status:** Implemented
+
+- ✅ User registration with email and password (min 8 characters)
+- ✅ Email validation (RFC 5322 format)
+- ✅ Password validation with inline feedback
+- ✅ Auto-login after registration
+- ✅ Session persistence across app restarts
+- ✅ Logout clears session and navigates to login
+- ✅ WCAG 2.1 AA accessibility compliance
+
+See `docs/tasks/task-001-authentication.md` for complete specification.
+
+### Task 002: Workout Logging System
+
+**Priority:** Must Have (MVP) - CRITICAL
+**Status:** Implemented
+
+- ✅ Running workouts with distance (km) and duration (minutes)
+- ✅ Strength workouts (squats, pushups, pullups) with reps and sets
+- ✅ Quick log feature (< 10 seconds - CRITICAL metric)
+- ✅ Quick action buttons on HomeScreen
+- ✅ Form pre-fills with user's last values or defaults
+- ✅ Full form validation with inline errors
+- ✅ Delete workout with confirmation dialog
+- ✅ Performance validated: quick log < 10 seconds
+
+See `docs/tasks/task-002-workout-logging.md` for complete specification.
+
+### Task 003: Calendar History
+
+**Priority:** Must Have (MVP)
+**Status:** In Progress
+
+- Monthly calendar view with workout indicators
+- Day detail view showing all workouts
+- Calendar navigation (month switching)
+- Empty states for months without workouts
+
+See `docs/tasks/task-003-calendar-history.md` for specification.
+
+### Task 004: Statistics & Achievements
+
+**Priority:** Must Have (MVP)
+**Status:** In Progress
+
+- Weekly summary statistics
+- Personal records tracking
+- Basic achievement system
+- Streak tracking
+- Achievement unlock notifications
+
+See `docs/tasks/task-004-statistics-achievements.md` for specification.
+
+### Task 005: Backend Sync
+
+**Priority:** Should Have (Phase 3)
+**Status:** Planned
+
+- Express.js backend deployment
+- Cloud sync implementation
+- Conflict resolution
+- Multi-device support
+
+See `docs/tasks/task-005-backend-sync.md` for specification.
+
+---
+
+## Design Handoff
+
+### Component Library
+
+Key components implemented:
+
+| Component | File | Status |
+|-----------|------|--------|
+| Button | `src/components/PrimaryButton.tsx` | ✅ |
+| Input | Built into forms | ✅ |
+| Card | `src/components/Card.tsx` | ✅ |
+| IconButton | `src/components/IconButton.tsx` | ✅ |
+| DateTimeField | `src/components/DateTimeField.tsx` | ✅ |
+| QuickLogButton | `src/components/QuickLogButton.tsx` | ✅ |
+| LogRunningForm | `src/components/LogRunningForm.tsx` | ✅ |
+| LogStrengthForm | `src/components/LogStrengthForm.tsx` | ✅ |
+| DeleteConfirmationDialog | `src/components/DeleteConfirmationDialog.tsx` | ✅ |
+
+### Accessibility Requirements (WCAG 2.1 AA)
+
+- ✅ Color contrast: Minimum 4.5:1 for normal text, 3:1 for large text
+- ✅ Touch targets: Minimum 44x44 points for all interactive elements
+- ✅ Screen reader support: All elements have accessibility labels
+- ✅ Error announcements: `accessibilityRole="alert"` for error messages
+- ✅ Focus states: Visible for all interactive elements
+
+See `docs/comms/UXUI_HANDOVER.md` and `docs/reqs/accessibility-guidelines.md` for complete design documentation.
 
 ---
 
 ## Current Status
 
+### Implemented Features
+
 - ✅ Project scaffolded with navigation structure
-- ✅ Authentication flow implemented
-- ✅ Home screen with UI components
-- ✅ Storage layer with AsyncStorage
-- ✅ Backend sync server with security hardening
+- ✅ Authentication flow (login/register with email validation, password hashing)
+- ✅ Home screen with stats, progress tracking, quick actions, recent activity
+- ✅ Workout logging with running and strength exercise forms
+- ✅ Storage layer with AsyncStorage (users, auth, workouts)
+- ✅ Backend sync server with security hardening (ADR-006)
 - ✅ AI agent SDLC pipeline configured
-- ✅ CI/CD pipelines (lint, test, build, deploy)
-- ✅ Workout logging functionality implemented
+- ✅ CI/CD pipelines (lint, test, build, deploy, security scan)
+- ✅ Form validation with outlier detection
+- ✅ Delete workout functionality with confirmation dialog
+- ✅ Accessibility support (screen reader announcements)
+- ✅ Comprehensive documentation (product vision, architecture, ASRs, ADRs, tasks)
+
+### In Progress
+
 - 🚧 Calendar view (basic implementation)
 - 🚧 Achievements system (basic implementation)
+- 🚧 Statistics dashboard enhancement
+
+### Planned (Phase 2-3)
+
+- ⏳ Progress charts and trend visualization
+- ⏳ Enhanced achievement gallery
+- ⏳ Onboarding flow
+- ⏳ Dark mode support
+- ⏳ Data export functionality
+- ⏳ Cloud sync backend (Phase 3)
 
 ---
 
@@ -366,4 +870,58 @@ Express.js server with lowdb for JSON file storage.
 - CI/CD helpers available in `scripts/ci-helpers.sh` (Unix) and `scripts/ci-helpers.ps1` (Windows)
 - Coverage parsing script: `scripts/parse-coverage.js`
 - All dates stored as ISO 8601 strings
-- Passwords are hashed client-side before storage (demo purposes only)
+- Passwords are hashed client-side with SHA-256 before storage (demo purposes only; bcrypt in Phase 3)
+- Email normalization: trimmed and lowercased before storage
+- Password requirements: minimum 8 characters, at least one number
+- **Critical Performance Metric**: Workout logging must complete in under 10 seconds (95th percentile)
+
+---
+
+## Documentation Index
+
+### Product Documentation (`docs/reqs/`)
+
+- `product-vision.md` - Vision statement, target users, success metrics
+- `user-stories.md` - 25+ user stories with acceptance criteria
+- `features.md` - Detailed feature specifications
+- `roadmap.md` - 4-phase development plan
+- `user-flows.md` - Primary user journey diagrams
+- `wireframes.md` - Screen wireframes and layouts
+- `design-system.md` - Color palette, typography, components
+- `accessibility-guidelines.md` - WCAG 2.1 AA compliance checklist
+
+### Technical Documentation (`docs/tech/`)
+
+- `architecture.md` - System architecture overview (C4 diagrams)
+- `asr.md` - Architecture Significant Requirements
+- `technical-decisions.md` - Architecture Decision Records (ADRs)
+- `CI-CD.md` - Complete CI/CD pipeline documentation
+
+### Task Specifications (`docs/tasks/`)
+
+- `task-001-authentication.md` - Authentication system implementation
+- `task-002-workout-logging.md` - Workout logging system (CRITICAL)
+- `task-003-calendar-history.md` - Calendar view implementation
+- `task-004-statistics-achievements.md` - Statistics and achievements
+- `task-005-backend-sync.md` - Backend sync server (Phase 3)
+
+### Architecture Decision Records (`docs/adr/`)
+
+- `ADR-006-backend-security.md` - Backend security hardening
+
+### Handoff Documents (`docs/comms/`)
+
+- `ARCHITECT_HANDOVER.md` - Architecture handoff request
+- `developer-handoff.md` - Developer implementation guide
+- `UXUI_HANDOVER.md` - UX/UI design handoff
+
+### Reports (`docs/reports/`)
+
+- `CI_CD_TEST_REPORT.md` - CI/CD pipeline test results
+- `INTEGRATION_TEST_REPORT.md` - Integration test results
+- `task-001-integration-test-report.md` - Task 001 test report
+
+---
+
+_Last Updated: March 16, 2026_
+_Document Version: 2.0 (Comprehensive Update)_

@@ -1,477 +1,250 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { ActivityType, WorkoutEntry } from "../src/models";
 import {
-  loadAppState,
-  saveAppState,
-  clearAppState,
-  getDeviceId,
-  loadAuthState,
-  saveAuthState,
-  clearAuthState,
-  useAppStorage,
+  clearWorkouts,
+  deleteWorkout,
+  getDefaultValues,
+  getLastWorkoutValues,
+  getWorkouts,
+  loadWorkouts,
+  saveWorkout,
+  updateWorkout,
 } from "../src/storage";
-import { AppState } from "../src/models";
 
-describe("storage", () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-    (AsyncStorage.getItem as jest.Mock).mockReset();
-    (AsyncStorage.setItem as jest.Mock).mockReset();
-    (AsyncStorage.removeItem as jest.Mock).mockReset();
+// Mock AsyncStorage
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock"),
+);
+
+describe("Storage Functions", () => {
+  beforeEach(async () => {
+    await AsyncStorage.clear();
   });
 
-  describe("loadAppState", () => {
-    it("returns empty state when no data exists", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
+  afterEach(async () => {
+    await AsyncStorage.clear();
+  });
 
-      const result = await loadAppState();
+  const createTestWorkout = (
+    type: ActivityType = "running",
+    overrides?: Partial<WorkoutEntry>,
+  ): WorkoutEntry => ({
+    id: `test-${Date.now()}`,
+    userId: "test-user",
+    type,
+    timestamp: new Date().toISOString(),
+    data: {
+      distance: type === "running" ? 5 : undefined,
+      duration: type === "running" ? 30 : undefined,
+      reps: type !== "running" ? 20 : undefined,
+      sets: type !== "running" ? 3 : undefined,
+    },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    ...overrides,
+  });
 
-      expect(result).toEqual({ entries: [] });
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_STATE_V1"
-      );
+  describe("loadWorkouts", () => {
+    it("should return empty array when no workouts exist", async () => {
+      const workouts = await loadWorkouts();
+      expect(workouts).toEqual([]);
     });
 
-    it("loads saved app state from AsyncStorage", async () => {
-      const mockState: AppState = {
-        entries: [
-          {
-            id: "1",
-            type: "running",
-            date: "2024-01-15T10:00:00Z",
-            quantity: 30,
-            createdAt: "2024-01-15T10:00:00Z",
-            updatedAt: "2024-01-15T10:00:00Z",
-          },
-        ],
-      };
+    it("should return workouts after saving", async () => {
+      const workout = createTestWorkout();
+      await saveWorkout(workout);
 
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-        JSON.stringify(mockState)
-      );
-
-      const result = await loadAppState();
-
-      expect(result).toEqual(mockState);
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_STATE_V1"
-      );
-    });
-
-    it("returns empty state on JSON parse error", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue("invalid json");
-
-      const result = await loadAppState();
-
-      expect(result).toEqual({ entries: [] });
-    });
-
-    it("returns empty state on AsyncStorage error", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockRejectedValue(
-        new Error("Storage error")
-      );
-
-      const result = await loadAppState();
-
-      expect(result).toEqual({ entries: [] });
-    });
-
-    it("handles partial state data", async () => {
-      const partialState = { entries: [] };
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-        JSON.stringify(partialState)
-      );
-
-      const result = await loadAppState();
-
-      expect(result).toEqual(partialState);
-    });
-
-    it("handles state with multiple entries", async () => {
-      const mockState: AppState = {
-        entries: [
-          {
-            id: "1",
-            type: "running",
-            date: "2024-01-15T10:00:00Z",
-            quantity: 30,
-            createdAt: "2024-01-15T10:00:00Z",
-            updatedAt: "2024-01-15T10:00:00Z",
-          },
-          {
-            id: "2",
-            type: "pushups",
-            date: "2024-01-16T11:00:00Z",
-            quantity: 20,
-            createdAt: "2024-01-16T11:00:00Z",
-            updatedAt: "2024-01-16T11:00:00Z",
-          },
-        ],
-      };
-
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-        JSON.stringify(mockState)
-      );
-
-      const result = await loadAppState();
-
-      expect(result.entries).toHaveLength(2);
-      expect(result).toEqual(mockState);
+      const workouts = await loadWorkouts();
+      expect(workouts).toHaveLength(1);
+      expect(workouts[0].id).toBe(workout.id);
     });
   });
 
-  describe("saveAppState", () => {
-    it("saves app state to AsyncStorage", async () => {
-      const mockState: AppState = {
-        entries: [
-          {
-            id: "1",
-            type: "running",
-            date: "2024-01-15T10:00:00Z",
-            quantity: 30,
-            createdAt: "2024-01-15T10:00:00Z",
-            updatedAt: "2024-01-15T10:00:00Z",
-          },
-        ],
-      };
+  describe("saveWorkout", () => {
+    it("should save a workout to storage", async () => {
+      const workout = createTestWorkout();
+      await saveWorkout(workout);
 
-      await saveAppState(mockState);
-
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_STATE_V1",
-        JSON.stringify(mockState)
-      );
+      const workouts = await getWorkouts();
+      expect(workouts).toHaveLength(1);
+      expect(workouts[0]).toEqual(workout);
     });
 
-    it("saves empty state", async () => {
-      const emptyState: AppState = { entries: [] };
+    it("should append multiple workouts", async () => {
+      const workout1 = createTestWorkout("running");
+      const workout2 = createTestWorkout("squats");
 
-      await saveAppState(emptyState);
+      await saveWorkout(workout1);
+      await saveWorkout(workout2);
 
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_STATE_V1",
-        JSON.stringify(emptyState)
-      );
-    });
-
-    it("handles save errors gracefully", async () => {
-      (AsyncStorage.setItem as jest.Mock).mockRejectedValue(
-        new Error("Save failed")
-      );
-
-      // Should not throw
-      await expect(saveAppState({ entries: [] })).resolves.toBeUndefined();
-    });
-
-    it("saves state with complex entries", async () => {
-      const complexState: AppState = {
-        entries: [
-          {
-            id: "1",
-            type: "other",
-            date: "2024-01-15T10:00:00Z",
-            quantity: 60,
-            notes: "Workout with special characters: @#$%",
-            createdAt: "2024-01-15T10:00:00Z",
-            updatedAt: "2024-01-15T10:00:00Z",
-          },
-        ],
-      };
-
-      await saveAppState(complexState);
-
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_STATE_V1",
-        JSON.stringify(complexState)
-      );
+      const workouts = await getWorkouts();
+      expect(workouts).toHaveLength(2);
     });
   });
 
-  describe("clearAppState", () => {
-    it("removes app state from AsyncStorage", async () => {
-      await clearAppState();
+  describe("deleteWorkout", () => {
+    it("should delete a workout by id", async () => {
+      const workout = createTestWorkout();
+      await saveWorkout(workout);
 
-      expect(AsyncStorage.removeItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_STATE_V1"
-      );
+      await deleteWorkout(workout.id);
+
+      const workouts = await getWorkouts();
+      expect(workouts).toHaveLength(0);
     });
 
-    it("handles clear errors gracefully", async () => {
-      (AsyncStorage.removeItem as jest.Mock).mockRejectedValue(
-        new Error("Clear failed")
-      );
+    it("should only delete the specified workout", async () => {
+      const workout1 = createTestWorkout("running", { id: "test-workout-1" });
+      const workout2 = createTestWorkout("squats", { id: "test-workout-2" });
 
-      await expect(clearAppState()).resolves.toBeUndefined();
+      await saveWorkout(workout1);
+      await saveWorkout(workout2);
+
+      await deleteWorkout(workout1.id);
+
+      const workouts = await getWorkouts();
+      expect(workouts).toHaveLength(1);
+      expect(workouts[0].id).toBe(workout2.id);
     });
   });
 
-  describe("getDeviceId", () => {
-    it("returns existing device id from AsyncStorage", async () => {
-      const existingId = "existing-device-id-123";
-      (AsyncStorage.getItem as jest.Mock).mockImplementation((key) => {
-        if (key === "TRAPP_TRACKER_DEVICE_ID") {
-          return Promise.resolve(existingId);
-        }
-        return Promise.resolve(null);
+  describe("getWorkouts", () => {
+    it("should return all workouts", async () => {
+      const workout1 = createTestWorkout("running");
+      const workout2 = createTestWorkout("squats");
+      const workout3 = createTestWorkout("pushups");
+
+      await saveWorkout(workout1);
+      await saveWorkout(workout2);
+      await saveWorkout(workout3);
+
+      const workouts = await getWorkouts();
+      expect(workouts).toHaveLength(3);
+    });
+  });
+
+  describe("getLastWorkoutValues", () => {
+    it("should return default values when no workouts exist", async () => {
+      const values = await getLastWorkoutValues("running");
+      expect(values).toEqual(getDefaultValues("running"));
+    });
+
+    it("should return most recent workout values", async () => {
+      const oldWorkout = createTestWorkout("running", {
+        data: { distance: 3, duration: 20 },
+        timestamp: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+      });
+      const newWorkout = createTestWorkout("running", {
+        data: { distance: 10, duration: 60 },
+        timestamp: new Date().toISOString(),
       });
 
-      const result = await getDeviceId();
+      await saveWorkout(oldWorkout);
+      await saveWorkout(newWorkout);
 
-      expect(result).toBe(existingId);
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_DEVICE_ID"
-      );
+      const values = await getLastWorkoutValues("running");
+      expect(values?.distance).toBe(10);
+      expect(values?.duration).toBe(60);
     });
 
-    it("generates new device id if none exists", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
+    it("should filter by workout type", async () => {
+      const runningWorkout = createTestWorkout("running", {
+        data: { distance: 5, duration: 30 },
+      });
+      const squatsWorkout = createTestWorkout("squats", {
+        data: { reps: 30, sets: 5 },
+      });
 
-      const result = await getDeviceId();
+      await saveWorkout(runningWorkout);
+      await saveWorkout(squatsWorkout);
 
-      expect(result).toBeDefined();
-      expect(result).toMatch(/^\d+-[a-z0-9]+$/);
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_DEVICE_ID",
-        result
-      );
-    });
+      const runningValues = await getLastWorkoutValues("running");
+      const squatsValues = await getLastWorkoutValues("squats");
 
-    it("returns unknown on error", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockRejectedValue(
-        new Error("Storage error")
-      );
-
-      const result = await getDeviceId();
-
-      expect(result).toBe("unknown");
-    });
-
-    it("generates unique ids on subsequent calls", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
-
-      const result1 = await getDeviceId();
-      jest.clearAllMocks();
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
-      const result2 = await getDeviceId();
-
-      // Both should match the pattern but be generated independently
-      expect(result1).toMatch(/^\d+-[a-z0-9]+$/);
-      expect(result2).toMatch(/^\d+-[a-z0-9]+$/);
+      expect(runningValues?.distance).toBe(5);
+      expect(squatsValues?.reps).toBe(30);
     });
   });
 
-  describe("loadAuthState", () => {
-    it("returns empty object when no auth data exists", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(null);
-
-      const result = await loadAuthState();
-
-      expect(result).toEqual({});
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith("TRAPP_TRACKER_AUTH_V1");
+  describe("getDefaultValues", () => {
+    it("should return running defaults", () => {
+      const values = getDefaultValues("running");
+      expect(values.distance).toBe(5);
+      expect(values.duration).toBe(30);
     });
 
-    it("loads saved auth state from AsyncStorage", async () => {
-      const mockAuthState = {
-        user: { username: "testuser" },
-        passwordHash: "hashed_password_123",
-      };
-
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-        JSON.stringify(mockAuthState)
-      );
-
-      const result = await loadAuthState();
-
-      expect(result).toEqual(mockAuthState);
+    it("should return squats defaults", () => {
+      const values = getDefaultValues("squats");
+      expect(values.reps).toBe(20);
+      expect(values.sets).toBe(3);
     });
 
-    it("returns empty object on JSON parse error", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue("invalid json");
-
-      const result = await loadAuthState();
-
-      expect(result).toEqual({});
+    it("should return pushups defaults", () => {
+      const values = getDefaultValues("pushups");
+      expect(values.reps).toBe(15);
+      expect(values.sets).toBe(3);
     });
 
-    it("returns empty object on AsyncStorage error", async () => {
-      (AsyncStorage.getItem as jest.Mock).mockRejectedValue(
-        new Error("Storage error")
-      );
-
-      const result = await loadAuthState();
-
-      expect(result).toEqual({});
+    it("should return pullups defaults", () => {
+      const values = getDefaultValues("pullups");
+      expect(values.reps).toBe(10);
+      expect(values.sets).toBe(3);
     });
 
-    it("handles partial auth state", async () => {
-      const partialState = { user: { username: "user" } };
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-        JSON.stringify(partialState)
-      );
-
-      const result = await loadAuthState();
-
-      expect(result).toEqual(partialState);
+    it("should return empty object for other type", () => {
+      const values = getDefaultValues("other");
+      expect(values).toEqual({});
     });
   });
 
-  describe("saveAuthState", () => {
-    it("saves auth state to AsyncStorage", async () => {
-      const mockAuthState = {
-        user: { username: "testuser" },
-        passwordHash: "hashed_password",
-      };
+  describe("updateWorkout", () => {
+    it("should update an existing workout", async () => {
+      const workout = createTestWorkout("running", {
+        data: { distance: 5, duration: 30 },
+      });
+      await saveWorkout(workout);
 
-      await saveAuthState(mockAuthState);
+      await updateWorkout(workout.id, {
+        data: { distance: 10, duration: 60 },
+      });
 
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_AUTH_V1",
-        JSON.stringify(mockAuthState)
-      );
+      const workouts = await getWorkouts();
+      expect(workouts[0].data.distance).toBe(10);
+      expect(workouts[0].data.duration).toBe(60);
     });
 
-    it("saves empty auth state", async () => {
-      await saveAuthState({});
-
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_AUTH_V1",
-        "{}"
-      );
+    it("should throw error if workout not found", async () => {
+      await expect(
+        updateWorkout("non-existent-id", { data: { distance: 10 } }),
+      ).rejects.toThrow("Workout not found");
     });
 
-    it("handles save errors gracefully", async () => {
-      (AsyncStorage.setItem as jest.Mock).mockRejectedValue(
-        new Error("Save failed")
-      );
+    it("should update updatedAt timestamp", async () => {
+      const workout = createTestWorkout();
+      await saveWorkout(workout);
 
-      await expect(saveAuthState({})).resolves.toBeUndefined();
-    });
+      const beforeUpdate = new Date(workout.updatedAt);
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
-    it("saves auth state with only user", async () => {
-      const userOnlyState = { user: { username: "user" } };
+      await updateWorkout(workout.id, { data: { distance: 10 } });
 
-      await saveAuthState(userOnlyState);
+      const workouts = await getWorkouts();
+      const afterUpdate = new Date(workouts[0].updatedAt);
 
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_AUTH_V1",
-        JSON.stringify(userOnlyState)
-      );
-    });
-
-    it("saves auth state with only passwordHash", async () => {
-      const hashOnlyState = { passwordHash: "hash123" };
-
-      await saveAuthState(hashOnlyState);
-
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_AUTH_V1",
-        JSON.stringify(hashOnlyState)
-      );
+      expect(afterUpdate.getTime()).toBeGreaterThan(beforeUpdate.getTime());
     });
   });
 
-  describe("clearAuthState", () => {
-    it("removes auth state from AsyncStorage", async () => {
-      await clearAuthState();
+  describe("clearWorkouts", () => {
+    it("should remove all workouts", async () => {
+      await saveWorkout(createTestWorkout("running"));
+      await saveWorkout(createTestWorkout("squats"));
 
-      expect(AsyncStorage.removeItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_AUTH_V1"
-      );
-    });
+      await clearWorkouts();
 
-    it("handles clear errors gracefully", async () => {
-      (AsyncStorage.removeItem as jest.Mock).mockRejectedValue(
-        new Error("Clear failed")
-      );
-
-      await expect(clearAuthState()).resolves.toBeUndefined();
-    });
-  });
-
-  // Note: useAppStorage is a React hook and cannot be tested in isolation
-  // It should be tested through integration tests with actual components
-
-  describe("storage keys", () => {
-    it("uses correct storage key for app state", async () => {
-      await loadAppState();
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_STATE_V1"
-      );
-    });
-
-    it("uses correct storage key for device id", async () => {
-      await getDeviceId();
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_DEVICE_ID"
-      );
-    });
-
-    it("uses correct storage key for auth state", async () => {
-      await loadAuthState();
-      expect(AsyncStorage.getItem).toHaveBeenCalledWith("TRAPP_TRACKER_AUTH_V1");
-    });
-  });
-
-  describe("edge cases", () => {
-    it("handles very large state objects", async () => {
-      const largeEntries = Array.from({ length: 1000 }, (_, i) => ({
-        id: `entry-${i}`,
-        type: "running" as const,
-        date: "2024-01-15T10:00:00Z",
-        quantity: i,
-        createdAt: "2024-01-15T10:00:00Z",
-        updatedAt: "2024-01-15T10:00:00Z",
-      }));
-
-      const largeState: AppState = { entries: largeEntries };
-
-      await saveAppState(largeState);
-
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_STATE_V1",
-        expect.any(String)
-      );
-    });
-
-    it("handles unicode characters in data", async () => {
-      const stateWithUnicode: AppState = {
-        entries: [
-          {
-            id: "1",
-            type: "other",
-            date: "2024-01-15T10:00:00Z",
-            quantity: 30,
-            notes: "Workout with unicode: 你好世界 🏃‍♂️",
-            createdAt: "2024-01-15T10:00:00Z",
-            updatedAt: "2024-01-15T10:00:00Z",
-          },
-        ],
-      };
-
-      await saveAppState(stateWithUnicode);
-
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        "TRAPP_TRACKER_STATE_V1",
-        JSON.stringify(stateWithUnicode)
-      );
-    });
-
-    it("handles empty strings in data", async () => {
-      const stateWithEmptyStrings: AppState = {
-        entries: [
-          {
-            id: "1",
-            type: "running",
-            date: "",
-            quantity: 0,
-            createdAt: "",
-            updatedAt: "",
-          },
-        ],
-      };
-
-      await saveAppState(stateWithEmptyStrings);
-
-      expect(AsyncStorage.setItem).toHaveBeenCalled();
+      const workouts = await getWorkouts();
+      expect(workouts).toHaveLength(0);
     });
   });
 });

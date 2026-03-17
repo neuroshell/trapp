@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Trapp Tracker",
-    "slug": "trapp-tracker",
+    "name": "Trapp",
+    "slug": "trapp",
     "version": "0.1.0",
     "sdkVersion": "54.0.0",
     "platforms": ["ios", "android", "web"],

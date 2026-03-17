@@ -1,270 +1,187 @@
-import express from "express";
-import cors from "cors";
-import { Low } from "lowdb";
-import { JSONFile } from "lowdb/node";
-import { nanoid } from "nanoid";
+import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
+
+// Import routes
+import healthRoutes from './routes/health.js';
+import authRoutes from './routes/auth.js';
+import syncRoutes from './routes/sync.js';
+
+// Import middleware
+import { requestLogger, preventPrototypePollution, sanitizeForLog } from './middleware/security.js';
+import { apiRateLimiter } from './middleware/rateLimit.js';
+import { errorHandler } from './utils/errors.js';
+import logger from './utils/logger.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const PORT = process.env.PORT || 3000;
+
+const app = express();
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SECURITY: Forbidden property names that could cause prototype pollution
-// Whitelist approach with comprehensive blocklist
+// Security Middleware
 // ─────────────────────────────────────────────────────────────────────────────
-const FORBIDDEN_KEYS = new Set([
-  "__proto__",
-  "constructor",
-  "prototype",
-  "__defineGetter__",
-  "__defineSetter__",
-  "__lookupGetter__",
-  "__lookupSetter__",
-  "hasOwnProperty",
-  "isPrototypeOf",
-  "propertyIsEnumerable",
-  "toString",
-  "valueOf",
-  "toLocaleString",
-]);
+
+// Helmet security headers
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+      },
+    },
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+    },
+  })
+);
+
+// CORS configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:8081', 'http://localhost:8082', 'exp://localhost:8083'];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, Postman)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  })
+);
+
+// Body parsing with size limits
+app.use(
+  express.json({
+    limit: '2mb',
+    strict: true,
+  })
+);
+app.use(
+  express.urlencoded({
+    extended: true,
+    limit: '2mb',
+  })
+);
+
+// Rate limiting for all API routes
+app.use('/api/', apiRateLimiter);
+
+// Prototype pollution prevention
+app.use(preventPrototypePollution);
+
+// Request logging with sanitization
+app.use(requestLogger);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Routes
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Health check (no auth required)
+app.use('/api/health', healthRoutes);
+app.use('/health', healthRoutes); // Legacy support
+
+// Authentication (no auth required)
+app.use('/api/auth', authRoutes);
+
+// Sync endpoints (auth required in route handlers)
+app.use('/api/sync', syncRoutes);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 404 Handler
+// ─────────────────────────────────────────────────────────────────────────────
+
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'Not Found',
+    message: `Route ${req.method} ${req.path} not found`,
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Error Handler
+// ─────────────────────────────────────────────────────────────────────────────
+
+app.use(errorHandler);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Start Server
+// ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * SECURITY: Validate and sanitize a user-controlled key.
- * Uses whitelist approach with strict regex validation.
- * Returns null if the key is dangerous or invalid.
+ * Create and start the server
+ * Exported for testing purposes
  */
-function sanitizeKey(key) {
-  if (typeof key !== "string") {
-    return null;
-  }
-
-  const trimmed = key.trim();
-
-  // Length validation
-  if (trimmed.length === 0 || trimmed.length > 256) {
-    return null;
-  }
-
-  // Whitelist: Only allow alphanumeric, hyphens, underscores
-  const validKeyPattern = /^[a-zA-Z0-9_-]+$/;
-  if (!validKeyPattern.test(trimmed)) {
-    return null;
-  }
-
-  // Block forbidden keys (prototype pollution prevention)
-  if (FORBIDDEN_KEYS.has(trimmed)) {
-    return null;
-  }
-
-  // Block any key starting with special characters
-  if (trimmed.startsWith("_") || trimmed.startsWith("$")) {
-    return null;
-  }
-
-  return trimmed;
+export async function createServer(opts = {}) {
+  const port = opts.port || PORT;
+  const serverInstance = app.listen(port, () => {
+    logger.info(`Server running on port ${port}`);
+    logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    logger.info(`Allowed origins: ${allowedOrigins.join(', ')}`);
+  });
+  return serverInstance;
 }
 
-/**
- * SECURITY: Sanitize string for safe logging.
- * Removes control characters that could inject fake log entries.
- */
-function sanitizeForLog(str) {
-  if (typeof str !== "string") {
-    str = String(str);
-  }
-  // Remove newline characters to prevent log line injection
-  str = str.replace(/[\r\n]/g, " ");
-  str = str.replace(/\s+/g, " ").trim();
-  // Truncate to prevent log flooding
-  const MAX_LOG_LEN = 1024;
-  if (str.length > MAX_LOG_LEN) {
-    str = str.slice(0, MAX_LOG_LEN) + "…";
-  }
-  return str;
-}
+// Only auto-start if this is the main module
+let server = null;
 
-async function createServer(opts = {}) {
-  const PORT = opts.port ?? process.env.PORT ?? 4000;
-  const DB_FILE = opts.dbFile ?? process.env.DB_FILE ?? "data.json";
-
-  const adapter = new JSONFile(DB_FILE);
-  const db = new Low(adapter);
-  await db.read();
-  db.data = db.data || {};
-
-  // SECURITY: Use Map for user-controlled keys to prevent prototype pollution
-  // Maps don't have prototype chain, making them immune to prototype pollution
-  db.data.users = new Map();
-  db.data.devices = new Map();
-
-  const ensureUser = (username, passwordHash) => {
-    if (!username || !passwordHash) return null;
-
-    // SECURITY: Sanitize the username key with strict validation
-    const normalized = sanitizeKey(username.toLowerCase());
-    if (!normalized) {
-      return null; // Invalid username format
-    }
-
-    // Ensure the users map exists
-    if (!(db.data.users instanceof Map)) {
-      db.data.users = new Map();
-    }
-
-    let user = db.data.users.get(normalized);
-    if (!user) {
-      user = {
-        username: normalized,
-        passwordHash,
-        // SECURITY: Use Map for devices to prevent prototype pollution
-        devices: new Map(),
-        createdAt: Date.now(),
-      };
-      db.data.users.set(normalized, user);
-    }
-
-    if (user.passwordHash !== passwordHash) return null;
-    return user;
-  };
-
-  const app = express();
-  app.use(cors());
-  app.use(express.json({ limit: "2mb" }));
-
-  // ───────────────────────────────────────────────────────────────────────────
-  // SECURITY FIX: Sanitize log output to prevent log injection
-  // ───────────────────────────────────────────────────────────────────────────
-  app.use((req, res, next) => {
-    const start = Date.now();
-    const clientIp = req.ip || req.connection?.remoteAddress || "unknown";
-
-    res.on("finish", () => {
-      const duration = Date.now() - start;
-      // SECURITY: Sanitize all user-controlled data before logging
-      const method = sanitizeForLog(req.method);
-      const url = sanitizeForLog(req.originalUrl);
-      const statusMessage = sanitizeForLog(res.statusMessage || "");
-      const ip = sanitizeForLog(clientIp);
-
-      console.log(
-        `[${new Date().toISOString()}] ${method} ${url} - ${res.statusCode} ${statusMessage} - ${duration}ms - ${ip}`,
-      );
+// Graceful shutdown handlers
+function setupGracefulShutdown(serverInstance) {
+  process.on('SIGTERM', () => {
+    logger.info('SIGTERM received, shutting down gracefully');
+    serverInstance.close(() => {
+      logger.info('Server closed');
+      process.exit(0);
     });
-
-    next();
   });
 
-  app.get("/health", (req, res) => {
-    res.json({ ok: true, timestamp: Date.now() });
+  process.on('SIGINT', () => {
+    logger.info('SIGINT received, shutting down gracefully');
+    serverInstance.close(() => {
+      logger.info('Server closed');
+      process.exit(0);
+    });
   });
-
-  // Upload sync payload for a device (requires username/password).
-  app.post("/sync", async (req, res) => {
-    try {
-      const { username, passwordHash, deviceId, payload } = req.body;
-
-      // SECURITY: Validate deviceId with strict whitelist regex
-      const safeDeviceId = sanitizeKey(deviceId);
-      if (!safeDeviceId) {
-        return res
-          .status(400)
-          .json({ error: "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed." });
-      }
-
-      if (!username || !passwordHash || typeof payload !== "object" || payload === null) {
-        return res.status(400).json({
-          error: "username, passwordHash, deviceId and payload are required",
-        });
-      }
-
-      const user = ensureUser(username, passwordHash);
-      if (!user) {
-        return res.status(401).json({ error: "Invalid username or password" });
-      }
-
-      // SECURITY: safeDeviceId is validated, Map prevents prototype pollution
-      user.devices.set(safeDeviceId, true);
-
-      const existing = db.data.devices.get(safeDeviceId) || {
-        id: safeDeviceId,
-        updatedAt: 0,
-        payload: {},
-        owner: username,
-      };
-      const updatedAt = Date.now();
-      const newData = {
-        ...existing,
-        id: safeDeviceId,
-        owner: user.username,
-        updatedAt,
-        payload,
-      };
-
-      // SECURITY: Map prevents prototype pollution
-      db.data.devices.set(safeDeviceId, newData);
-      await db.write();
-
-      res.json({ ok: true, device: newData });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
-
-  // Download sync payload for a device (requires username/password).
-  app.get("/sync", async (req, res) => {
-    try {
-      const { username, passwordHash, deviceId } = req.query;
-
-      // SECURITY: Validate deviceId with strict whitelist regex
-      const safeDeviceId = sanitizeKey(deviceId);
-      if (!safeDeviceId) {
-        return res
-          .status(400)
-          .json({ error: "Invalid deviceId format. Only alphanumeric, hyphens, and underscores allowed." });
-      }
-
-      if (!username || !passwordHash) {
-        return res.status(400).json({
-          error: "username, passwordHash and deviceId query parameters are required",
-        });
-      }
-
-      const user = ensureUser(username, passwordHash);
-      if (!user) {
-        return res.status(401).json({ error: "Invalid username or password" });
-      }
-
-      // SECURITY: safeDeviceId validated, Map prevents prototype pollution
-      if (!user.devices.has(safeDeviceId)) {
-        return res.status(403).json({ error: "Device not registered for this user" });
-      }
-
-      const device = db.data.devices.get(safeDeviceId);
-      if (!device) {
-        return res.json({ ok: true, device: null });
-      }
-
-      res.json({ ok: true, device });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  });
-
-  const server = app.listen(PORT, () => {
-    console.log(`Trapp backend listening on http://localhost:${PORT}`);
-  });
-
-  return server;
 }
+
+// Export for testing
+export { app };
 
 // Start server if run directly
-// Check if this file is being run directly (not imported)
 const isMainModule =
-  process.argv[1] && (process.argv[1].endsWith("index.js") || process.argv[1].endsWith("index.mjs"));
+  process.argv[1] &&
+  (process.argv[1].endsWith('index.js') || process.argv[1].endsWith('index.mjs'));
 
 if (isMainModule) {
-  createServer().catch((err) => {
-    console.error("Failed to start server:", err);
+  createServer().then((serverInstance) => {
+    server = serverInstance;
+    setupGracefulShutdown(serverInstance);
+    logger.info('Starting Trapp Tracker Backend Server...');
+  }).catch((err) => {
+    logger.error(`Failed to start server: ${err.message}`);
     process.exit(1);
   });
 }
 
-export { createServer };
+export default app;

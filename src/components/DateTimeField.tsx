@@ -41,9 +41,13 @@ export function DateTimeField({ label, value, onChange }: Props) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="datetime-field">
       {label ? <Text style={styles.label}>{label}</Text> : null}
-      <Pressable style={styles.button} onPress={() => setShow(true)}>
+      <Pressable
+        style={styles.button}
+        onPress={() => setShow(true)}
+        testID="datetime-picker"
+      >
         <Text style={styles.value}>{formatDateTime(value)}</Text>
         <MaterialCommunityIcons
           name="calendar"

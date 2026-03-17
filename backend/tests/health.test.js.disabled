@@ -1,0 +1,104 @@
+import { test, describe, beforeEach, afterEach } from 'node:test';
+import assert from 'node:assert';
+import { createServer } from '../index.js';
+import { closeServer, createTempDb, cleanupTemp } from './test-utils.js';
+
+let tmpDir;
+let dbFile;
+let server;
+let base;
+let address;
+
+beforeEach(async () => {
+  const temp = await createTempDb();
+  tmpDir = temp.tmpDir;
+  dbFile = temp.dbFile;
+
+  process.env.DB_FILE = dbFile;
+
+  server = await createServer({ port: 0 });
+  address = server.address();
+  base = `http://127.0.0.1:${address.port}`;
+});
+
+afterEach(async () => {
+  await closeServer(server);
+  await cleanupTemp(tmpDir);
+});
+
+describe('Health Endpoints', () => {
+  describe('GET /api/health', () => {
+    test('should return healthy status', async () => {
+      const res = await fetch(`${base}/api/health`);
+
+      assert.strictEqual(res.status, 200);
+      const json = await res.json();
+      assert.strictEqual(json.status, 'healthy');
+      assert.ok(json.timestamp);
+      assert.ok(json.uptime);
+    });
+
+    test('should return environment info', async () => {
+      const res = await fetch(`${base}/api/health`);
+
+      assert.strictEqual(res.status, 200);
+      const json = await res.json();
+      assert.ok(json.environment);
+      assert.ok(json.version);
+    });
+
+    test('should return consistent responses', async () => {
+      const res1 = await fetch(`${base}/api/health`);
+      const res2 = await fetch(`${base}/api/health`);
+
+      assert.strictEqual(res1.status, 200);
+      assert.strictEqual(res2.status, 200);
+
+      const json1 = await res1.json();
+      const json2 = await res2.json();
+
+      assert.strictEqual(json1.status, json2.status);
+    });
+  });
+
+  describe('GET /api/health/ready', () => {
+    test('should return ready status', async () => {
+      const res = await fetch(`${base}/api/health/ready`);
+
+      assert.strictEqual(res.status, 200);
+      const json = await res.json();
+      assert.strictEqual(json.ready, true);
+      assert.ok(json.timestamp);
+    });
+  });
+
+  describe('GET /health (legacy)', () => {
+    test('should support legacy health endpoint', async () => {
+      const res = await fetch(`${base}/health`);
+
+      assert.strictEqual(res.status, 200);
+      const json = await res.json();
+      assert.strictEqual(json.status, 'healthy');
+    });
+  });
+
+  describe('404 Handling', () => {
+    test('should return 404 for unknown routes', async () => {
+      const res = await fetch(`${base}/api/nonexistent`);
+
+      assert.strictEqual(res.status, 404);
+      const json = await res.json();
+      assert.strictEqual(json.error, 'Not Found');
+      assert.ok(json.message);
+    });
+
+    test('should include method and path in 404 message', async () => {
+      const res = await fetch(`${base}/api/unknown`, { method: 'POST' });
+
+      assert.strictEqual(res.status, 404);
+      const json = await res.json();
+      assert.ok(json.message.includes('POST'));
+      assert.ok(json.message.includes('/api/unknown'));
+    });
+  });
+});
