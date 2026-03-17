@@ -23,10 +23,39 @@ const levels = {
 
 const shouldLog = (level) => levels[level] <= levels[logLevel];
 
+const sanitizeLogValue = (value) => {
+  const str = String(value);
+  // Remove newline and carriage return characters to prevent log injection
+  return str.replace(/[\r\n]/g, '');
+};
+
+const sanitizeMeta = (meta) => {
+  if (!meta || typeof meta !== 'object') {
+    return meta;
+  }
+
+  const sanitized = Array.isArray(meta) ? [] : {};
+
+  for (const [key, value] of Object.entries(meta)) {
+    if (value && typeof value === 'object') {
+      sanitized[key] = sanitizeMeta(value);
+    } else {
+      sanitized[key] = sanitizeLogValue(value);
+    }
+  }
+
+  return sanitized;
+};
+
 // Sanitize potentially user-controlled values before logging to prevent
 // log injection via newlines or other control characters.
-const sanitizeLogValue = (value) => {
-  if (value == null) {
+  const safeMessage = sanitizeLogValue(message);
+  const safeMeta = sanitizeMeta(meta);
+  const metaStr =
+    safeMeta && Object.keys(safeMeta).length
+      ? ` ${JSON.stringify(safeMeta)}`
+      : '';
+  return `[${timestamp}] [${level.toUpperCase()}] ${safeMessage}${metaStr}`;
     return value;
   }
   if (typeof value === 'string') {
