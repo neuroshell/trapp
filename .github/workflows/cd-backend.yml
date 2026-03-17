@@ -133,10 +133,24 @@ jobs:
           # Deploy to Netlify
           cd backend
 
-          # Deploy using netlify.toml configuration
-          # The publish directory is set to 'netlify' in netlify.toml
-          # Netlify will automatically run npm install and deploy functions
-          DEPLOY_OUTPUT=$(netlify deploy --prod --dir=netlify --functions=netlify/functions --site $NETLIFY_SITE_ID --json 2>&1 | tee deploy_output.json)
+          # Copy backend files to netlify folder for deployment
+          echo "Setting up Netlify deployment structure..."
+          mkdir -p netlify/functions
+          cp index.js netlify/
+          cp package.json netlify/
+          cp netlify.toml netlify/
+          cp -r db netlify/
+          cp -r middleware netlify/
+          cp -r routes netlify/
+          cp -r utils netlify/
+          cp -r data netlify/ || true
+          cp -r node_modules netlify/
+          echo "✓ Deployment structure ready"
+
+          # Deploy from netlify folder
+          cd netlify
+
+          DEPLOY_OUTPUT=$(netlify deploy --prod --dir=. --functions=functions --site $NETLIFY_SITE_ID --json 2>&1 | tee deploy_output.json)
           
           echo "Raw deploy output:"
           cat deploy_output.json
