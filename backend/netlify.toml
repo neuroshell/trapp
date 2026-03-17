@@ -11,15 +11,15 @@
 [functions]
   # Directory containing Netlify functions
   directory = "netlify/functions"
-  
+
   # Node.js version
   node_bundler = "esbuild"
-  
+
   # Include all dependencies
   included_files = ["data/**"]
-  
-  # External dependencies (not bundled)
-  external = ["lowdb", "bcryptjs", "jsonwebtoken", "express", "cors", "helmet", "express-rate-limit", "express-validator", "dotenv"]
+
+  # External node modules (not bundled, installed at runtime)
+  external_node_modules = ["lowdb", "bcryptjs", "jsonwebtoken", "express", "cors", "helmet", "express-rate-limit", "express-validator", "dotenv"]
 
 # Redirect all API requests to the function
 [[redirects]]
