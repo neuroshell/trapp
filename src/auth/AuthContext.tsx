@@ -8,6 +8,8 @@ import React, {
 } from "react";
 
 import { User } from "../models";
+import { apiService } from "../services/apiService";
+import { syncService } from "../services/syncService";
 import {
   loadAuthState,
   saveAuthState,
@@ -21,12 +23,15 @@ export type AuthUser = User;
 type AuthContextValue = {
   user: AuthUser | null;
   passwordHash?: string;
+  token?: string;
   loading: boolean;
   error: string | null;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   clearError: () => void;
+  isAuthenticated: boolean;
+  useBackendAuth: boolean;
 };
 
 export const AuthContext = createContext<AuthContextValue | undefined>(
@@ -64,8 +69,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [passwordHash, setPasswordHash] = useState<string | undefined>(
     undefined,
   );
+  const [token, setToken] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [useBackendAuth, setUseBackendAuth] = useState(false);
 
   const safeSetState = <T,>(
     setter: React.Dispatch<React.SetStateAction<T>>,
@@ -76,13 +83,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
         const { act } = require("react-test-renderer");
-        act(() => setter(value));
+        act(() => setter(value as React.SetStateAction<T>));
         return;
       } catch {
         // Ignore if act isn't available
       }
     }
-    setter(value);
+    setter(value as React.SetStateAction<T>);
   };
 
   useEffect(() => {
@@ -92,14 +99,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (loaded.user) {
           safeSetState(setUser, loaded.user);
           safeSetState(setPasswordHash, loaded.passwordHash);
+
+          // Restore token if available
+          const storedToken = (loaded as any).token;
+          if (storedToken) {
+            safeSetState(setToken, storedToken);
+            apiService.setToken(storedToken);
+            setUseBackendAuth(true);
+
+            // Initialize sync service with token
+            syncService.setAuthToken(storedToken);
+
+            // Verify token is still valid
+            const valid = await apiService.verifyToken();
+            if (!valid) {
+              // Token expired, clear auth
+              safeSetState(setUser, null);
+              safeSetState(setPasswordHash, undefined);
+              safeSetState(setToken, undefined);
+              await clearAuthState();
+              apiService.setToken(null);
+              setUseBackendAuth(false);
+            }
+          }
         } else {
           safeSetState(setUser, null);
           safeSetState(setPasswordHash, undefined);
+          safeSetState(setToken, undefined);
         }
       } catch (err) {
         console.warn("Failed to load auth state", err);
         safeSetState(setUser, null);
         safeSetState(setPasswordHash, undefined);
+        safeSetState(setToken, undefined);
       } finally {
         safeSetState(setLoading, false);
       }
@@ -125,6 +157,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    try {
+      // Try backend authentication first
+      const response = await apiService.login(email, password);
+
+      if (response.success && response.token) {
+        // Backend auth successful
+        safeSetState(setUser, response.user);
+        safeSetState(setToken, response.token);
+        setUseBackendAuth(true);
+
+        // Store token in auth state
+        await saveAuthState({
+          user: response.user,
+          passwordHash: undefined,
+          token: response.token,
+        } as any);
+
+        // Initialize sync service
+        syncService.setAuthToken(response.token);
+        syncService.initialize();
+
+        return;
+      }
+    } catch (backendError) {
+      console.warn(
+        "Backend auth failed, falling back to local auth",
+        backendError,
+      );
+      // Fall back to local auth
+    }
+
+    // Local authentication (fallback)
     const passwordHash = await hash(password);
     const storedUser = await findUserByEmail(email.trim().toLowerCase());
 
@@ -149,6 +213,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     safeSetState(setUser, authUser);
     safeSetState(setPasswordHash, passwordHash);
+    setUseBackendAuth(false);
     await saveAuthState({ user: authUser, passwordHash });
   };
 
@@ -169,6 +234,39 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     const normalizedEmail = email.trim().toLowerCase();
+
+    try {
+      // Try backend registration first
+      const response = await apiService.register(normalizedEmail, password);
+
+      if (response.success && response.token) {
+        // Backend registration successful
+        safeSetState(setUser, response.user);
+        safeSetState(setToken, response.token);
+        setUseBackendAuth(true);
+
+        // Store token in auth state
+        await saveAuthState({
+          user: response.user,
+          passwordHash: undefined,
+          token: response.token,
+        } as any);
+
+        // Initialize sync service
+        syncService.setAuthToken(response.token);
+        syncService.initialize();
+
+        return;
+      }
+    } catch (backendError) {
+      console.warn(
+        "Backend registration failed, falling back to local registration",
+        backendError,
+      );
+      // Fall back to local registration
+    }
+
+    // Check if user exists locally
     const existingUser = await findUserByEmail(normalizedEmail);
 
     if (existingUser) {
@@ -176,6 +274,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
+    // Local registration (fallback)
     const passwordHash = await hash(password);
     const newUser: AuthUser = {
       id: `user_${Date.now()}_${Math.random().toString(16).slice(2)}`,
@@ -188,12 +287,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await saveUser({ ...newUser, passwordHash });
     safeSetState(setUser, newUser);
     safeSetState(setPasswordHash, passwordHash);
+    setUseBackendAuth(false);
     await saveAuthState({ user: newUser, passwordHash });
   };
 
   const signOut = async () => {
     safeSetState(setUser, null);
+    safeSetState(setPasswordHash, undefined);
+    safeSetState(setToken, undefined);
     safeSetState(setError, null);
+    setUseBackendAuth(false);
+
+    // Clear API token
+    apiService.setToken(null);
+
+    // Clear sync service token
+    syncService.clearAuthToken();
+
     await clearAuthState();
   };
 
@@ -205,14 +315,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     () => ({
       user,
       passwordHash,
+      token,
       loading,
       error,
       signIn,
       signUp,
       signOut,
       clearError,
+      isAuthenticated: !!user,
+      useBackendAuth,
     }),
-    [user, passwordHash, loading, error],
+    [user, passwordHash, token, loading, error, useBackendAuth],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -432,25 +432,177 @@ Storage keys:
 
 ---
 
-## Backend API (Optional Sync Server - Phase 3)
+## Backend API (Express.js Sync Server)
 
-Express.js server with lowdb for JSON file storage.
+Full-featured Express.js REST API with JWT authentication, lowdb for JSON file storage, and comprehensive security features.
+
+### Backend Structure
+
+```
+backend/
+├── index.js              # Main server entry point
+├── routes/
+│   ├── sync.js           # Sync endpoints (GET/POST /api/sync, CRUD workouts)
+│   ├── auth.js           # Authentication (register, login, verify)
+│   └── health.js         # Health check endpoints
+├── middleware/
+│   ├── auth.js           # JWT authentication middleware
+│   ├── rateLimit.js      # Rate limiting (100 req/min)
+│   ├── validate.js       # Input validation with express-validator
+│   └── security.js       # Prototype pollution prevention, log sanitization
+├── db/
+│   ├── index.js          # Database layer with lowdb
+│   └── schema.js         # Data schema definitions
+├── utils/
+│   ├── logger.js         # Logging utility
+│   └── errors.js         # Error handling
+├── tests/
+│   ├── auth.test.js      # Auth endpoint tests
+│   ├── sync.test.js      # Sync endpoint tests
+│   ├── health.test.js    # Health endpoint tests
+│   ├── security.test.js  # Security tests
+│   └── database.test.js  # Database operation tests
+├── data/                 # Database files (gitignored)
+├── .env.example          # Environment template
+├── package.json
+└── index.js
+```
 
 ### Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/health` | Health check |
-| `POST` | `/sync` | Upload sync payload |
-| `GET` | `/sync` | Download sync payload |
+#### Authentication
 
-### Security Features (ADR-006)
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `POST` | `/api/auth/register` | Register new user (email, password) | No |
+| `POST` | `/api/auth/login` | Login and get JWT token | No |
+| `POST` | `/api/auth/verify` | Verify JWT token validity | Yes |
 
-- **Input Validation**: `sanitizeKey()` function blocks prototype pollution keys
-- **Prototype-Safe Objects**: `Object.create(null)` for all user-controlled maps
-- **Log Sanitization**: `sanitizeForLog()` prevents log injection attacks
-- **SHA-256 password hashing**
-- **CORS enabled**
+#### Sync
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/api/sync` | Download user's synced data | Yes |
+| `POST` | `/api/sync` | Upload workout data for sync | Yes |
+| `POST` | `/api/sync/workout` | Sync single workout | Yes |
+| `PUT` | `/api/sync/workout/:id` | Update existing workout | Yes |
+| `DELETE` | `/api/sync/workout/:id` | Delete workout | Yes |
+| `POST` | `/api/sync/achievement` | Unlock/save achievement | Yes |
+
+#### Health
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| `GET` | `/api/health` | Health check with server status | No |
+| `GET` | `/api/health/ready` | Readiness check | No |
+| `GET` | `/health` | Legacy health endpoint | No |
+
+### Security Features
+
+- **JWT Authentication**: Bearer token-based auth with configurable expiry (default 30 days)
+- **Password Hashing**: bcrypt with configurable rounds (default 10)
+- **Prototype Pollution Prevention**: Blocks `__proto__`, `constructor`, `prototype` keys
+- **Input Validation**: express-validator schemas for all endpoints
+- **Rate Limiting**: 100 requests/minute per IP (configurable)
+- **Helmet Security Headers**: HSTS, CSP, X-Frame-Options, etc.
+- **CORS Configuration**: Whitelist-based origin control
+- **Log Sanitization**: Prevents log injection attacks
+- **Input Sanitization**: `sanitizeKey()` and `sanitizeForLog()` utilities
+
+### Data Models
+
+```javascript
+// User
+{
+  id: string,                    // nanoid
+  email: string,                 // normalized lowercase
+  username: string,
+  passwordHash: string,          // bcrypt
+  displayName: string | null,
+  profile: { avatar, bio, timezone, units } | null,
+  devices: string[],
+  createdAt: string,             // ISO 8601
+  updatedAt: string,             // ISO 8601
+  lastSync: string | null        // ISO 8601
+}
+
+// Workout
+{
+  id: string,                    // nanoid
+  userId: string,                // indexed
+  type: 'running'|'squats'|'pushups'|'pullups'|'other',
+  timestamp: string,             // ISO 8601
+  data: {
+    distance?: number,           // 0-100 km
+    duration?: number,           // 0-1440 min
+    reps?: number,               // 0-1000
+    sets?: number,               // 0-100
+    weight?: number,             // 0-500 kg
+    notes?: string
+  },
+  createdAt: string,             // ISO 8601
+  updatedAt: string              // ISO 8601
+}
+
+// Achievement
+{
+  id: string,
+  userId: string,
+  name: string,
+  description: string,
+  category: 'streak'|'personal_record'|'milestone'|'consistency',
+  unlockedAt: string,            // ISO 8601
+  progress: { current, target },
+  icon: string,
+  points: number
+}
+```
+
+### Conflict Resolution
+
+- **Last-Write-Wins**: Based on `updatedAt` timestamp comparison
+- **Client Timestamp Wins**: When client's `updatedAt` is newer than server's
+- **Server Timestamp Wins**: When server's `updatedAt` is newer or equal
+- **Achievements**: Union merge (no conflicts, combines all achievements)
+
+### Running the Backend
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+Server runs on `http://localhost:3000` by default.
+
+### Environment Variables
+
+```env
+PORT=3000
+NODE_ENV=development
+JWT_SECRET=your-secret-key-min-32-chars
+JWT_EXPIRY=30d
+ALLOWED_ORIGINS=http://localhost:8081,http://localhost:8082,http://localhost:8083
+RATE_LIMIT_WINDOW_MS=60000
+RATE_LIMIT_MAX_REQUESTS=100
+BCRYPT_ROUNDS=10
+DB_FILE=data/db.json
+LOG_LEVEL=info
+```
+
+### Testing
+
+```bash
+cd backend
+npm test
+```
+
+Test coverage includes:
+- Database operations (CRUD for users, workouts, achievements)
+- Authentication endpoints (register, login, verify)
+- Sync endpoints (upload, download, conflict resolution)
+- Security tests (prototype pollution, rate limiting, headers)
+- Health endpoint tests
 
 See `docs/adr/ADR-006-backend-security.md` for complete security documentation.
 

@@ -3,22 +3,18 @@ import { Alert, ScrollView, Share, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAuth } from "../auth/AuthContext";
+import { useSync } from "../hooks/useSync";
 import { AppState } from "../models";
-import {
-  getDeviceId,
-  loadAppState,
-  saveAppState,
-  useAppStorage,
-} from "../storage";
+import { loadAppState, useAppStorage, loadWorkouts } from "../storage";
 import { colors, spacing, typography } from "../theme";
-
-const DEFAULT_SYNC_URL = "http://localhost:4000";
 
 export function SettingsScreen() {
   const { clearAll } = useAppStorage();
-  const { user, passwordHash, signOut } = useAuth();
+  const { user, signOut, useBackendAuth } = useAuth();
   const [state, setState] = useState<AppState>({ entries: [] });
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
+  const { isSyncing, isOnline, lastSyncAt, error, syncNow, fullSync } =
+    useSync();
 
   useEffect(() => {
     (async () => {
@@ -47,92 +43,133 @@ export function SettingsScreen() {
 
   const handleExport = useCallback(async () => {
     try {
+      const workouts = await loadWorkouts();
       await Share.share({
         title: "FitTrack export",
-        message: JSON.stringify(state, null, 2),
+        message: JSON.stringify({ workouts, entries: state }, null, 2),
       });
     } catch {
       Alert.alert("Export failed", "Unable to share data.");
     }
   }, [state]);
 
-  const handleSync = useCallback(async () => {
-    if (!user?.username || !passwordHash) {
-      Alert.alert("Sign in required", "Please sign in before syncing.");
+  const handleSyncNow = useCallback(async () => {
+    if (!useBackendAuth) {
+      Alert.alert(
+        "Backend not connected",
+        "You are currently using local authentication. To enable cloud sync, please ensure the backend server is running and try signing in again.",
+      );
       return;
     }
 
     try {
       setSyncStatus("Syncing...");
-      const deviceId = await getDeviceId();
-      const res = await fetch(`${DEFAULT_SYNC_URL}/sync`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: user.username,
-          passwordHash,
-          deviceId,
-          payload: state,
-        }),
-      });
-      const json = await res.json();
-      if (!res.ok) {
-        throw new Error(json?.error || "Sync failed");
-      }
-      setSyncStatus("Sync complete");
-      Alert.alert("Sync complete", "Your data was uploaded to the server.");
-    } catch (error) {
-      setSyncStatus(null);
-      Alert.alert("Sync failed", String(error));
-    }
-  }, [state, passwordHash, user?.username]);
-
-  const handleFetch = useCallback(async () => {
-    if (!user?.username || !passwordHash) {
+      const result = await syncNow();
+      setSyncStatus(`Sync complete: ${result.downloaded} downloaded, ${result.uploaded} uploaded`);
       Alert.alert(
-        "Sign in required",
-        "Please sign in before fetching remote data.",
+        "Sync complete",
+        `Downloaded: ${result.downloaded}, Uploaded: ${result.uploaded}`,
+      );
+    } catch (error) {
+      setSyncStatus(
+        `Sync failed: ${error instanceof Error ? error.message : String(error)}`,
+      );
+      Alert.alert(
+        "Sync failed",
+        error instanceof Error ? error.message : String(error),
+      );
+    }
+  }, [syncNow, useBackendAuth]);
+
+  const handleFullSync = useCallback(async () => {
+    if (!user) {
+      Alert.alert("Sign in required", "Please sign in before syncing.");
+      return;
+    }
+
+    if (!useBackendAuth) {
+      Alert.alert(
+        "Backend not connected",
+        "You are currently using local authentication. To enable cloud sync, please ensure the backend server is running and try signing in again.",
       );
       return;
     }
 
     try {
-      setSyncStatus("Downloading...");
-      const deviceId = await getDeviceId();
-      const res = await fetch(
-        `${DEFAULT_SYNC_URL}/sync?deviceId=${encodeURIComponent(deviceId)}&username=${encodeURIComponent(
-          user.username,
-        )}&passwordHash=${encodeURIComponent(passwordHash)}`,
+      setSyncStatus("Performing full sync...");
+      const result = await fullSync();
+      setSyncStatus(
+        `Sync complete: ${result.downloaded} downloaded, ${result.uploaded} uploaded`,
       );
-      const json = await res.json();
-      if (!res.ok) {
-        throw new Error(json?.error || "Fetch failed");
-      }
-      if (json?.device?.payload) {
-        await saveAppState(json.device.payload);
-        setState(json.device.payload);
-        Alert.alert("Sync complete", "Imported data from the server.");
-      } else {
-        Alert.alert("No data", "No data found for this device.");
-      }
-      setSyncStatus(null);
+      Alert.alert(
+        "Sync complete",
+        `Downloaded: ${result.downloaded}, Uploaded: ${result.uploaded}, Conflicts: ${result.conflicts}`,
+      );
     } catch (error) {
       setSyncStatus(null);
-      Alert.alert("Sync failed", String(error));
+      Alert.alert(
+        "Sync failed",
+        error instanceof Error ? error.message : String(error),
+      );
     }
-  }, [passwordHash, user?.username]);
+  }, [fullSync, user, useBackendAuth]);
 
   return (
     <SafeAreaView style={styles.page}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Settings</Text>
 
+        {/* Sync Status Card */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Sync Status</Text>
+          <View style={styles.syncStatusRow}>
+            <Text
+              style={[
+                styles.statusIndicator,
+                { backgroundColor: isOnline ? colors.success : colors.error },
+              ]}
+            />
+            <Text style={styles.statusLabel}>
+              {isOnline ? "Online" : "Offline"}
+            </Text>
+          </View>
+          {lastSyncAt && (
+            <Text style={styles.cardSubtitle}>
+              Last sync: {new Date(lastSyncAt).toLocaleString()}
+            </Text>
+          )}
+          {error && (
+            <Text style={[styles.cardSubtitle, styles.errorText]}>
+              Error: {error}
+            </Text>
+          )}
+          <View style={styles.syncButtons}>
+            <Text style={styles.link} onPress={handleSyncNow}>
+              {isSyncing ? "Syncing..." : "Sync Now"}
+            </Text>
+            <Text style={styles.link} onPress={handleFullSync}>
+              Full Sync
+            </Text>
+          </View>
+          {syncStatus && (
+            <Text
+              style={[
+                styles.syncStatus,
+                syncStatus.includes("failed") ? styles.errorText : null,
+              ]}
+            >
+              {syncStatus}
+            </Text>
+          )}
+        </View>
+
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Account</Text>
           {user ? (
             <>
               <Text style={styles.cardSubtitle}>
-                Signed in as {user.username}
+                Signed in as {user.username}{" "}
+                {useBackendAuth ? "(Backend)" : "(Local)"}
               </Text>
               <Text style={styles.link} onPress={signOut}>
                 Sign out
@@ -154,15 +191,6 @@ export function SettingsScreen() {
           <Text style={styles.link} onPress={handleExport}>
             Export data
           </Text>
-          <Text style={styles.link} onPress={handleSync}>
-            Sync to server
-          </Text>
-          <Text style={styles.link} onPress={handleFetch}>
-            Download remote data
-          </Text>
-          {syncStatus ? (
-            <Text style={styles.syncStatus}>{syncStatus}</Text>
-          ) : null}
         </View>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>About</Text>
@@ -222,5 +250,29 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     color: colors.textSecondary,
     fontSize: typography.small,
+  },
+  syncStatusRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: spacing.xs,
+  },
+  statusIndicator: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: spacing.sm,
+  },
+  statusLabel: {
+    fontSize: typography.body,
+    fontWeight: "600",
+    color: colors.text,
+  },
+  syncButtons: {
+    flexDirection: "row",
+    gap: spacing.md,
+    marginTop: spacing.sm,
+  },
+  errorText: {
+    color: colors.error,
   },
 });

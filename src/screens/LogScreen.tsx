@@ -20,6 +20,7 @@ import { DeleteConfirmationDialog } from "../components/DeleteConfirmationDialog
 import { LogRunningForm } from "../components/LogRunningForm";
 import { LogStrengthForm } from "../components/LogStrengthForm";
 import { PrimaryButton } from "../components/PrimaryButton";
+import { useWorkoutSync } from "../hooks/useSync";
 import { ActivityType, WorkoutEntry } from "../models";
 import { RootTabParamList } from "../navigation/types";
 import {
@@ -75,6 +76,9 @@ export function LogScreen({ navigation }: LogScreenProps) {
   const [workouts, setWorkouts] = useState<WorkoutEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  // Sync hook
+  const { syncWorkout, syncWorkoutDeletion } = useWorkoutSync();
 
   // Form state
   const [type, setType] = useState<ActivityType>("running");
@@ -263,6 +267,15 @@ export function LogScreen({ navigation }: LogScreenProps) {
       // Save to storage
       await saveWorkout(newWorkout);
 
+      // Sync to backend (non-blocking, fire-and-forget)
+      console.log("[LogScreen] Syncing workout to backend:", newWorkout.id);
+      syncWorkout(newWorkout)
+        .then(() => console.log("[LogScreen] Workout synced successfully"))
+        .catch((err) => {
+          console.error("[LogScreen] Failed to sync workout:", err.message);
+          // Don't show error to user - workout is saved locally
+        });
+
       // Check for new achievements
       const unlockedIds = await getUnlockedAchievementIds();
       const streak = calculateStreak(updatedWorkouts);
@@ -322,6 +335,12 @@ export function LogScreen({ navigation }: LogScreenProps) {
     try {
       await deleteWorkout(workoutToDelete.id);
       setWorkouts((prev) => prev.filter((w) => w.id !== workoutToDelete.id));
+
+      // Sync deletion to backend (non-blocking)
+      syncWorkoutDeletion(workoutToDelete.id).catch((err) => {
+        console.warn("Failed to sync workout deletion", err);
+      });
+
       AccessibilityInfo.announceForAccessibility("Workout deleted");
     } catch (error) {
       console.error("Failed to delete workout", error);

@@ -105,9 +105,9 @@ app.use(helmet({
 // CORS configuration
 app.use(cors({
   origin: process.env.ALLOWED_ORIGINS?.split(',') || [
-    'http://localhost:19006', // Expo
-    'http://localhost:19000',
-    'exp://localhost:19000',
+    'http://localhost:8081', // Expo
+    'http://localhost:8082',
+    'exp://localhost:8083',
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -629,7 +629,7 @@ JWT_SECRET=your-super-secret-key-change-in-production
 JWT_EXPIRY=30d
 
 # CORS Configuration
-ALLOWED_ORIGINS=http://localhost:19006,http://localhost:19000,exp://localhost:19000
+ALLOWED_ORIGINS=http://localhost:8081,http://localhost:8082,exp://localhost:8083
 
 # Rate Limiting
 RATE_LIMIT_WINDOW_MS=60000

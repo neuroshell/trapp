@@ -24,6 +24,7 @@ import { LoginScreen } from "./src/screens/LoginScreen";
 import { RegisterScreen } from "./src/screens/RegisterScreen";
 import { SettingsScreen } from "./src/screens/SettingsScreen";
 import { SplashScreen } from "./src/screens/SplashScreen";
+import { syncService } from "./src/services/syncService";
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const AuthStack = createNativeStackNavigator<AuthStackParamList>();
@@ -78,6 +79,15 @@ function AuthStackScreen() {
 
 function AppContent() {
   const { user, loading } = useAuth();
+
+  // Initialize sync service when user logs in
+  React.useEffect(() => {
+    if (user && !loading) {
+      syncService.initialize().catch((err) => {
+        console.warn('Failed to initialize sync service', err);
+      });
+    }
+  }, [user, loading]);
 
   if (loading) return <SplashScreen />;
 

@@ -30,6 +30,7 @@ export interface User {
 export interface AuthState {
   user: User | null;
   passwordHash?: string;
+  token?: string;
 }
 
 // Extended workout models for Task 002

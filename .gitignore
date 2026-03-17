@@ -20,5 +20,15 @@ web-build/
 # Backend storage
 backend/data.json
 
+# E2E Tests (Playwright)
+playwright-results/
+playwright-report/
+playwright-results-*/
+playwright-junit.xml
+__e2e__/**/*.png
+__e2e__/**/*.webm
+__e2e__/**/*.zip
+test-results/
+
 .qwen/
 gha-creds-*.json

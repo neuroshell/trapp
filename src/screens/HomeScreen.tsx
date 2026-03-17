@@ -10,7 +10,9 @@ import {
   QUICK_LOG_BUTTONS,
 } from "../components/QuickLogButton";
 import { StreakTracker } from "../components/StreakTracker";
+import { SyncStatus } from "../components/SyncStatus";
 import { WeeklySummaryCard } from "../components/WeeklySummaryCard";
+import { useAutoSync } from "../hooks/useSync";
 import { ActivityType, WorkoutEntry } from "../models";
 import { RootTabParamList } from "../navigation/types";
 import { getWorkouts } from "../storage";
@@ -35,6 +37,9 @@ export function HomeScreen({ navigation }: Props) {
     isActive: false,
   });
   const [weeklyStats, setWeeklyStats] = useState<WeeklyStats | null>(null);
+
+  // Auto-sync on mount (results used for side effects only)
+  useAutoSync(true);
 
   // Load workouts when screen gains focus
   useFocusEffect(
@@ -73,10 +78,16 @@ export function HomeScreen({ navigation }: Props) {
     <SafeAreaView style={styles.page}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>FitTrack Pro</Text>
-        <Text style={styles.subtitle}>
-          Track your workouts and crush your goals.
-        </Text>
+        {/* Header with Sync Status */}
+        <View style={styles.headerRow}>
+          <View style={styles.headerTextContainer}>
+            <Text style={styles.title}>FitTrack Pro</Text>
+            <Text style={styles.subtitle}>
+              Track your workouts and crush your goals.
+            </Text>
+          </View>
+          <SyncStatus compact showDetails={false} />
+        </View>
 
         {/* Streak Tracker */}
         <StreakTracker streak={streak} testID="home-streak-tracker" />
@@ -183,6 +194,16 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.lg,
     paddingBottom: spacing.xl,
+  },
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: spacing.md,
+  },
+  headerTextContainer: {
+    flex: 1,
+    paddingRight: spacing.sm,
   },
   title: {
     fontSize: typography.title,
