@@ -40,6 +40,19 @@ export const authenticate = (req, res, next) => {
 
     const token = authHeader.substring(7);
 
+    // SECURITY: Validate token is not empty or too short to prevent bypass attempts
+    if (!token || token.trim().length === 0) {
+      console.log("[AuthMiddleware] Empty token provided");
+      throw errors.unauthorized("No authentication token provided");
+    }
+
+    // SECURITY: Validate token has minimum JWT length (header.payload.signature)
+    // Minimum valid JWT is ~20 chars (e.g., "eyJhbGciOiJIUzI1NiJ9.e30.signature")
+    if (token.length < 20) {
+      console.log("[AuthMiddleware] Token too short: " + token.length + " chars");
+      throw errors.unauthorized("Invalid token format");
+    }
+
     const decoded = verifyToken(token);
 
     if (!decoded.userId) {
@@ -93,6 +106,12 @@ export const optionalAuth = (req, res, next) => {
     }
 
     const token = authHeader.substring(7);
+
+    // SECURITY: Validate token is not empty or too short to prevent bypass attempts
+    if (!token || token.trim().length === 0 || token.length < 20) {
+      return next(); // Silently skip - user remains unauthenticated
+    }
+
     const decoded = verifyToken(token);
     req.user = decoded;
   } catch (error) {
