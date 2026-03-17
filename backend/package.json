@@ -12,7 +12,7 @@
     "test:stable": "node --test tests/database.test.js tests/test-utils.js",
     "test:ci": "node test-ci.js",
     "test:coverage": "node --test --experimental-test-coverage",
-    "build:netlify": "npm install --production && mkdir -p netlify/functions && cp netlify/functions/api.js netlify/functions/api.js",
+    "build:netlify": "npm install --omit=dev && node -e \"require('fs').mkdirSync('netlify/functions', {recursive:true})\" && echo Netlify functions ready",
     "deploy:netlify": "netlify deploy --prod --dir=netlify"
   },
   "keywords": [
@@ -33,7 +33,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "lowdb": "^5.0.0",
-    "nanoid": "^4.0.0",
+    "nanoid": "^5.1.7",
     "serverless-http": "^3.2.0"
   },
   "devDependencies": {
