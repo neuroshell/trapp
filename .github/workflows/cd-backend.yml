@@ -143,16 +143,15 @@ jobs:
           # Deploy
           DEPLOY_OUTPUT=$(netlify deploy --prod --dir=dist --functions=netlify/functions --json > deploy_output.json)
           
-          # Extract URLs from output
-          DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -o '"deploy_url":"[^"]*"' | cut -d'"' -f4 || echo "")
-          LIVE_URL=$(echo "$DEPLOY_OUTPUT" | grep -o '"url":"[^"]*"' | cut -d'"' -f4 || echo "")
+          # Extract URLs safely using jq (standard in GitHub runners)
+          DEPLOY_URL=$(jq -r '.deploy_url' deploy_output.json)
+          LIVE_URL=$(jq -r '.url' deploy_output.json)
           
-          echo "deploy-url=${DEPLOY_URL:-https://unknown.netlify.app}" >> $GITHUB_OUTPUT
-          echo "live-url=${LIVE_URL:-https://unknown.netlify.app}" >> $GITHUB_OUTPUT
+          echo "deploy-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          echo "live-url=$LIVE_URL" >> $GITHUB_OUTPUT
           
           echo "✅ Deployment successful!"
-          echo "Deploy URL: ${DEPLOY_URL:-N/A}"
-          echo "Live URL: ${LIVE_URL:-N/A}"
+          echo "Live URL: $LIVE_URL"
 
       - name: Wait for deployment propagation
         run: sleep 30
