@@ -12,11 +12,14 @@
   # Directory containing Netlify functions
   directory = "functions"
 
-  # Don't bundle - use Node.js native module resolution
-  node_bundler = "none"
+  # Use esbuild for bundling
+  node_bundler = "esbuild"
 
   # Include data files
   included_files = ["data/**"]
+
+  # External modules (installed at runtime, not bundled)
+  external_node_modules = ["express", "cors", "helmet", "serverless-http", "bcryptjs", "jsonwebtoken", "lowdb", "express-rate-limit", "express-validator", "dotenv"]
 
 # Redirect all API requests to the function
 [[redirects]]
