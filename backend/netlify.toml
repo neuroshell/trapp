@@ -2,23 +2,23 @@
   # Install dependencies
   install_command = "npm install"
 
-  # Build command (none needed for Node.js)
-  command = "echo 'Backend build complete'"
+  # No build step needed - just install deps
+  command = "echo 'Backend ready'"
 
-  # Directory to deploy (current directory when deploying from netlify folder)
+  # Deploy from backend root
   publish = "."
 
 [functions]
   # Directory containing Netlify functions
   directory = "functions"
 
-  # Node.js version
+  # Use esbuild for bundling
   node_bundler = "esbuild"
 
-  # Include all dependencies
+  # Include data files
   included_files = ["data/**"]
 
-  # External node modules (not bundled, installed at runtime)
+  # External modules (installed at runtime, not bundled)
   external_node_modules = ["lowdb", "bcryptjs", "jsonwebtoken", "express", "cors", "helmet", "express-rate-limit", "express-validator", "dotenv"]
 
 # Redirect all API requests to the function
@@ -28,18 +28,7 @@
   status = 200
   force = true
 
-# Environment variables (set these in Netlify UI)
-# JWT_SECRET=your-secret-key
-# NODE_ENV=production
-# ALLOWED_ORIGINS=https://your-domain.com
-# BCRYPT_ROUNDS=10
-# JWT_EXPIRY=30d
-# RATE_LIMIT_WINDOW_MS=60000
-# RATE_LIMIT_MAX_REQUESTS=100
-# LOG_LEVEL=info
-# DB_FILE=/var/task/data/db.json
-
-# Headers for security
+# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -48,7 +37,7 @@
     X-XSS-Protection = "1; mode=block"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# CORS headers (adjust for your domain)
+# CORS headers
 [[headers]]
   for = "/api/*"
   [headers.values]
